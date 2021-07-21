@@ -1,0 +1,33 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net5.0</TargetFramework>
+    <PublishSingleFile>true</PublishSingleFile>
+    <SelfContained>true</SelfContained>
+    <IncludeAllContentForSelfExtract>true</IncludeAllContentForSelfExtract>
+    <RuntimeIdentifier>win-x64</RuntimeIdentifier>
+    <LangVersion>latest</LangVersion>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Reference Include="C:/Program Files (x86)/Microsoft Visual Studio/Shared/Visual Studio Tools for Office/PIA/Office15/Microsoft.Office.Interop.Excel.dll" />
+  </ItemGroup>
+  
+  <ItemGroup>
+    <PackageReference Include="CsvHelper" Version="27.1.1" />
+    <PackageReference Include="EPPlus" Version="5.7.1" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
+    <PackageReference Include="PdfSharp" Version="1.50.5147" />
+  </ItemGroup>
+
+
+  <Target Name="CopyFilesAfterBuild" AfterTargets="Build">
+
+    <ItemGroup>
+      <_CopyItems_1 Include=".\labor_entries.json" />
+    </ItemGroup> 
+
+    <Copy SourceFiles="@(_CopyItems_1)" DestinationFolder="./bin/Debug/net5.0/win-x64/publish/labor" SkipUnchangedFiles="false" OverwriteReadOnlyFiles="true" />
+  </Target>
+</Project>
