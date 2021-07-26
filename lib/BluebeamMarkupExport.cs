@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
+using JPMorrow.PDF;
 
 namespace JPMorrow.Bluebeam.Markup
 {
@@ -24,6 +25,8 @@ namespace JPMorrow.Bluebeam.Markup
         public int BottomConnectorsPvc { get; private set; }
         public int BottomConnectorsMc { get; private set; }
 
+        public BundleRegion BundleRegion { get; private set; } = null;
+
         public string DeviceCode { get; private set; } = "";
 
         public P3BluebeamFDFMarkup(
@@ -31,7 +34,7 @@ namespace JPMorrow.Bluebeam.Markup
             string gang, string plaster_ring, string connector_entry_type, string connector_size,
             int top_connectors_emt, int bottom_connectors_emt,
             int top_connectors_pvc, int bottom_connectors_pvc,
-            int top_connectors_mc, int bottom_connectors_mc)
+            int top_connectors_mc, int bottom_connectors_mc, BundleRegion bundle_region = null)
         {
             Subject = subject;
             BoxType = box_type;
@@ -50,10 +53,12 @@ namespace JPMorrow.Bluebeam.Markup
             BottomConnectorsPvc = bottom_connectors_pvc;
             BottomConnectorsMc = bottom_connectors_mc;
 
+            if(bundle_region != null) BundleRegion = bundle_region;
+
             ProcessFields();
         }
 
-        public static P3BluebeamFDFMarkup ParseMarkup(Dictionary<string, string> fdf_values)
+        public static P3BluebeamFDFMarkup ParseMarkup(Dictionary<string, string> fdf_values, BundleRegion bundle_region = null)
         {
             /* ConsoleDebugger.Debug.Show("\nProcessing Markup Properties {", false);
             foreach (KeyValuePair<string, string> kvp in fdf_values)
@@ -75,8 +80,7 @@ namespace JPMorrow.Bluebeam.Markup
             var bcp =       int.Parse(fdf_values["Bottom PVC Connectors"]);
             var tcm =       int.Parse(fdf_values["Top MC Connectors"]);
             var bcm =       int.Parse(fdf_values["Bottom MC Connectors"]);
-            
-            var record = new P3BluebeamFDFMarkup(subject, bt, bs, gang, pr, cet, cs, tce, bce, tcp, bcp, tcm, bcm);
+            var record = new P3BluebeamFDFMarkup(subject, bt, bs, gang, pr, cet, cs, tce, bce, tcp, bcp, tcm, bcm, bundle_region);
             return record;
         }
 

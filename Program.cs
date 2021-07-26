@@ -22,7 +22,6 @@ namespace BluebeamP3InWall
                 return ExcelOutputPath + PdfImportFilename.Split('.').First() + ExcelOutputFileExt;
             }}
 
-
         static void Main(string[] args)
         {
             string exe_path = GetThisExecutablePath();
