@@ -53,8 +53,8 @@ namespace JPMorrow.Excel
         /// <summary>
 		/// Export a Legacy P3 In Wall sheet
 		/// </summary>
-        public void GenerateLegacyP3InWallSheet(string labor_import_path, string project_title, IEnumerable<P3PartCollection> colls) {
-
+        public void GenerateLegacyP3InWallSheet(string labor_import_path, string project_title, IEnumerable<P3PartCollection> colls) 
+		{
             if(HasData) throw new Exception("The sheet already has data");
             string title = "M.P.A.C.T. - P3 In Wall";
             InsertHeader(title, project_title, "");
@@ -65,30 +65,38 @@ namespace JPMorrow.Excel
 
             //colls = colls.OrderBy(x => x.DeviceCode).ToList();
             var field_hardware = P3PartTotal.GetPartTotals(colls, P3PartCategory.Hardware, P3PartCategory.Clip);
-            var per_box_items = P3PartCollection.GetPartTotalsByCategory(colls, P3PartCategory.Box, P3PartCategory.Bracket, P3PartCategory.Plaster_Ring, P3PartCategory.Stinger, P3PartCategory.Connector);
+            var per_box_items = P3PartCollection.GetPartTotalsByBundleThenCategory(colls, P3PartCategory.Box, P3PartCategory.Bracket, P3PartCategory.Plaster_Ring, P3PartCategory.Stinger, P3PartCategory.Connector);
             var item_total = P3PartTotal.GetPartTotals(colls, P3PartCategory.Box, P3PartCategory.Bracket, P3PartCategory.Plaster_Ring, P3PartCategory.Stinger, P3PartCategory.Connector);
 
             var entries = LaborExchange.LoadLaborFromFile(labor_import_path);
             var l = new LaborExchange(entries);
 
-            foreach(var t in per_box_items)
+			foreach(var kvp in per_box_items)
 			{
-				var code = t.DeviceCode;
-				InsertSingleDivider(Draw.Color.SlateGray, Draw.Color.White, code);
+                var bundle_name = kvp.Key.Equals(string.Empty) ? "UNSET" : kvp.Key;
+                InsertSingleDivider(Draw.Color.OrangeRed, Draw.Color.White, "Bundle Name: " + bundle_name);
 
-                foreach(var p in t.Parts)
-                {
-                    var has_item = l.GetItem(out var li, (double)p.Qty, p.Name);
-                    if(!has_item) throw new Exception("No Labor item for: " + p.Name);
-                    InsertIntoRow(li.EntryName, li.Quantity, li.PerUnitLabor, li.LaborCodeLetter, li.TotalLaborValue);
-                    code_one_sub += li.TotalLaborValue; NextRow(1);
-                }
-                
-				code_one_sub = Math.Ceiling(code_one_sub);
-				code_one_gt += code_one_sub;
-				InsertGrandTotal("Sub Total", ref code_one_sub, true, false, true);
-				code_one_sub = 0.0;
+				foreach(var t in kvp.Value)
+				{
+					var code = t.DeviceCode;
+					InsertSingleDivider(Draw.Color.SlateGray, Draw.Color.White, code);
+
+					foreach(var p in t.Parts)
+					{
+						var has_item = l.GetItem(out var li, (double)p.Qty, p.Name);
+						if(!has_item) throw new Exception("No Labor item for: " + p.Name);
+						InsertIntoRow(li.EntryName, li.Quantity, li.PerUnitLabor, li.LaborCodeLetter, li.TotalLaborValue);
+						code_one_sub += li.TotalLaborValue; NextRow(1);
+					}
+					
+					code_one_sub = Math.Ceiling(code_one_sub);
+					code_one_gt += code_one_sub;
+					InsertGrandTotal("Sub Total", ref code_one_sub, true, false, true);
+					code_one_sub = 0.0;
+				}
 			}
+
+            
 
 			InsertSingleDivider(Draw.Color.SlateGray, Draw.Color.White, "Fixture Item Totals");
 

@@ -351,9 +351,11 @@ namespace JPMorrow.P3
         public static IEnumerable<P3PartCollection> GetLegacyDevices(IEnumerable<P3BluebeamFDFMarkup> markups)
         {
             var codes = new List<P3Code>();
-            foreach(var dc in markups.Select(x => x.DeviceCode))
+            foreach(var m in markups)
             {
-                codes.Add(P3Code.GetCodeFromDeviceCode(dc));
+                var bundle_name = m.BundleRegion == null ? string.Empty : m.BundleRegion.BundleName;
+                var code = P3Code.GetCodeFromDeviceCode(m.DeviceCode, bundle_name);
+                codes.Add(code);
             }
 
             var devices = ParseLegacyDeviceCodes(codes);
@@ -488,14 +490,15 @@ namespace JPMorrow.P3
                 if (code.RawDeviceCode.Contains("\u00B2"))
                     hardware_parts.Add(new P3Part("1/4\"x20 - 1/2\" Long Screw", 1, P3PartCategory.Hardware));
 
-                var p_idx = part_colls.FindIndex(x => x.DeviceCode.Equals(code.RawDeviceCode));
+                var p_idx = part_colls.FindIndex(x => x.DeviceCode.Equals(code.RawDeviceCode) && x.BundleName.Equals(code.BundleName));
                 if(p_idx == -1) 
                 {
                     hardware_parts.Add(final_box_part);
                     hardware_parts.Add(plaster_ring_part);
                     var coll = new P3PartCollection(
 						code.RawDeviceCode, hardware_parts);
-					part_colls.Add(coll);
+                    coll.BundleName = code.BundleName;
+                    part_colls.Add(coll);
 				}
 				else 
                 {
@@ -579,6 +582,7 @@ namespace JPMorrow.P3
             public string ConnectorSizeCode { get; private set; } = string.Empty;
             public string BoxSizeCode { get; private set; } = string.Empty;
             public string GangCode { get; private set; } = string.Empty;
+            public string BundleName { get; private set; } = string.Empty;
 
             private List<string> _extra_connectors = new List<string>();
             public IList<string> ExtraConnectors { get => _extra_connectors; }
@@ -601,6 +605,14 @@ namespace JPMorrow.P3
                 ProcessCode();
             }
 
+            private P3Code(string code, string bundle_name)
+            {
+                //FixtureId = null;
+                RawDeviceCode = code;
+                BundleName = bundle_name;
+                ProcessCode();
+            }
+
             /* public static P3Code GetDeviceCodeFromFixture(Document doc, ElementId fixture_id) 
             {
                 var fixture = doc.GetElement(fixture_id);
@@ -610,6 +622,11 @@ namespace JPMorrow.P3
             public static P3Code GetCodeFromDeviceCode(string device_code)
             {
                 return new P3Code(device_code);
+            }
+
+            public static P3Code GetCodeFromDeviceCode(string device_code, string bundle_name)
+            {
+                return new P3Code(device_code, bundle_name);
             }
 
             public static P3Code GetCodeFromP3CSV(P3CSVRow row)
@@ -795,6 +812,7 @@ namespace JPMorrow.P3
     {
 		public string DeviceCode { get; private set; }
         public List<P3Part> Parts { get; set; } = new List<P3Part>();
+        public string BundleName { get; set; } = string.Empty;
 
         public P3PartCollection(string device_code, IEnumerable<P3Part> parts) {
 			DeviceCode = device_code;
@@ -847,6 +865,46 @@ namespace JPMorrow.P3
 
             copy_colls = copy_colls.OrderBy(x => x.DeviceCode).ToList();
             return copy_colls;
+        }
+
+        /// <summary>
+        /// Get Device Code Separated Part Totals
+        /// </summary>
+        public static Dictionary<string, List<P3PartCollection>> GetPartTotalsByBundleThenCategory(IEnumerable<P3PartCollection> pcolls, params P3PartCategory[] cats)
+        {
+            Dictionary<string, List<P3PartCollection>> dict = new Dictionary<string, List<P3PartCollection>>();
+            var copy_colls = pcolls.ToList().ConvertAll(x => {
+                var pp = new P3PartCollection(x.DeviceCode, x.Parts);
+                pp.BundleName = x.BundleName;
+                return pp;
+            });
+
+            foreach(var coll in copy_colls)
+            {
+                bool s = dict.TryGetValue(coll.BundleName, out var list);
+
+                List<P3Part> remove_parts = new List<P3Part>();
+                foreach(var part in coll.Parts)
+                {
+                    if(!cats.Any(x => part.Category == x))
+                        remove_parts.Add(part);
+                }
+                remove_parts.ForEach(x => coll.Parts.Remove(x));
+
+                if (s)
+                {
+                    list.Add(coll);
+                }
+                else
+                {
+                    dict[coll.BundleName] = new List<P3PartCollection>();
+                    dict[coll.BundleName].Add(coll);
+                    dict[coll.BundleName] = dict[coll.BundleName].OrderBy(x => x.DeviceCode).ToList();
+                }
+            }
+
+            dict = dict.OrderBy(x => x.Key).ToDictionary(x => x.Key, x => x.Value);
+            return dict;
         }
 	}
 

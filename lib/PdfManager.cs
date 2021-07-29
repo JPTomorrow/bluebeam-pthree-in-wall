@@ -26,7 +26,86 @@ namespace JPMorrow.PDF
             RectString = props["/Rect"].ToString();
         }
 
-        public bool isInRegion(PdfAnnotation annot) {
+        private class AnnotationXYBoundingBox
+        {
+            public class Point 
+            {
+                public double X { get; private set; }
+                public double Y { get; private set; }
+
+                public Point(double x , double y) 
+                {
+                    X = x;
+                    Y = y;
+                }
+
+                public override string ToString()
+                {
+                    return string.Format("({0}, {1})", X, Y);
+                }
+            }
+
+            public Point TopLeft { get; private set; }
+            public Point BottomRight { get; private set; }
+
+            public AnnotationXYBoundingBox(string rectangle_str) {
+                string[] rect_coord_strs = rectangle_str.Trim('[', ']', ' ').Split(' ');
+                double[] rect_coords = rect_coord_strs.Select(x => double.Parse(x)).ToArray();
+                TopLeft = new Point(rect_coords[0], rect_coords[1]);
+                BottomRight = new Point(rect_coords[2], rect_coords[3]);
+            }
+
+            private bool Overlap(Point l1, Point r1, Point l2, Point r2)
+            {
+                // To check if either rectangle is actually a line
+                // For example :  l1 ={-1,0}  r1={1,1}  l2={0,-1}
+                // r2={0,1}
+
+                if (l1.X == r1.X || l1.Y == r1.Y || l2.X == r2.X
+                    || l2.Y == r2.Y) {
+                    // the line cannot have positive overlap
+                    return false;
+                }
+            
+                // If one rectangle is on left side of other
+                if (l1.X >= r2.X || l2.X >= r1.X)
+                    return false;
+            
+                // If one rectangle is above other
+                if (r1.Y >= l2.Y || r2.Y >= l1.Y)
+                    return false;
+            
+                return true;
+            }
+
+            public bool DoOverlap(AnnotationXYBoundingBox other) {
+                Console.WriteLine("topmost: " + TopLeft.ToString());
+                Console.WriteLine("bottomright: " + BottomRight.ToString());
+                Console.WriteLine("other.topmost: " + other.TopLeft.ToString());
+                Console.WriteLine("other.bottomright: " + other.BottomRight.ToString());
+                Console.WriteLine("");
+                return Overlap(TopLeft, BottomRight, other.TopLeft, other.BottomRight);
+            }
+        }
+
+        public bool isInRegion(PdfAnnotation text_annot, IEnumerable<PdfAnnotation> all_annots) {
+
+            var annots = all_annots.Where(x => x != null).ToList();
+            var txt_grouping = text_annot.Elements["/GroupNesting"].ToString();
+
+            var idx = annots.FindIndex(x => txt_grouping.Contains(x.Elements["/NM"].ToString().Trim('(', ')', ' ')) && x.Elements["/Subtype"].Equals("/Square"));
+
+            if(idx == -1) return false;
+            else // found box now get rect
+            {
+                var box_rect_str = annots[idx].Elements["/Rect"].ToString();
+                AnnotationXYBoundingBox box_bb = new AnnotationXYBoundingBox(box_rect_str);
+                AnnotationXYBoundingBox bundle_bb = new AnnotationXYBoundingBox(RectString);
+                Console.WriteLine("");
+                Console.WriteLine(annots[idx].Elements["/Subj"].ToString() + "\n" + annots[idx].Elements["/Subtype"].ToString());
+                if(bundle_bb.DoOverlap(box_bb)) return true;
+            }
+            
             return false; 
         }
 
@@ -66,8 +145,11 @@ namespace JPMorrow.PDF
                         var props = GetAnnotationPropertyDict(text_annot);
                         P3BluebeamFDFMarkup markup = null;
 
-                        var idx = regions.FindIndex(x => x.isInRegion(text_annot));
-                        if(idx == -1) markup = P3BluebeamFDFMarkup.ParseMarkup(props);
+                        var idx = regions.FindIndex(x => x.isInRegion(text_annot, page.Annotations.ToList().Select(x => x as PdfAnnotation)));
+                        if(idx == -1)
+                        {
+                            markup = P3BluebeamFDFMarkup.ParseMarkup(props);
+                        } 
                         else
                         {
                             markup = P3BluebeamFDFMarkup.ParseMarkup(props, regions[idx]);
