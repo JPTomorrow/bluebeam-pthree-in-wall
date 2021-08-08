@@ -9,11 +9,14 @@ using JPMorrow.Bluebeam.Markup;
 using JPMorrow.Excel;
 using JPMorrow.P3;
 using JPMorrow.PDF;
+using JPMorrow.Test.Console;
 
 namespace BluebeamP3InWall
 {
     class Program
     {
+        private static bool TestAppOnStartup { get => true; }
+
         public static string ExcelOutputPath { get; set; } = "";
         public static string ExcelOutputFileExt { get; set; } =  "_P3_In_Wall_BOM.xlsx";
         public static string LaborFilePath { get; set; } = "";
@@ -25,6 +28,14 @@ namespace BluebeamP3InWall
         static void Main(string[] args)
         {
             string exe_path = GetThisExecutablePath();
+
+#if DEBUG
+            Console.WriteLine(exe_path + "\n");
+            TestBedConsole.TestAll(exe_path);
+            Console.ReadKey();
+            return;
+#endif
+            
             bool got_pdf_fn = ResolvePdfInputFilePath(exe_path);
 
             if(!got_pdf_fn) 

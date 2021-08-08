@@ -1,0 +1,2 @@
+C:\Users\Jmorrow\Desktop\Code\csharp\BluebeamP3InWall\bin\Release\net5.0\win-x64\publish\BluebeamP3InWall.pdb
+C:\Users\Jmorrow\Desktop\Code\csharp\BluebeamP3InWall\bin\Release\net5.0\win-x64\publish\BluebeamP3InWall.exe
