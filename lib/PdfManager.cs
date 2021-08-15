@@ -9,7 +9,8 @@ using PdfSharp.Pdf.IO;
 
 namespace JPMorrow.PDF
 {
-    public class BundleRegion {
+    public class BundleRegion 
+    {
         public string Subject { get; private set; }
         public string GroupingText { get; private set; }
         public string BundleName { get; private set; }
@@ -58,8 +59,8 @@ namespace JPMorrow.PDF
             private bool Overlap(Point l1, Point r1, Point l2, Point r2)
             {
                 // To check if either rectangle is actually a line
-                // For example :  l1 ={-1,0}  r1={1,1}  l2={0,-1}
-                // r2={0,1}
+                // For example :  l1 = {-1,0}  r1 = {1,1}  l2 = {0,-1}
+                // r2 = {0,1}
 
                 if (l1.X == r1.X || l1.Y == r1.Y || l2.X == r2.X
                     || l2.Y == r2.Y) {
@@ -88,7 +89,8 @@ namespace JPMorrow.PDF
             }
         }
 
-        public bool isInRegion(PdfAnnotation text_annot, IEnumerable<PdfAnnotation> all_annots) {
+        public bool isInRegion(PdfAnnotation text_annot, IEnumerable<PdfAnnotation> all_annots) 
+        {
 
             var annots = all_annots.Where(x => x != null).ToList();
             var txt_grouping = text_annot.Elements["/GroupNesting"].ToString();
@@ -246,7 +248,6 @@ namespace JPMorrow.PDF
                 // is text annotation
                 if (annot != null && annot.Subject.ToLower().Contains("box"))
                 {
-                    
                     string[] subject_box_names = new[] { "power", "data", "lighting", "fire alarm" };
                     if(!annot.Elements["/Subtype"].Equals("/FreeText") || !subject_box_names.Any(x => annot.Subject.ToLower().Contains(x + " box"))) continue;
                     annot.Elements.Remove("/AP");

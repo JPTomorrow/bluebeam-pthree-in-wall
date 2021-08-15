@@ -7,6 +7,10 @@
     <LangVersion>latest</LangVersion>
   </PropertyGroup>
 
+  <PropertyGroup Condition="$(FIRE_ALARM.Equals('1'))">
+    <DefineConstants>$(DefineConstants);FIRE_ALARM</DefineConstants>
+  </PropertyGroup>
+
   <PropertyGroup Condition="$(Configuration.Equals('Release'))">
     <PublishSingleFile>true</PublishSingleFile>
     <SelfContained>true</SelfContained>
@@ -23,7 +27,6 @@
     <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
     <PackageReference Include="PdfSharp" Version="1.50.5147" />
   </ItemGroup>
-
 
   <Target Name="CopyFilesAfterBuild" AfterTargets="Build">
 

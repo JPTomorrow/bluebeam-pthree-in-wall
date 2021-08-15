@@ -5,10 +5,21 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": ".NET Core Launch (console)",
+            "name": "debug p3 in wall",
             "type": "coreclr",
             "request": "launch",
-            "preLaunchTask": "build debug",
+            "preLaunchTask": "build p3 in wall debug",
+            "program": "${workspaceFolder}/bin/Debug/net5.0/win-x64/publish/BluebeamP3InWall.exe",
+            "args": [],
+            "cwd": "${workspaceFolder}",
+            "console": "externalTerminal",
+            "stopAtEntry": false
+        },
+        {
+            "name": "debug fire alarm",
+            "type": "coreclr",
+            "request": "launch",
+            "preLaunchTask": "build fire alarm debug",
             "program": "${workspaceFolder}/bin/Debug/net5.0/win-x64/publish/BluebeamP3InWall.exe",
             "args": [],
             "cwd": "${workspaceFolder}",

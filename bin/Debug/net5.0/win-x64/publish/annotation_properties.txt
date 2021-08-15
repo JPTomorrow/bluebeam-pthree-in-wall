@@ -1,0 +1,26 @@
+/Subj : (.1/2" EMT - On Trapeze)
+/Type : /Annot
+/P : 130 0 R
+/F : 4
+/C : [ 0 0.8 1 ]
+/CreationDate : (D:20210812150152-05'00')
+/T : (jmorrow)
+/Subtype : /PolyLine
+/Measure : 235 0 R
+/IC : [ 1 0 0 ]
+/BS : << /D [ 4 3 16 3 ] /S /D /Type /Border /W 1 >>
+/DS : (font: Helvetica 12pt; text-align:center; line-height:13.8pt; color:#00CCFF)
+/Cap : True
+/AlignOnSegment : True
+/MeasurementTypes : 130
+/IT : /PolyLineDimension
+/M : (D:20210812150152-05'00')
+/AP : << /N 237 0 R >>
+/Vertices : [ 331.387 711.576 332.55 611.966 397.083 555.378 ]
+/RC : (<?xml version="1.0"?><body xmlns:xfa="http://www.xfa.org/schema/xfa-data/1.0/" xfa:contentType="text/html" xfa:APIVersion="BluebeamPDFRevu:2018" xfa:spec="2.2.0" style="font:Helvetica 12pt; text-align:center; line-height:13.8pt; color:#00CCFF" xmlns="http://www.w3.org/1999/xhtml">41'-2 1/2"</body>)
+/BSIColumnData : [ (powered) () (4" deep) (1/2") (0) (0) (0) (0) (0) (0) (1) (1/4") (EMT) (UNSET) ]
+/Label : ()
+/Rect : [ 325.887 549.878 402.583 717.076 ]
+/Contents : (41'-2 1/2")
+/NM : (IDJMIVMKUAGVZSZP)
+

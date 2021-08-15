@@ -4,7 +4,7 @@
     "version": "2.0.0",
     "tasks": [
         {
-            "label": "build release",
+            "label": "build p3 in wall release",
             "command": "dotnet",
             "type": "shell",
             "args": [
@@ -22,7 +22,7 @@
             "problemMatcher": "$msCompile"
         },
         {
-            "label": "build debug",
+            "label": "build p3 in wall debug",
             "command": "dotnet",
             "type": "shell",
             "args": [
@@ -31,7 +31,45 @@
                 "/property:GenerateFullPaths=true",
                 // Do not generate summary otherwise it leads to duplicate errors in Problems panel
                 "/consoleloggerparameters:NoSummary",
-                "/p:Configuration=Debug"
+                "/p:Configuration=Debug",
+            ],
+            "group": "build",
+            "presentation": {
+                "reveal": "silent"
+            },
+            "problemMatcher": "$msCompile"
+        },
+        {
+            "label": "build fire alarm release",
+            "command": "dotnet",
+            "type": "shell",
+            "args": [
+                "publish",
+                // Ask dotnet build to generate full paths for file names.
+                "/property:GenerateFullPaths=true",
+                // Do not generate summary otherwise it leads to duplicate errors in Problems panel
+                "/consoleloggerparameters:NoSummary",
+                "/p:Configuration=Release",
+                "/p:FIRE_ALARM",
+            ],
+            "group": "build",
+            "presentation": {
+                "reveal": "silent"
+            },
+            "problemMatcher": "$msCompile"
+        },
+        {
+            "label": "build fire alarm debug",
+            "command": "dotnet",
+            "type": "shell",
+            "args": [
+                "publish",
+                // Ask dotnet build to generate full paths for file names.
+                "/property:GenerateFullPaths=true",
+                // Do not generate summary otherwise it leads to duplicate errors in Problems panel
+                "/consoleloggerparameters:NoSummary",
+                "/p:Configuration=Debug",
+                "/p:FIRE_ALARM=1",
             ],
             "group": "build",
             "presentation": {
