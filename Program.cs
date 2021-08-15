@@ -35,8 +35,23 @@ namespace BluebeamP3InWall
             Console.ReadKey();
             return;
 #endif
-            
-            bool got_pdf_fn = ResolvePdfInputFilePath(exe_path);
+
+            try
+            {
+#if FIRE_ALARM
+            Console.WriteLine("Fire Alarm");
+            RunFireAlarm(exe_path);
+#else
+            Console.WriteLine("P3 in wall");
+            RunP3InWall(exe_path);
+#endif
+            }
+            catch(Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+            }
+
+            /* bool got_pdf_fn = ResolvePdfInputFilePath(exe_path);
 
             if(!got_pdf_fn) 
             {
@@ -50,9 +65,12 @@ namespace BluebeamP3InWall
             CleanupPdfOutputFiles();
             ParsePdf();
             Console.ReadKey();
-            return;
+            return; */
         }
 
+        /// <summary>
+        /// Get executable path 
+        /// </summary>
         public static string GetThisExecutablePath()
         {
             var split_path = System.Diagnostics.Process
@@ -62,6 +80,34 @@ namespace BluebeamP3InWall
             split_path.Remove(split_path.Last()); 
             return string.Join("\\", split_path) + "\\";
         }
+
+
+        private static void RunFireAlarm(string exe_path)
+        {
+            string pdf_input_path = GetPdfInputFilePath(exe_path);
+
+            if(string.IsNullOrWhiteSpace(pdf_input_path) || !File.Exists(pdf_input_path)) 
+            {
+                Console.WriteLine("Failed to retrieve pdf file name");
+                Console.ReadKey();
+                return;
+            }
+
+            var pdf_output_path = exe_path +
+                 Path.GetFileNameWithoutExtension(pdf_input_path) + 
+                 "_fire_alarm_processed.pdf";
+
+            Pdforge f = new Pdforge(pdf_input_path, pdf_output_path);
+            
+            
+        }
+
+        private static void RunP3InWall(string exe_path)
+        {
+            
+        }
+
+        
 
         /// <summary>
         /// Generate all of the paths that the program will use
@@ -76,6 +122,7 @@ namespace BluebeamP3InWall
             PdfImportPath = exe_path; 
             PdfCopyPath = exe_path;
         }
+
 
         public static void CleanupFDFInputFiles() 
         {
@@ -141,14 +188,13 @@ namespace BluebeamP3InWall
         /// <summary>
         /// Get user input to select a pdf file name if multiple are present
         /// </summary>
-        /// <returns>true if path gathered successfully, else false</returns>
-        public static bool ResolvePdfInputFilePath(string exe_path)
+        public static string GetPdfInputFilePath(string exe_path)
         {
             var raw_fns = Directory
                 .GetFiles(exe_path)
                 .Where(x => x.ToLower().EndsWith(".pdf") && !x.Contains(PdfCopyFilenameExt));
 
-            if(!raw_fns.Any()) return false;
+            if(!raw_fns.Any()) return String.Empty;
 
             string get_fn(string raw_fn) => raw_fn.Split('\\').Last();
 
@@ -170,6 +216,7 @@ namespace BluebeamP3InWall
 
                 int response = -1;
                 bool running = true;
+
                 do
                 {
                     Console.Write("Select the PDF file you would like to parse (by number): ");
@@ -191,10 +238,10 @@ namespace BluebeamP3InWall
                 while (running);
 
 
-                PdfImportFilename = fns[response];
+                return fns[response];
             }
 
-            return true;
+            return string.Empty;
         }
 
         /// <summary>

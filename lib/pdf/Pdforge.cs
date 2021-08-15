@@ -46,7 +46,7 @@ namespace JPMorrow.PDF {
 
         public IEnumerable<PdfAnnotation> GetAnnotationsBySubject(PdfPage page, string subject, bool contains)
         {
-            var annots = GetAnnotationsByElementProperty(page, "Subject", subject, contains);
+            var annots = GetAnnotationsByElementProperty(page, "Subj", subject, contains);
             return annots;
         }
 
@@ -57,8 +57,10 @@ namespace JPMorrow.PDF {
 
 
         private IEnumerable<PdfAnnotation> GetAnnotationsByElementProperty(
-            PdfPage page, string annotation_element_name, string annotation_element_value, bool contains_value)
+            PdfPage page, string annotation_element_name,
+            string annotation_element_value, bool contains_value)
         {
+            var el_name = annotation_element_name.StartsWith('/') ? annotation_element_name : "/" + annotation_element_name;
             List<PdfAnnotation> results = new List<PdfAnnotation>();
 
             for (var i = 0; i < page.Annotations.Count; i++)
@@ -66,9 +68,9 @@ namespace JPMorrow.PDF {
                 var annot = page.Annotations[i];
                 if (annot == null) continue;
                 
-                bool s = annot.Elements.TryGetValue(annotation_element_name, out var item);
+                bool s = annot.Elements.TryGetValue(el_name, out var item);
+                
                 if(!s) continue;
-                Console.WriteLine("test annot");
                 var str = item.ToString().Trim(' ', '[', ']', '(', ')');
                 
                 bool has_value = contains_value ? str.Contains(annotation_element_value) : str.Equals(annotation_element_value);
@@ -78,6 +80,24 @@ namespace JPMorrow.PDF {
 
             return results;
         }
+
+        public void SetAnnotationStringProperty(PdfAnnotation annotation, string property_name, string property_value)
+        {
+            var pname = property_name.StartsWith("/") ? property_name : "/" + property_name;
+            bool s = annotation.Elements.TryGetValue(pname, out PdfItem item);
+            if(!s) return;
+            annotation.Elements.SetValue(pname, new PdfString(property_value));
+        }
+
+        public void SetAnnotationStringPropertys(IEnumerable<PdfAnnotation> annotations, string property_name, string property_value)
+        {
+            foreach(var annot in annotations)
+            {
+                SetAnnotationStringProperty(annot, property_name, property_value);
+            }
+        }
+
+        
 
         public void PrintAllFirstPageData()
         {
@@ -153,6 +173,26 @@ namespace JPMorrow.PDF {
             return true;
         }
 
+        public void PrintAllElementProperies(PdfPage page, string txt_file_path)
+        {
+            var o = "";
+
+            foreach(PdfAnnotation annot in page.Annotations)
+            {
+                if(annot == null) continue;
+                var elements = annot.Elements;
+
+                foreach( var p in elements)
+                {
+                    o += string.Format("{0} : {1}", p.Key, p.Value) + "\n";
+                }
+
+                o += "\n";
+            }
+
+            File.WriteAllText(txt_file_path, o);
+        }   
+
         /// <summary>
         /// Check if qfile is locked
         /// </summary>
@@ -176,4 +216,6 @@ namespace JPMorrow.PDF {
             }
         }
     }
+
+    
 }
