@@ -11,13 +11,15 @@ namespace JPMorrow.Pdf.Bluebeam.FireAlarm
     /// </summary>
     public class BluebeamConduitPackage
     {
-        private static string[] conduitSizes = new string[] { "1/2\"", "3/4\"", "1\"", "1 1/2\""};
+        private static string[] conduitSizes = new string[] { "1/2\"", "3/4\"", "1\"", "1 1/4\"", "1 1/2\"", "2\"" };
         private Dictionary<string, List<double>> TotalEmtLength { get; set; } = new Dictionary<string, List<double>>()
         {
             {conduitSizes[0], new List<double>()},
             {conduitSizes[1], new List<double>()},
             {conduitSizes[2], new List<double>()},
             {conduitSizes[3], new List<double>()},
+            {conduitSizes[4], new List<double>()},
+            {conduitSizes[5], new List<double>()},
         };
 
         private Dictionary<string, List<double>> TotalPvcLength { get; set; } = new Dictionary<string, List<double>>() 
@@ -26,6 +28,8 @@ namespace JPMorrow.Pdf.Bluebeam.FireAlarm
             {conduitSizes[1], new List<double>()},
             {conduitSizes[2], new List<double>()},
             {conduitSizes[3], new List<double>()},
+            {conduitSizes[4], new List<double>()},
+            {conduitSizes[5], new List<double>()},
         };
 
         private Dictionary<string, List<double>> TotalMcCableLength { get; set; } = new Dictionary<string, List<double>>() 
@@ -34,6 +38,8 @@ namespace JPMorrow.Pdf.Bluebeam.FireAlarm
             {conduitSizes[1], new List<double>()},
             {conduitSizes[2], new List<double>()},
             {conduitSizes[3], new List<double>()},
+            {conduitSizes[4], new List<double>()},
+            {conduitSizes[5], new List<double>()},
         };
 
         /// <summary>
@@ -180,9 +186,38 @@ namespace JPMorrow.Pdf.Bluebeam.FireAlarm
     /// THIS CLASS WILL TAKE IN A SET OF RECTANGLE ANNOTATIONS AND 
     /// RETURN A TOTAL COUNT OF ALL THE DIFFERENT SIZED FIRE ALARM BOXES
     /// AND THEIR KNOCKOUTS.
+    /// 
+    /// Goals:
+    /// 1. Take in a set of grouped annotations
     /// </summary>
 
+    public class BluebeamFireAlarmBox
+    {
+        public PdfAnnotation GeneratingAnnotation { get; private set; }
 
+        public string BoxConfig { get; private set; }
+        public string BoxSize { get; private set; }
+
+        public BluebeamFireAlarmBox(PdfAnnotation a)
+        {
+            GeneratingAnnotation = a;
+        }
+
+        private void ProcessSubject()
+        {
+            var elements = GeneratingAnnotation.Elements;
+            bool s = elements.TryGetString("/Subj", out string subject);
+            if(!s) return;
+            subject = subject.ToLower();
+            
+
+        }
+
+        private void ProcessContents()
+        {
+
+        }
+    }
 
     public class BlubeamFireAlarmBoxPackage
     {
@@ -191,8 +226,10 @@ namespace JPMorrow.Pdf.Bluebeam.FireAlarm
         /// </summary>
         private static string fireAlarmBoxMarkupVersion = "1.0.0";
 
-        private string[] fireAlarmBoxSizes = new string[] {
+        private List<BluebeamFireAlarmBox> boxes { get; set; } = new List<BluebeamFireAlarmBox>();
 
+        private string[] fireAlarmBoxSizes = new string[] {
+            "",
         };
 
         private static string[] fireAlarmBoxIdentifierTags = new string[] {
@@ -207,27 +244,42 @@ namespace JPMorrow.Pdf.Bluebeam.FireAlarm
             {"1 1/2\" KOs",     0}
         };
 
-
-
-        /* private BlubeamFireAlarmBoxPackage()
+        private BlubeamFireAlarmBoxPackage()
         {
 
-        } */
+        }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="annotations">the annotations to process</param>
+        /// <returns> a package of fire alarm boxes</returns>
         public static BlubeamFireAlarmBoxPackage BoxPackageFromRectangleAnnotations(IEnumerable<PdfAnnotation> annotations)
         {
             var filtered_annots = new List<PdfAnnotation>();
+            BlubeamFireAlarmBoxPackage package = new BlubeamFireAlarmBoxPackage();
 
             foreach (var a in annotations)
             {
                 bool passed = IsRectangle(a) || HasFireAlarmBoxSubject(a, out string subject);
                 if (!passed) continue;
-
+                package.AddBox(new BluebeamFireAlarmBox(a));
             }
 
             return null;
         }
 
+        /// <summary>
+        /// Add a fire alarm box to the package
+        /// </summary>
+        public void AddBox(BluebeamFireAlarmBox box)
+        {
+            boxes.Add(box);
+        }
+
+        /// <summary>
+        /// Tell whether the provided pdf annotation is of subtype /Rectangle
+        /// </summary>
         private static bool IsRectangle(PdfAnnotation a)
         {
             var elements = a.Elements;
@@ -235,6 +287,9 @@ namespace JPMorrow.Pdf.Bluebeam.FireAlarm
             return s && sub_type.Equals("/Rectangle");
         }
 
+        /// <summary>
+        /// Does the provided Pdf annotation have the correct subject for a fire alarm box
+        /// </summary>
         private static bool HasFireAlarmBoxSubject(PdfAnnotation a, out string ret_subject)
         {
             ret_subject = string.Empty;
