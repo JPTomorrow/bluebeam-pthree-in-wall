@@ -8,6 +8,7 @@ using System.Threading;
 using JPMorrow.Bluebeam.Markup;
 using JPMorrow.Excel;
 using JPMorrow.P3;
+using JPMorrow.Pdf.Bluebeam.FireAlarm;
 using JPMorrow.PDF;
 using JPMorrow.Test.Console;
 
@@ -31,9 +32,12 @@ namespace BluebeamP3InWall
 
 #if DEBUG
             Console.WriteLine(exe_path + "\n");
-            TestBedConsole.TestAll(exe_path);
-            Console.ReadKey();
-            return;
+            bool passed = TestBedConsole.TestAll(exe_path);
+            if(!passed)
+            {
+                Console.ReadKey();
+                return;
+            }
 #endif
 
             try
@@ -80,8 +84,11 @@ namespace BluebeamP3InWall
             split_path.Remove(split_path.Last()); 
             return string.Join("\\", split_path) + "\\";
         }
-
-
+        
+        /// <summary>
+        /// Process the fire alarm from a bluebeam document
+        /// </summary>
+        /// <param name="exe_path"></param>
         private static void RunFireAlarm(string exe_path)
         {
             string pdf_input_path = GetPdfInputFilePath(exe_path);
@@ -97,11 +104,22 @@ namespace BluebeamP3InWall
                  Path.GetFileNameWithoutExtension(pdf_input_path) + 
                  "_fire_alarm_processed.pdf";
 
+            // parse poly lines into conduit package
             Pdforge f = new Pdforge(pdf_input_path, pdf_output_path);
+            var poly_lines = f.GetAnnotationsBySubType(f.GetPage(0), "PolyLine");
+            Console.WriteLine(poly_lines.Count().ToString());
+            BluebeamConduitPackage conduit_pkg = BluebeamConduitPackage.PackageFromPolyLines(poly_lines);
+
+            // parse all rectangles into fire alarm box package
             
-            
+            // parse all hanger rectangles into fire alarm hanger package
+
+
         }
 
+        /// <summary>
+        /// Process teh P3 in wall from a bluebeam document
+        /// </summary>
         private static void RunP3InWall(string exe_path)
         {
             

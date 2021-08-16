@@ -55,6 +55,12 @@ namespace JPMorrow.PDF {
             return null; // GetAnnotationsByElementProperty(page, "/Contents");
         }
 
+        public IEnumerable<PdfAnnotation> GetAnnotationsBySubType(PdfPage page, string sub_type)
+        {
+            var st = sub_type.StartsWith("/") ? sub_type : "/" + sub_type;
+            var annots = GetAnnotationsByElementProperty(page, "Subtype", st, false);
+            return annots;
+        }
 
         private IEnumerable<PdfAnnotation> GetAnnotationsByElementProperty(
             PdfPage page, string annotation_element_name,

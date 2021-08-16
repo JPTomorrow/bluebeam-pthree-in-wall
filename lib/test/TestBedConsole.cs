@@ -105,7 +105,7 @@ namespace JPMorrow.Test.Console
     
     public static partial class TestBedConsole
     {
-        public static void TestAll(string exe_path)
+        public static bool TestAll(string exe_path)
         {
             var methods = typeof(TestBed).GetMethods()
                 .Where(x => !x.Name.Contains("TestAll") && x.Name.ToLower().StartsWith("test"));
@@ -148,13 +148,17 @@ namespace JPMorrow.Test.Console
                 C.WriteLine();
                 C.WriteLine("\tFailed Test Name: " + entry_failed_on.FunctionName);
                 C.WriteLine("\tReason: " + entry_failed_on.Assert.GetFailMessage());
+                C.WriteLine("\n");
             }
             else
             {
                 C.WriteLine(finished_txt);
                 C.Write("\tResult: ");
                 TestBedConsoleUtils.ConsoleColorWrite("Passed", ConsoleColor.Green);
+                C.WriteLine("\n");
             }
+
+            return entry_failed_on == null;
         }
     }
 
