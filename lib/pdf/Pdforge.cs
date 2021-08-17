@@ -23,6 +23,8 @@ namespace JPMorrow.PDF {
             return _inputDocument;
         } }
 
+        public List<PdfAnnotation> AllAnnotations { get => GetPage(0).Annotations.Select(x => x as PdfAnnotation).ToList(); }
+
         public Pdforge(string input_filepath, string output_filepath) 
         {
             InputFilepath = input_filepath;

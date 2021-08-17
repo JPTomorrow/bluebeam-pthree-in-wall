@@ -31,21 +31,28 @@ namespace JPMorrow.Measurements
                 string exp3 = "^\\d+\\s\\d+[\\/]\\d+[\"]$"; // 1 1/2"
                 string exp4 = "^\\d+[\\/]\\d+[\"]$"; // 1/2"
                 string exp5 = "^\\d+[\"]$"; // 2"
+                string exp6 = "^\\d+[']\\s\\d+[\"]$"; // 11' 7"
+                string exp7 = "^\\d+[']\\s\\d+\\s\\d+[\\/]\\d+[\"]$"; // 11' 7 1/2"
 
                 if( !Regex.Match(length, exp1).Success &&
                     !Regex.Match(length, exp2).Success &&
                     !Regex.Match(length, exp3).Success &&
                     !Regex.Match(length, exp4).Success &&
-                    !Regex.Match(length, exp5).Success)
+                    !Regex.Match(length, exp5).Success &&
+                    !Regex.Match(length, exp6).Success &&
+                    !Regex.Match(length, exp7).Success)
                 {
                     return -1;
                 }
 
                 if(Regex.Match(length, exp1).Success)
                 {
-                    var feet_raw = length.Split("\" ").First();
-                    var inch_raw = length.Split("\" ")[1];
-                    inch_raw = inch_raw.Remove(length.Length - 1);
+                    var split = length.Split(" ").ToList();
+                    var feet_raw = split.First();
+                    feet_raw = feet_raw.Remove(feet_raw.Length - 1);
+                    split.Remove(split.First());
+                    var inch_raw = string.Join(" ", split);
+                    inch_raw = inch_raw.Remove(inch_raw.Length - 1);
 
                     double final = 0.0;
                     // parse feet
@@ -113,6 +120,51 @@ namespace JPMorrow.Measurements
                     double final = double.Parse(inch_raw) / 12.0;
                     return final;
                 }
+                else if(Regex.Match(length, exp6).Success)
+                {
+                    var split = length.Split(" ").ToList();
+                    var feet_raw = split.First();
+                    feet_raw = feet_raw.Remove(feet_raw.Length - 1);
+                    split.Remove(split.First());
+                    var inch_raw = string.Join(" ", split);
+                    inch_raw = inch_raw.Remove(inch_raw.Length - 1);
+
+                    double final = 0.0;
+
+                    // parse feet
+                    var feet = int.Parse(feet_raw);
+                    final += feet;
+
+                    // parse inches
+                    final += int.Parse(inch_raw) / 12.0;
+
+                    return final;
+                }
+                else if(Regex.Match(length, exp7).Success)
+                {
+                    var split = length.Split(" ").ToList();
+                    var feet_raw = split.First();
+                    feet_raw = feet_raw.Remove(feet_raw.Length - 1);
+                    split.Remove(split.First());
+                    var inch_raw = string.Join(" ", split);
+                    inch_raw = inch_raw.Remove(inch_raw.Length - 1);
+
+                    double final = 0.0;
+
+                    // parse feet
+                    var feet = int.Parse(feet_raw);
+                    final += feet;
+
+                    // parse inches
+                    var whole_in = int.Parse(inch_raw.Split(" ").First());
+                    var fractional_top = inch_raw.Split(" ").Last().Split("/").First();
+                    var fractional_bottom = inch_raw.Split(" ").Last().Split("/").Last();
+                    double fraction = (double.Parse(fractional_top) / double.Parse(fractional_bottom));
+                    final += ((double)whole_in / 12.0);
+                    final += fraction;
+
+                    return final;
+                }
                 else
                 {
                     return -1;
@@ -139,7 +191,7 @@ namespace JPMorrow.Measurements
                     final += fraction + "\"";
                 }
 
-                return final;
+                return length <= 0.0 ? "0' 0\"" : final;
             }
 
             private static string ToFraction64(double value) 

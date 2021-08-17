@@ -1,26 +1,628 @@
-/Subj : (.1/2" EMT - On Trapeze)
+/Subj : (4" Fire Alarm Box - jm1.0.0)
 /Type : /Annot
 /P : 130 0 R
 /F : 4
-/C : [ 0 0.8 1 ]
-/CreationDate : (D:20210812150152-05'00')
+/C : [ 0 0 0 ]
+/CreationDate : (D:20210816104737-05'00')
+/T : (jmorrow)
+/Subtype : /Square
+/Rect : [ 8.6 783.637 10.695 785.732 ]
+/IC : [ 1 0 0 ]
+/RD : [ 0.063 0.063 0.063 0.063 ]
+/M : (D:20210816235607-05'00')
+/RC : (<?xml version="1.0"?><body xmlns:xfa="http://www.xfa.org/schema/xfa-data/1.0/" xfa:contentType="text/html" xfa:APIVersion="BluebeamPDFRevu:2018" xfa:spec="2.2.0" xmlns="http://www.w3.org/1999/xhtml"><p>Box Configuration: D</p><p>#</p><p># -------------------------------------------------</p><p># NOTE:</p><p># Possible Box Configs -&gt; D, I, X, T, XY</p><p /></body>)
+/Contents : <FEFF0042006F007800200043006F006E00660069006700750072006100740069006F006E003A00200044000D0023000D00230020
+002D002D002D002D002D002D002D002D002D002D002D002D002D002D002D002D002D002D002D002D002D002D002D002D
+002D002D002D002D002D002D002D002D002D002D002D002D002D002D002D002D002D002D002D002D002D002D002D002D
+002D000D00230020004E004F00540045003A000D002300200050006F0073007300690062006C006500200042006F0078
+00200043006F006E00660069006700730020002D003E00200044002C00200049002C00200058002C00200054002C0020
+00580059000D>
+/BS : << /S /S /Type /Border /W 0.125 >>
+/AP : << /N 383 0 R >>
+/NM : (ERXIMHAWBLGSYTTT)
+
+/Subj : (4 11/16" Fire Alarm Box - jm1.0.0)
+/Type : /Annot
+/P : 130 0 R
+/F : 4
+/C : [ 0 0 0 ]
+/CreationDate : (D:20210816104739-05'00')
+/T : (jmorrow)
+/Subtype : /Square
+/Rect : [ 19.835 783.637 21.929 785.732 ]
+/IC : [ 1 0 0 ]
+/RD : [ 0.063 0.063 0.063 0.063 ]
+/M : (D:20210816235610-05'00')
+/RC : (<?xml version="1.0"?><body xmlns:xfa="http://www.xfa.org/schema/xfa-data/1.0/" xfa:contentType="text/html" xfa:APIVersion="BluebeamPDFRevu:2018" xfa:spec="2.2.0" xmlns="http://www.w3.org/1999/xhtml"><p>Box Configuration: D</p><p>#</p><p># -------------------------------------------------</p><p># NOTE:</p><p># Possible Box Configs -&gt; D, I, X, T, XY</p><p /></body>)
+/Contents : <FEFF0042006F007800200043006F006E00660069006700750072006100740069006F006E003A00200044000D0023000D00230020
+002D002D002D002D002D002D002D002D002D002D002D002D002D002D002D002D002D002D002D002D002D002D002D002D
+002D002D002D002D002D002D002D002D002D002D002D002D002D002D002D002D002D002D002D002D002D002D002D002D
+002D000D00230020004E004F00540045003A000D002300200050006F0073007300690062006C006500200042006F0078
+00200043006F006E00660069006700730020002D003E00200044002C00200049002C00200058002C00200054002C0020
+00580059000D>
+/BS : << /S /S /Type /Border /W 0.125 >>
+/AP : << /N 385 0 R >>
+/NM : (BZYVAHTMSVSIIXGK)
+
+/Subj : (1/2" - EMT - Fire Alarm Connector)
+/Type : /Annot
+/P : 130 0 R
+/F : 4
+/C : [ 0 0 0 ]
+/CreationDate : (D:20210816104742-05'00')
+/T : (jmorrow)
+/Subtype : /Square
+/Rect : [ 27.659 784.841 28.382 785.5 ]
+/IC : [ 1 0 0 ]
+/RD : [ 0.063 0.063 0.063 0.063 ]
+/M : (D:20210816104742-05'00')
+/BS : << /S /S /Type /Border /W 0.125 >>
+/AP : << /N 387 0 R >>
+/NM : (ZRFJUITXJCFFFSEY)
+
+/Subj : (3/4" - EMT - Fire Alarm Connector)
+/Type : /Annot
+/P : 130 0 R
+/F : 4
+/C : [ 0 0 0 ]
+/CreationDate : (D:20210816104746-05'00')
+/T : (jmorrow)
+/Subtype : /Square
+/Rect : [ 28.622 784.819 29.346 785.478 ]
+/IC : [ 1 0.502 0 ]
+/RD : [ 0.063 0.063 0.063 0.063 ]
+/M : (D:20210816104746-05'00')
+/BS : << /S /S /Type /Border /W 0.125 >>
+/AP : << /N 389 0 R >>
+/NM : (PFHVUGCYLZHXNTFB)
+
+/Subj : (1" - EMT - Fire Alarm Connector)
+/Type : /Annot
+/P : 130 0 R
+/F : 4
+/C : [ 0 0 0 ]
+/CreationDate : (D:20210816104748-05'00')
+/T : (jmorrow)
+/Subtype : /Square
+/Rect : [ 29.783 784.779 30.507 785.437 ]
+/IC : [ 1 1 0 ]
+/RD : [ 0.063 0.063 0.063 0.063 ]
+/M : (D:20210816104748-05'00')
+/BS : << /S /S /Type /Border /W 0.125 >>
+/AP : << /N 391 0 R >>
+/NM : (VNNOJEYFDDHCPCCF)
+
+/Subj : (1 1/4" - EMT - Fire Alarm Connector)
+/Type : /Annot
+/P : 130 0 R
+/F : 4
+/C : [ 0 0 0 ]
+/CreationDate : (D:20210816104750-05'00')
+/T : (jmorrow)
+/Subtype : /Square
+/Rect : [ 30.85 784.725 31.573 785.383 ]
+/IC : [ 0 1 0 ]
+/RD : [ 0.063 0.063 0.063 0.063 ]
+/M : (D:20210816104750-05'00')
+/BS : << /S /S /Type /Border /W 0.125 >>
+/AP : << /N 393 0 R >>
+/NM : (GKDCMLVQIHDJLDMM)
+
+/Subj : (1 1/2" - EMT - Fire Alarm Connector)
+/Type : /Annot
+/P : 130 0 R
+/F : 4
+/C : [ 0 0 0 ]
+/CreationDate : (D:20210816104753-05'00')
+/T : (jmorrow)
+/Subtype : /Square
+/Rect : [ 32.051 784.684 32.775 785.343 ]
+/IC : [ 0 0.502 0 ]
+/RD : [ 0.063 0.063 0.063 0.063 ]
+/M : (D:20210816104753-05'00')
+/BS : << /S /S /Type /Border /W 0.125 >>
+/AP : << /N 395 0 R >>
+/NM : (MGTGQLBNXBWJIFPE)
+
+/Subj : (2" - EMT - Fire Alarm Connector)
+/Type : /Annot
+/P : 130 0 R
+/F : 4
+/C : [ 0 0 0 ]
+/CreationDate : (D:20210816104755-05'00')
+/T : (jmorrow)
+/Subtype : /Square
+/Rect : [ 33.415 784.617 34.138 785.275 ]
+/IC : [ 0 0.251 0 ]
+/RD : [ 0.063 0.063 0.063 0.063 ]
+/M : (D:20210816104755-05'00')
+/BS : << /S /S /Type /Border /W 0.125 >>
+/AP : << /N 397 0 R >>
+/NM : (MIHUAHDFUNSIOZEH)
+
+/Subj : (1/2" - PVC - Fire Alarm Connector)
+/Type : /Annot
+/P : 130 0 R
+/F : 4
+/C : [ 0 0 0 ]
+/CreationDate : (D:20210816104757-05'00')
+/T : (jmorrow)
+/Subtype : /Square
+/Rect : [ 27.677 780.378 28.401 781.036 ]
+/IC : [ 1 0 0 ]
+/RD : [ 0.063 0.063 0.063 0.063 ]
+/M : (D:20210816104757-05'00')
+/BS : << /S /S /Type /Border /W 0.125 >>
+/AP : << /N 399 0 R >>
+/NM : (EEGWJTPHXTHXBSWY)
+
+/Subj : (3/4" - PVC - Fire Alarm Connector)
+/Type : /Annot
+/P : 130 0 R
+/F : 4
+/C : [ 0 0 0 ]
+/CreationDate : (D:20210816104759-05'00')
+/T : (jmorrow)
+/Subtype : /Square
+/Rect : [ 29.705 780.411 30.493 781.063 ]
+/IC : [ 1 0.502 0 ]
+/RD : [ 0.063 0.063 0.063 0.063 ]
+/M : (D:20210816104953-05'00')
+/BS : << /S /S /Type /Border /W 0.125 >>
+/AP : << /N 401 0 R >>
+/NM : (FZGHJDIHZDQDLHWT)
+
+/Subj : (1" - PVC - Fire Alarm Connector)
+/Type : /Annot
+/P : 130 0 R
+/F : 4
+/C : [ 0 0 0 ]
+/CreationDate : (D:20210816104801-05'00')
+/T : (jmorrow)
+/Subtype : /Square
+/Rect : [ 31.633 780.324 32.356 780.982 ]
+/IC : [ 1 1 0 ]
+/RD : [ 0.063 0.063 0.063 0.063 ]
+/M : (D:20210816104801-05'00')
+/BS : << /S /S /Type /Border /W 0.125 >>
+/AP : << /N 403 0 R >>
+/NM : (YGZLCTQCCSPTJATP)
+
+/Subj : (1 1/4" - PVC - Fire Alarm Connector)
+/Type : /Annot
+/P : 130 0 R
+/F : 4
+/C : [ 0 0 0 ]
+/CreationDate : (D:20210816104803-05'00')
+/T : (jmorrow)
+/Subtype : /Square
+/Rect : [ 33.469 780.324 34.192 780.982 ]
+/IC : [ 0 1 0 ]
+/RD : [ 0.063 0.063 0.063 0.063 ]
+/M : (D:20210816104803-05'00')
+/BS : << /S /S /Type /Border /W 0.125 >>
+/AP : << /N 405 0 R >>
+/NM : (PBEOPTFDEHONVVZO)
+
+/Subj : (1 1/2" - PVC - Fire Alarm Connector)
+/Type : /Annot
+/P : 130 0 R
+/F : 4
+/C : [ 0 0 0 ]
+/CreationDate : (D:20210816104805-05'00')
+/T : (jmorrow)
+/Subtype : /Square
+/Rect : [ 35.089 780.337 35.812 780.996 ]
+/IC : [ 0 0.502 0 ]
+/RD : [ 0.063 0.063 0.063 0.063 ]
+/M : (D:20210816104805-05'00')
+/BS : << /S /S /Type /Border /W 0.125 >>
+/AP : << /N 407 0 R >>
+/NM : (GPHTZRIWIIGMHYWK)
+
+/Subj : (2" - PVC - Fire Alarm Connector)
+/Type : /Annot
+/P : 130 0 R
+/F : 4
+/C : [ 0 0 0 ]
+/CreationDate : (D:20210816104807-05'00')
+/T : (jmorrow)
+/Subtype : /Square
+/Rect : [ 36.803 780.189 37.527 780.847 ]
+/IC : [ 0 0.251 0 ]
+/RD : [ 0.063 0.063 0.063 0.063 ]
+/M : (D:20210816104807-05'00')
+/BS : << /S /S /Type /Border /W 0.125 >>
+/AP : << /N 409 0 R >>
+/NM : (MYFLAUHVFQKOJHCM)
+
+/Subj : (1/2" - EMT - Conduit Run - Supported - jm1.0.0)
+/Type : /Annot
+/P : 130 0 R
+/F : 4
+/C : [ 1 0 0 ]
+/CreationDate : (D:20210816104812-05'00')
 /T : (jmorrow)
 /Subtype : /PolyLine
-/Measure : 235 0 R
+/Measure : 412 0 R
 /IC : [ 1 0 0 ]
-/BS : << /D [ 4 3 16 3 ] /S /D /Type /Border /W 1 >>
-/DS : (font: Helvetica 12pt; text-align:center; line-height:13.8pt; color:#00CCFF)
-/Cap : True
+/BS : << /S /S /Type /Border /W 1 >>
+/DS : (font: Helvetica 12pt; text-align:center; line-height:13.8pt; color:#FF0000)
 /AlignOnSegment : True
 /MeasurementTypes : 130
 /IT : /PolyLineDimension
-/M : (D:20210812150152-05'00')
-/AP : << /N 237 0 R >>
-/Vertices : [ 331.387 711.576 332.55 611.966 397.083 555.378 ]
-/RC : (<?xml version="1.0"?><body xmlns:xfa="http://www.xfa.org/schema/xfa-data/1.0/" xfa:contentType="text/html" xfa:APIVersion="BluebeamPDFRevu:2018" xfa:spec="2.2.0" style="font:Helvetica 12pt; text-align:center; line-height:13.8pt; color:#00CCFF" xmlns="http://www.w3.org/1999/xhtml">41'-2 1/2"</body>)
-/BSIColumnData : [ (powered) () (4" deep) (1/2") (0) (0) (0) (0) (0) (0) (1) (1/4") (EMT) (UNSET) ]
-/Label : ()
-/Rect : [ 325.887 549.878 402.583 717.076 ]
-/Contents : (41'-2 1/2")
-/NM : (IDJMIVMKUAGVZSZP)
+/M : (D:20210816185748-05'00')
+/AP : << /N 413 0 R >>
+/Vertices : [ 45.141 785.678 45.141 779.563 ]
+/RC : (<?xml version="1.0"?><body xmlns:xfa="http://www.xfa.org/schema/xfa-data/1.0/" xfa:contentType="text/html" xfa:APIVersion="BluebeamPDFRevu:2018" xfa:spec="2.2.0" style="font:Helvetica 12pt; text-align:center; line-height:13.8pt; color:#FF0000" xmlns="http://www.w3.org/1999/xhtml">Hanger Rod To Structure - 0' 0"<p>1'-4 1/4"</p></body>)
+/Label : (Hanger Rod To Structure - 0' 0")
+/Rect : [ 39.641 774.063 50.641 791.178 ]
+/Contents : <FEFF00480061006E00670065007200200052006F006400200054006F00200053007400720075006300740075007200650020002D
+002000300027002000300022000D00310027002D003400200031002F00340022>
+/NM : (ZENBWCQZLOZROCRQ)
+
+/Subj : (3/4" - EMT - Conduit Run - Supported - jm1.0.0)
+/Type : /Annot
+/P : 130 0 R
+/F : 4
+/C : [ 1 0.502 0 ]
+/CreationDate : (D:20210816104820-05'00')
+/T : (jmorrow)
+/Subtype : /PolyLine
+/Measure : 416 0 R
+/IC : [ 1 0 0 ]
+/BS : << /S /S /Type /Border /W 1 >>
+/DS : (font: Helvetica 12pt; text-align:center; line-height:13.8pt; color:#FF0000)
+/AlignOnSegment : True
+/MeasurementTypes : 130
+/IT : /PolyLineDimension
+/M : (D:20210816185751-05'00')
+/AP : << /N 417 0 R >>
+/Vertices : [ 54.734 787.562 54.734 780.223 ]
+/RC : (<?xml version="1.0"?><body xmlns:xfa="http://www.xfa.org/schema/xfa-data/1.0/" xfa:contentType="text/html" xfa:APIVersion="BluebeamPDFRevu:2018" xfa:spec="2.2.0" style="font:Helvetica 12pt; text-align:center; line-height:13.8pt; color:#FF0000" xmlns="http://www.w3.org/1999/xhtml">Hanger Rod To Structure - 0' 0"<p>1'-7 1/2"</p></body>)
+/Label : (Hanger Rod To Structure - 0' 0")
+/Rect : [ 49.234 774.723 60.234 793.062 ]
+/Contents : <FEFF00480061006E00670065007200200052006F006400200054006F00200053007400720075006300740075007200650020002D
+002000300027002000300022000D00310027002D003700200031002F00320022>
+/NM : (CNFKXUOAVWTNCNCJ)
+
+/Subj : (1" - EMT - Conduit Run - Supported - jm1.0.0)
+/Type : /Annot
+/P : 130 0 R
+/F : 4
+/C : [ 1 1 0 ]
+/CreationDate : (D:20210816104828-05'00')
+/T : (jmorrow)
+/Subtype : /PolyLine
+/Measure : 420 0 R
+/IC : [ 1 0 0 ]
+/BS : << /S /S /Type /Border /W 1 >>
+/DS : (font: Helvetica 12pt; text-align:center; line-height:13.8pt; color:#FF0000)
+/AlignOnSegment : True
+/MeasurementTypes : 130
+/IT : /PolyLineDimension
+/M : (D:20210816185803-05'00')
+/AP : << /N 421 0 R >>
+/Vertices : [ 59.902 787.367 59.902 780.207 ]
+/RC : (<?xml version="1.0"?><body xmlns:xfa="http://www.xfa.org/schema/xfa-data/1.0/" xfa:contentType="text/html" xfa:APIVersion="BluebeamPDFRevu:2018" xfa:spec="2.2.0" style="font:Helvetica 12pt; text-align:center; line-height:13.8pt; color:#FF0000" xmlns="http://www.w3.org/1999/xhtml">Hanger Rod To Structure - 0' 0"<p>1'-7"</p></body>)
+/Label : (Hanger Rod To Structure - 0' 0")
+/Rect : [ 54.402 774.707 65.402 792.867 ]
+/Contents : <FEFF00480061006E00670065007200200052006F006400200054006F00200053007400720075006300740075007200650020002D
+002000300027002000300022000D00310027002D00370022>
+/NM : (ZAVXHPRCDWZZOIJI)
+
+/Subj : (1 1/4" - EMT - Conduit Run - Supported - jm1.0.0)
+/Type : /Annot
+/P : 130 0 R
+/F : 4
+/C : [ 0 1 0 ]
+/CreationDate : (D:20210816104831-05'00')
+/T : (jmorrow)
+/Subtype : /PolyLine
+/Measure : 424 0 R
+/IC : [ 1 0 0 ]
+/BS : << /S /S /Type /Border /W 1 >>
+/DS : (font: Helvetica 12pt; text-align:center; line-height:13.8pt; color:#FF0000)
+/AlignOnSegment : True
+/MeasurementTypes : 130
+/IT : /PolyLineDimension
+/M : (D:20210816185956-05'00')
+/AP : << /N 425 0 R >>
+/Vertices : [ 63.839 786.384 63.839 777.75 ]
+/RC : (<?xml version="1.0"?><body xmlns:xfa="http://www.xfa.org/schema/xfa-data/1.0/" xfa:contentType="text/html" xfa:APIVersion="BluebeamPDFRevu:2018" xfa:spec="2.2.0" style="font:Helvetica 12pt; text-align:center; line-height:13.8pt; color:#FF0000" xmlns="http://www.w3.org/1999/xhtml"><p>Hanger Rod To Structure - 0' 0"</p><p>1'-11"</p></body>)
+/Label : (Hanger Rod To Structure - 0' 0")
+/Rect : [ 58.339 772.25 69.339 791.884 ]
+/Contents : <FEFF00480061006E00670065007200200052006F006400200054006F00200053007400720075006300740075007200650020002D
+002000300027002000300022000D00310027002D003100310022>
+/NM : (BKZIKLPTUYXUMUIB)
+
+/Subj : (1 1/2" - EMT - Conduit Run - Supported - jm1.0.0)
+/Type : /Annot
+/P : 130 0 R
+/F : 4
+/C : [ 0 0.502 0 ]
+/CreationDate : (D:20210816104837-05'00')
+/T : (jmorrow)
+/Subtype : /PolyLine
+/Measure : 432 0 R
+/IC : [ 1 0 0 ]
+/BS : << /S /S /Type /Border /W 1 >>
+/DS : (font: Helvetica 12pt; text-align:center; line-height:13.8pt; color:#FF0000)
+/AlignOnSegment : True
+/MeasurementTypes : 130
+/IT : /PolyLineDimension
+/M : (D:20210816185956-05'00')
+/AP : << /N 433 0 R >>
+/Vertices : [ 68.31 787.308 68.31 777.976 ]
+/RC : (<?xml version="1.0"?><body xmlns:xfa="http://www.xfa.org/schema/xfa-data/1.0/" xfa:contentType="text/html" xfa:APIVersion="BluebeamPDFRevu:2018" xfa:spec="2.2.0" style="font:Helvetica 12pt; text-align:center; line-height:13.8pt; color:#FF0000" xmlns="http://www.w3.org/1999/xhtml"><p>Hanger Rod To Structure - 0' 0"</p><p>2'-1"</p></body>)
+/Label : (Hanger Rod To Structure - 0' 0")
+/Rect : [ 62.81 772.476 73.81 792.808 ]
+/Contents : <FEFF00480061006E00670065007200200052006F006400200054006F00200053007400720075006300740075007200650020002D
+002000300027002000300022000D00320027002D00310022>
+/NM : (KKLJYIWPIBOKSIWH)
+
+/Subj : (2" - EMT - Conduit Run - Supported - jm1.0.0)
+/Type : /Annot
+/P : 130 0 R
+/F : 4
+/C : [ 0 0.251 0 ]
+/CreationDate : (D:20210816104840-05'00')
+/T : (jmorrow)
+/Subtype : /PolyLine
+/Measure : 436 0 R
+/IC : [ 1 0 0 ]
+/BS : << /S /S /Type /Border /W 1 >>
+/DS : (font: Helvetica 12pt; text-align:center; line-height:13.8pt; color:#FF0000)
+/AlignOnSegment : True
+/MeasurementTypes : 130
+/IT : /PolyLineDimension
+/M : (D:20210816190001-05'00')
+/AP : << /N 437 0 R >>
+/Vertices : [ 73.482 787.328 73.482 778.693 ]
+/RC : (<?xml version="1.0"?><body xmlns:xfa="http://www.xfa.org/schema/xfa-data/1.0/" xfa:contentType="text/html" xfa:APIVersion="BluebeamPDFRevu:2018" xfa:spec="2.2.0" style="font:Helvetica 12pt; text-align:center; line-height:13.8pt; color:#FF0000" xmlns="http://www.w3.org/1999/xhtml"><p>Hanger Rod To Structure - 0' 0"</p><p>1'-11"</p></body>)
+/Label : (Hanger Rod To Structure - 0' 0")
+/Rect : [ 67.982 773.193 78.982 792.828 ]
+/Contents : <FEFF00480061006E00670065007200200052006F006400200054006F00200053007400720075006300740075007200650020002D
+002000300027002000300022000D00310027002D003100310022>
+/NM : (BIQHURQBGKOROMVE)
+
+/Subj : (1/2" - PVC - Conduit Run - Supported - jm1.0.0)
+/Type : /Annot
+/P : 130 0 R
+/F : 4
+/C : [ 1 0 0 ]
+/CreationDate : (D:20210816104910-05'00')
+/T : (jmorrow)
+/Subtype : /PolyLine
+/Measure : 440 0 R
+/IC : [ 1 0 0 ]
+/BS : << /S /S /Type /Border /W 1 >>
+/DS : (font: Helvetica 12pt; text-align:center; line-height:13.8pt; color:#FF0000)
+/AlignOnSegment : True
+/MeasurementTypes : 130
+/IT : /PolyLineDimension
+/M : (D:20210816185849-05'00')
+/AP : << /N 441 0 R >>
+/Vertices : [ 43.922 767.333 43.922 758.699 ]
+/RC : (<?xml version="1.0"?><body xmlns:xfa="http://www.xfa.org/schema/xfa-data/1.0/" xfa:contentType="text/html" xfa:APIVersion="BluebeamPDFRevu:2018" xfa:spec="2.2.0" style="font:Helvetica 12pt; text-align:center; line-height:13.8pt; color:#FF0000" xmlns="http://www.w3.org/1999/xhtml"><p>Hanger Rod To Structure - 0' 0"</p><p>1'-11"</p></body>)
+/Label : (Hanger Rod To Structure - 0' 0")
+/Rect : [ 38.422 753.199 49.422 772.833 ]
+/Contents : <FEFF00480061006E00670065007200200052006F006400200054006F00200053007400720075006300740075007200650020002D
+002000300027002000300022000D00310027002D003100310022>
+/NM : (YBQRAYXLSPIOZWEI)
+
+/Subj : (3/4" - PVC - Conduit Run - Supported - jm1.0.0)
+/Type : /Annot
+/P : 130 0 R
+/F : 4
+/C : [ 1 0.502 0 ]
+/CreationDate : (D:20210816104915-05'00')
+/T : (jmorrow)
+/Subtype : /PolyLine
+/Measure : 448 0 R
+/IC : [ 1 0 0 ]
+/BS : << /S /S /Type /Border /W 1 >>
+/DS : (font: Helvetica 12pt; text-align:center; line-height:13.8pt; color:#FF0000)
+/AlignOnSegment : True
+/MeasurementTypes : 130
+/IT : /PolyLineDimension
+/M : (D:20210816185945-05'00')
+/AP : << /N 449 0 R >>
+/Vertices : [ 54.775 765.274 54.775 757.303 ]
+/RC : (<?xml version="1.0"?><body xmlns:xfa="http://www.xfa.org/schema/xfa-data/1.0/" xfa:contentType="text/html" xfa:APIVersion="BluebeamPDFRevu:2018" xfa:spec="2.2.0" style="font:Helvetica 12pt; text-align:center; line-height:13.8pt; color:#FF0000" xmlns="http://www.w3.org/1999/xhtml"><p>Hanger Rod To Structure - 0' 0"</p><p>1'-9 1/4"</p></body>)
+/Label : (Hanger Rod To Structure - 0' 0")
+/Rect : [ 49.275 751.803 60.275 770.774 ]
+/Contents : <FEFF00480061006E00670065007200200052006F006400200054006F00200053007400720075006300740075007200650020002D
+002000300027002000300022000D00310027002D003900200031002F00340022>
+/NM : (POCQFHZEUIPVHIZG)
+
+/Subj : (1" - PVC - Conduit Run - Supported - jm1.0.0)
+/Type : /Annot
+/P : 130 0 R
+/F : 4
+/C : [ 1 1 0 ]
+/CreationDate : (D:20210816104919-05'00')
+/T : (jmorrow)
+/Subtype : /PolyLine
+/Measure : 452 0 R
+/IC : [ 1 0 0 ]
+/BS : << /S /S /Type /Border /W 1 >>
+/DS : (font: Helvetica 12pt; text-align:center; line-height:13.8pt; color:#FF0000)
+/AlignOnSegment : True
+/MeasurementTypes : 130
+/IT : /PolyLineDimension
+/M : (D:20210816185945-05'00')
+/AP : << /N 453 0 R >>
+/Vertices : [ 59.975 765.792 59.975 758.032 ]
+/RC : (<?xml version="1.0"?><body xmlns:xfa="http://www.xfa.org/schema/xfa-data/1.0/" xfa:contentType="text/html" xfa:APIVersion="BluebeamPDFRevu:2018" xfa:spec="2.2.0" style="font:Helvetica 12pt; text-align:center; line-height:13.8pt; color:#FF0000" xmlns="http://www.w3.org/1999/xhtml"><p>Hanger Rod To Structure - 0' 0"</p><p>1'-8 3/4"</p></body>)
+/Label : (Hanger Rod To Structure - 0' 0")
+/Rect : [ 54.475 752.532 65.475 771.292 ]
+/Contents : <FEFF00480061006E00670065007200200052006F006400200054006F00200053007400720075006300740075007200650020002D
+002000300027002000300022000D00310027002D003800200033002F00340022>
+/NM : (CDJOVOFMOCYORUPM)
+
+/Subj : (1 1/4" - PVC - Conduit Run - Supported - jm1.0.0)
+/Type : /Annot
+/P : 130 0 R
+/F : 4
+/C : [ 0 1 0 ]
+/CreationDate : (D:20210816104922-05'00')
+/T : (jmorrow)
+/Subtype : /PolyLine
+/Measure : 456 0 R
+/IC : [ 1 0 0 ]
+/BS : << /S /S /Type /Border /W 1 >>
+/DS : (font: Helvetica 12pt; text-align:center; line-height:13.8pt; color:#FF0000)
+/AlignOnSegment : True
+/MeasurementTypes : 130
+/IT : /PolyLineDimension
+/M : (D:20210816185945-05'00')
+/AP : << /N 457 0 R >>
+/Vertices : [ 64.158 765.019 64.158 757.146 ]
+/RC : (<?xml version="1.0"?><body xmlns:xfa="http://www.xfa.org/schema/xfa-data/1.0/" xfa:contentType="text/html" xfa:APIVersion="BluebeamPDFRevu:2018" xfa:spec="2.2.0" style="font:Helvetica 12pt; text-align:center; line-height:13.8pt; color:#FF0000" xmlns="http://www.w3.org/1999/xhtml"><p>Hanger Rod To Structure - 0' 0"</p><p>1'-9"</p></body>)
+/Label : (Hanger Rod To Structure - 0' 0")
+/Rect : [ 58.658 751.646 69.658 770.519 ]
+/Contents : <FEFF00480061006E00670065007200200052006F006400200054006F00200053007400720075006300740075007200650020002D
+002000300027002000300022000D00310027002D00390022>
+/NM : (BARAQHTAYBSTLFET)
+
+/Subj : (1 1/2" - PVC - Conduit Run - Supported - jm1.0.0)
+/Type : /Annot
+/P : 130 0 R
+/F : 4
+/C : [ 0 0.502 0 ]
+/CreationDate : (D:20210816104925-05'00')
+/T : (jmorrow)
+/Subtype : /PolyLine
+/Measure : 460 0 R
+/IC : [ 1 0 0 ]
+/BS : << /S /S /Type /Border /W 1 >>
+/DS : (font: Helvetica 12pt; text-align:center; line-height:13.8pt; color:#FF0000)
+/AlignOnSegment : True
+/MeasurementTypes : 130
+/IT : /PolyLineDimension
+/M : (D:20210816185945-05'00')
+/AP : << /N 461 0 R >>
+/Vertices : [ 68.334 765.614 68.334 758.518 ]
+/RC : (<?xml version="1.0"?><body xmlns:xfa="http://www.xfa.org/schema/xfa-data/1.0/" xfa:contentType="text/html" xfa:APIVersion="BluebeamPDFRevu:2018" xfa:spec="2.2.0" style="font:Helvetica 12pt; text-align:center; line-height:13.8pt; color:#FF0000" xmlns="http://www.w3.org/1999/xhtml"><p>Hanger Rod To Structure - 0' 0"</p><p>1'-7"</p></body>)
+/Label : (Hanger Rod To Structure - 0' 0")
+/Rect : [ 62.834 753.018 73.834 771.114 ]
+/Contents : <FEFF00480061006E00670065007200200052006F006400200054006F00200053007400720075006300740075007200650020002D
+002000300027002000300022000D00310027002D00370022>
+/NM : (UGQKHSMDMGELZFCX)
+
+/Subj : (2" - PVC - Conduit Run - Supported - jm1.0.0)
+/Type : /Annot
+/P : 130 0 R
+/F : 4
+/C : [ 0 0.251 0 ]
+/CreationDate : (D:20210816104928-05'00')
+/T : (jmorrow)
+/Subtype : /PolyLine
+/Measure : 464 0 R
+/IC : [ 1 0 0 ]
+/BS : << /S /S /Type /Border /W 1 >>
+/DS : (font: Helvetica 12pt; text-align:center; line-height:13.8pt; color:#FF0000)
+/AlignOnSegment : True
+/MeasurementTypes : 130
+/IT : /PolyLineDimension
+/M : (D:20210816185950-05'00')
+/AP : << /N 465 0 R >>
+/Vertices : [ 73.611 765.594 73.611 758.498 ]
+/RC : (<?xml version="1.0"?><body xmlns:xfa="http://www.xfa.org/schema/xfa-data/1.0/" xfa:contentType="text/html" xfa:APIVersion="BluebeamPDFRevu:2018" xfa:spec="2.2.0" style="font:Helvetica 12pt; text-align:center; line-height:13.8pt; color:#FF0000" xmlns="http://www.w3.org/1999/xhtml"><p>Hanger Rod To Structure - 0' 0"</p><p>1'-7"</p></body>)
+/Label : (Hanger Rod To Structure - 0' 0")
+/Rect : [ 68.111 752.998 79.111 771.094 ]
+/Contents : <FEFF00480061006E00670065007200200052006F006400200054006F00200053007400720075006300740075007200650020002D
+002000300027002000300022000D00310027002D00370022>
+/NM : (DRWRGYANXPEICYBO)
+
+/Subj : (1/2" - PVC - Fire Alarm Connector)
+/Type : /Annot
+/P : 130 0 R
+/F : 4
+/C : [ 0 0 0 ]
+/CreationDate : (D:20210816222051-05'00')
+/T : (justi)
+/Subtype : /Square
+/Rect : [ 15.94 775.324 16.664 775.983 ]
+/IC : [ 1 0 0 ]
+/RD : [ 0.063 0.063 0.063 0.063 ]
+/M : (D:20210816235808-05'00')
+/BS : << /S /S /Type /Border /W 0.125 >>
+/AP : << /N 471 0 R >>
+/NM : (NCJHNEWIZFOFUOID)
+/RT : /Group
+/IRT : 466 0 R
+
+/Subj : (1/2" - PVC - Fire Alarm Connector)
+/Type : /Annot
+/P : 130 0 R
+/F : 4
+/C : [ 0 0 0 ]
+/CreationDate : (D:20210816222033-05'00')
+/T : (justi)
+/Subtype : /Square
+/Rect : [ 15.94 777.646 16.664 778.305 ]
+/IC : [ 1 0 0 ]
+/RD : [ 0.063 0.063 0.063 0.063 ]
+/M : (D:20210816235808-05'00')
+/BS : << /S /S /Type /Border /W 0.125 >>
+/AP : << /N 469 0 R >>
+/NM : (ISSHXUNRBCKCATYV)
+/IRT : 466 0 R
+/RT : /Group
+
+/Subj : (1" - PVC - Fire Alarm Connector)
+/Type : /Annot
+/P : 130 0 R
+/F : 4
+/C : [ 0 0 0 ]
+/CreationDate : (D:20210816222108-05'00')
+/T : (justi)
+/Subtype : /Square
+/Rect : [ 17.15 776.526 17.831 777.27 ]
+/IC : [ 1 1 0 ]
+/RD : [ 0.063 0.063 0.063 0.063 ]
+/M : (D:20210816235808-05'00')
+/BS : << /S /S /Type /Border /W 0.125 >>
+/AP : << /N 473 0 R >>
+/NM : (QUZUCSQTVZDZTSMW)
+/Rotation : 91.826
+/Popup : 474 0 R
+/RT : /Group
+/IRT : 466 0 R
+
+/Subj : (4" Fire Alarm Box - jm1.0.0)
+/Type : /Annot
+/P : 130 0 R
+/F : 4
+/C : [ 0 0 0 ]
+/CreationDate : (D:20210816221939-05'00')
+/T : (justi)
+/Subtype : /Square
+/Rect : [ 15.277 775.794 17.371 777.889 ]
+/IC : [ 1 0 0 ]
+/RD : [ 0.063 0.063 0.063 0.063 ]
+/M : (D:20210816235808-05'00')
+/RC : (<?xml version="1.0"?><body xmlns:xfa="http://www.xfa.org/schema/xfa-data/1.0/" xfa:contentType="text/html" xfa:APIVersion="BluebeamPDFRevu:2018" xfa:spec="2.2.0" xmlns="http://www.w3.org/1999/xhtml"><p>Box Configuration: D</p><p>#</p><p># -------------------------------------------------</p><p># NOTE:</p><p># Possible Box Configs -&gt; D, I, X, T, XY</p><p /></body>)
+/Contents : <FEFF0042006F007800200043006F006E00660069006700750072006100740069006F006E003A00200044000D0023000D00230020
+002D002D002D002D002D002D002D002D002D002D002D002D002D002D002D002D002D002D002D002D002D002D002D002D
+002D002D002D002D002D002D002D002D002D002D002D002D002D002D002D002D002D002D002D002D002D002D002D002D
+002D000D00230020004E004F00540045003A000D002300200050006F0073007300690062006C006500200042006F0078
+00200043006F006E00660069006700730020002D003E00200044002C00200049002C00200058002C00200054002C0020
+00580059000D>
+/BS : << /S /S /Type /Border /W 0.125 >>
+/AP : << /N 467 0 R >>
+/NM : (AQOAPPHHHTVWPXZK)
+/GroupNesting : [ (Group) /AQOAPPHHHTVWPXZK /NCJHNEWIZFOFUOID /ISSHXUNRBCKCATYV /QUZUCSQTVZDZTSMW ]
+
+/Type : /Annot
+/P : 130 0 R
+/F : 4
+/C : [ 1 0 0 ]
+/Subtype : /Popup
+/NM : (CXFIGAEEPXRGZROE)
+/M : (D:20210816235645-05'00')
+/Parent : 472 0 R
+/Rect : [ 33.831 657.27 213.831 777.27 ]
 

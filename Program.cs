@@ -53,6 +53,7 @@ namespace BluebeamP3InWall
             catch(Exception ex)
             {
                 Console.WriteLine(ex.ToString());
+                Console.ReadKey();
             }
 
             /* bool got_pdf_fn = ResolvePdfInputFilePath(exe_path);
@@ -91,13 +92,17 @@ namespace BluebeamP3InWall
         /// <param name="exe_path"></param>
         private static void RunFireAlarm(string exe_path)
         {
-            string pdf_input_path = GetPdfInputFilePath(exe_path);
+            string pdf_input_path = GetPdfInputFileName(exe_path);
 
             if(string.IsNullOrWhiteSpace(pdf_input_path) || !File.Exists(pdf_input_path)) 
             {
                 Console.WriteLine("Failed to retrieve pdf file name");
                 Console.ReadKey();
                 return;
+            }
+            else
+            {
+                Console.WriteLine("Using pdf file: " + pdf_input_path);
             }
 
             var pdf_output_path = exe_path +
@@ -107,14 +112,54 @@ namespace BluebeamP3InWall
             // parse poly lines into conduit package
             Pdforge f = new Pdforge(pdf_input_path, pdf_output_path);
             var poly_lines = f.GetAnnotationsBySubType(f.GetPage(0), "PolyLine");
-            Console.WriteLine(poly_lines.Count().ToString());
             BluebeamConduitPackage conduit_pkg = BluebeamConduitPackage.PackageFromPolyLines(poly_lines);
+            Console.WriteLine(conduit_pkg.ToString());
 
-            // parse all rectangles into fire alarm box package
+            // parse all groups into fire alarm boxes with connectors package
+            BlubeamFireAlarmBoxPackage box_package = BlubeamFireAlarmBoxPackage.BoxPackageFromAnnotations(f.AllAnnotations);
+
+            // parse all individual hangers into fire alarm hanger package
+
+            // Output to Excel
+            KillExcelProcess();
+            CleanupExcelFiles();
             
-            // parse all hanger rectangles into fire alarm hanger package
+            ExcelEngine exporter = null;
 
+            try
+            {
+                exporter = new ExcelEngine(ExcelOutputFilePath);
 
+                if(!ExcelEngine.PrepExportFile(ExcelOutputFilePath)) 
+                {
+                    Console.WriteLine("Failed to generate Excel output.");
+                    Console.ReadKey();
+                    return;
+                }
+
+                ExcelOutputSheet s1 = new ExcelOutputSheet(ExportStyle.FireAlarm);
+                Console.WriteLine("Generating Bill of Material:"); 
+                Console.WriteLine("\tCreated sheet");
+                exporter.RegisterSheets("Fire Alarm", s1);
+                Console.WriteLine("\tRegistered sheet");
+                s1.GenerateFireAlarmSheet(LaborFilePath, "<Project Title Goes Here>", conduit_pkg, box_package);
+                Console.WriteLine("\tFilled Sheet");
+                exporter.Close();
+                Console.WriteLine("\tBill of Material Generated!");
+                exporter.OpenExcel();
+                // exporter.OpenPDF(PdfCopyFilename);
+            }
+            catch(Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+                Console.ReadKey();
+            }
+
+            Console.WriteLine("\nBill of Material: ");
+            Console.WriteLine("\tFilename - " + ExcelOutputFilePath.Split("\\").Last());
+            Console.WriteLine("\tFull Path - " + ExcelOutputFilePath);
+
+            Console.ReadKey();
         }
 
         /// <summary>
@@ -206,7 +251,7 @@ namespace BluebeamP3InWall
         /// <summary>
         /// Get user input to select a pdf file name if multiple are present
         /// </summary>
-        public static string GetPdfInputFilePath(string exe_path)
+        public static string GetPdfInputFileName(string exe_path)
         {
             var raw_fns = Directory
                 .GetFiles(exe_path)
@@ -218,7 +263,7 @@ namespace BluebeamP3InWall
 
             if (raw_fns.Count() == 1)
             {
-                PdfImportFilename = get_fn(raw_fns.First());
+                return get_fn(raw_fns.First());
             }
             else 
             {
@@ -258,8 +303,6 @@ namespace BluebeamP3InWall
 
                 return fns[response];
             }
-
-            return string.Empty;
         }
 
         /// <summary>

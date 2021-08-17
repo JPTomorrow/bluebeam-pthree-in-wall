@@ -28,5 +28,11 @@ namespace JPMorrow.Excel
             new[] { "Part Name", "Qty", "Labor Per Unit", "Labor Code", "Total Labor Hours" },
             new[] { 'A', 'E' }
         );
+
+        public static ExcelSheetStyle FireAlarm = new ExcelSheetStyle(
+            " - Fire Alarm - M.P.A.C.T. - ",
+            new[] { "Part Name", "Qty", "Labor Per Unit", "Labor Code", "Total Labor Hours" },
+            new[] { 'A', 'E' }
+        );
     }
 }

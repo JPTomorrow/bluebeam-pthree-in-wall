@@ -8,6 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using JPMorrow.P3;
+using JPMorrow.Pdf.Bluebeam.FireAlarm;
 using JPMorrow.Revit.Labor;
 using OfficeOpenXml.Style;
 using Draw = System.Drawing;
@@ -123,6 +124,100 @@ namespace JPMorrow.Excel
 			code_one_sub = Math.Ceiling(code_one_sub);
 			InsertGrandTotal("Sub Total", ref code_one_sub, true, false, true);
 			code_one_sub = 0.0;
+
+			InsertGrandTotal("Code 01 | Empty Raceway | Grand Total", ref code_one_gt, false, false, false);
+			code_one_gt = shave_labor(code_one_gt);
+			InsertGrandTotal("Code 01 w/ 0.82 Labor Factor", ref code_one_gt, true, false, true);
+
+            FormatExcelSheet(0.1M);
+            MakeFooter();
+
+            // debugger.show(err:PrintRowCrawlGraph());
+            HasData = true;
+        }
+
+		public void GenerateFireAlarmSheet(
+			string labor_import_path, string project_title, 
+			BluebeamConduitPackage conduit_pkg, BlubeamFireAlarmBoxPackage box_pkg) 
+		{
+			if(HasData) throw new Exception("The sheet already has data");
+            string title = "M.P.A.C.T. - Fire Alarm";
+            InsertHeader(title, project_title, "");
+
+            var code_one_gt = 0.0;
+			var code_one_sub = 0.0;
+            static double shave_labor(double labor) => labor * 0.82;
+
+			var entries = LaborExchange.LoadLaborFromFile(labor_import_path);
+            var l = new LaborExchange(entries);
+
+			// boxes
+
+            // conduit
+            var emt_total_1 = conduit_pkg.GetTotalEmtLengthRounded("1/2\"");
+            var emt_total_2 = conduit_pkg.GetTotalEmtLengthRounded("3/4\"");
+            var emt_total_3 = conduit_pkg.GetTotalEmtLengthRounded("1\"");
+            var emt_total_4 = conduit_pkg.GetTotalEmtLengthRounded("1 1/4\"");
+            var emt_total_5 = conduit_pkg.GetTotalEmtLengthRounded("1 1/2\"");
+            var emt_total_6 = conduit_pkg.GetTotalEmtLengthRounded("2\"");
+
+			var pvc_total_1 = conduit_pkg.GetTotalPvcLengthRounded("1/2\"");
+            var pvc_total_2 = conduit_pkg.GetTotalPvcLengthRounded("3/4\"");
+            var pvc_total_3 = conduit_pkg.GetTotalPvcLengthRounded("1\"");
+            var pvc_total_4 = conduit_pkg.GetTotalPvcLengthRounded("1 1/4\"");
+            var pvc_total_5 = conduit_pkg.GetTotalPvcLengthRounded("1 1/2\"");
+            var pvc_total_6 = conduit_pkg.GetTotalPvcLengthRounded("2\"");
+
+			var mc_total_1 = conduit_pkg.GetTotalMcCableLengthRounded("1/2\"");
+            var mc_total_2 = conduit_pkg.GetTotalMcCableLengthRounded("3/4\"");
+            var mc_total_3 = conduit_pkg.GetTotalMcCableLengthRounded("1\"");
+            var mc_total_4 = conduit_pkg.GetTotalMcCableLengthRounded("1 1/4\"");
+            var mc_total_5 = conduit_pkg.GetTotalMcCableLengthRounded("1 1/2\"");
+            var mc_total_6 = conduit_pkg.GetTotalMcCableLengthRounded("2\"");
+
+			void print_conduit(int qty, string labor_str)
+			{
+				if(qty.Equals("0' 0\"")) return;
+				var has_item = l.GetItem(out var li, qty, labor_str);
+				if(!has_item) throw new Exception("No Labor item for conduit");
+				InsertIntoRow(li.EntryName, li.Quantity, li.PerUnitLabor, li.LaborCodeLetter, li.TotalLaborValue);
+				code_one_sub += li.TotalLaborValue; NextRow(1);
+			}
+
+			InsertSingleDivider(Draw.Color.SlateGray, Draw.Color.White, "Conduit");
+
+            print_conduit(emt_total_1, "Conduit - EMT - 1/2\"");
+            print_conduit(emt_total_2, "Conduit - EMT - 3/4\"");
+            print_conduit(emt_total_3, "Conduit - EMT - 1\"");
+            print_conduit(emt_total_4, "Conduit - EMT - 1 1/4\"");
+            print_conduit(emt_total_5, "Conduit - EMT - 1 1/2\"");
+            print_conduit(emt_total_6, "Conduit - EMT - 2\"");
+ 
+			print_conduit(pvc_total_1, "Conduit - PVC - 1/2\"");
+            print_conduit(pvc_total_2, "Conduit - PVC - 3/4\"");
+            print_conduit(pvc_total_3, "Conduit - PVC - 1\"");
+            print_conduit(pvc_total_4, "Conduit - PVC - 1 1/4\"");
+            print_conduit(pvc_total_5, "Conduit - PVC - 1 1/2\"");
+            print_conduit(pvc_total_6, "Conduit - PVC - 2\"");
+
+			//@TODO:MC Cable
+			/* print_conduit(mc_total_1, "1/2\"", 		"Conduit - EMT - 1/2\"");
+            print_conduit(mc_total_2, "3/4\"", 		"Conduit - EMT - 3/4\"");
+            print_conduit(mc_total_3, "1\"", 		"Conduit - EMT - 1\"");
+            print_conduit(mc_total_4, "1 1/4\"", 	"Conduit - EMT - 1 1/4\"");
+            print_conduit(mc_total_5, "1 1/2\"", 	"Conduit - EMT - 1 1/2\"");
+            print_conduit(mc_total_6, "2\"", 		"Conduit - EMT - 2\""); */
+
+            code_one_sub = Math.Ceiling(code_one_sub);
+			code_one_gt += code_one_sub;
+			InsertGrandTotal("Sub Total", ref code_one_sub, true, false, true);
+			code_one_sub = 0.0;
+
+			// couplings
+
+			// connectors
+
+			// hangers
 
 			InsertGrandTotal("Code 01 | Empty Raceway | Grand Total", ref code_one_gt, false, false, false);
 			code_one_gt = shave_labor(code_one_gt);
