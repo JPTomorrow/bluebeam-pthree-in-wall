@@ -1,4 +1,4 @@
-/Subj : (4" Fire Alarm Box - jm1.0.0)
+/Subj : (4" - Fire Alarm Box - jm1.0.0)
 /Type : /Annot
 /P : 130 0 R
 /F : 4
@@ -9,19 +9,20 @@
 /Rect : [ 8.6 783.637 10.695 785.732 ]
 /IC : [ 1 0 0 ]
 /RD : [ 0.063 0.063 0.063 0.063 ]
-/M : (D:20210816235607-05'00')
-/RC : (<?xml version="1.0"?><body xmlns:xfa="http://www.xfa.org/schema/xfa-data/1.0/" xfa:contentType="text/html" xfa:APIVersion="BluebeamPDFRevu:2018" xfa:spec="2.2.0" xmlns="http://www.w3.org/1999/xhtml"><p>Box Configuration: D</p><p>#</p><p># -------------------------------------------------</p><p># NOTE:</p><p># Possible Box Configs -&gt; D, I, X, T, XY</p><p /></body>)
-/Contents : <FEFF0042006F007800200043006F006E00660069006700750072006100740069006F006E003A00200044000D0023000D00230020
+/M : (D:20210817071626-05'00')
+/RC : (<?xml version="1.0"?><body xmlns:xfa="http://www.xfa.org/schema/xfa-data/1.0/" xfa:contentType="text/html" xfa:APIVersion="BluebeamPDFRevu:2018" xfa:spec="2.2.0" xmlns="http://www.w3.org/1999/xhtml"><p>Box Configuration: D</p><p>Threaded Rod Length: 0' 0"</p><p>#</p><p># -------------------------------------------------</p><p># NOTE:</p><p># Possible Box Configs -&gt; D, I, X, T, XY</p><p /></body>)
+/Contents : <FEFF0042006F007800200043006F006E00660069006700750072006100740069006F006E003A00200044000D0054006800720065
+006100640065006400200052006F00640020004C0065006E006700740068003A002000300027002000300022000D0023
+000D00230020002D002D002D002D002D002D002D002D002D002D002D002D002D002D002D002D002D002D002D002D002D
 002D002D002D002D002D002D002D002D002D002D002D002D002D002D002D002D002D002D002D002D002D002D002D002D
-002D002D002D002D002D002D002D002D002D002D002D002D002D002D002D002D002D002D002D002D002D002D002D002D
-002D000D00230020004E004F00540045003A000D002300200050006F0073007300690062006C006500200042006F0078
-00200043006F006E00660069006700730020002D003E00200044002C00200049002C00200058002C00200054002C0020
-00580059000D>
+002D002D002D002D000D00230020004E004F00540045003A000D002300200050006F0073007300690062006C00650020
+0042006F007800200043006F006E00660069006700730020002D003E00200044002C00200049002C00200058002C0020
+0054002C002000580059000D>
 /BS : << /S /S /Type /Border /W 0.125 >>
 /AP : << /N 383 0 R >>
 /NM : (ERXIMHAWBLGSYTTT)
 
-/Subj : (4 11/16" Fire Alarm Box - jm1.0.0)
+/Subj : (4 11/16" - Fire Alarm Box - jm1.0.0)
 /Type : /Annot
 /P : 130 0 R
 /F : 4
@@ -32,14 +33,15 @@
 /Rect : [ 19.835 783.637 21.929 785.732 ]
 /IC : [ 1 0 0 ]
 /RD : [ 0.063 0.063 0.063 0.063 ]
-/M : (D:20210816235610-05'00')
-/RC : (<?xml version="1.0"?><body xmlns:xfa="http://www.xfa.org/schema/xfa-data/1.0/" xfa:contentType="text/html" xfa:APIVersion="BluebeamPDFRevu:2018" xfa:spec="2.2.0" xmlns="http://www.w3.org/1999/xhtml"><p>Box Configuration: D</p><p>#</p><p># -------------------------------------------------</p><p># NOTE:</p><p># Possible Box Configs -&gt; D, I, X, T, XY</p><p /></body>)
-/Contents : <FEFF0042006F007800200043006F006E00660069006700750072006100740069006F006E003A00200044000D0023000D00230020
+/M : (D:20210817071644-05'00')
+/RC : (<?xml version="1.0"?><body xmlns:xfa="http://www.xfa.org/schema/xfa-data/1.0/" xfa:contentType="text/html" xfa:APIVersion="BluebeamPDFRevu:2018" xfa:spec="2.2.0" xmlns="http://www.w3.org/1999/xhtml"><p>Box Configuration: D</p><p>Threaded Rod Length: 0' 0"</p><p>#</p><p># -------------------------------------------------</p><p># NOTE:</p><p># Possible Box Configs -&gt; D, I, X, T, XY</p><p /></body>)
+/Contents : <FEFF0042006F007800200043006F006E00660069006700750072006100740069006F006E003A00200044000D0054006800720065
+006100640065006400200052006F00640020004C0065006E006700740068003A002000300027002000300022000D0023
+000D00230020002D002D002D002D002D002D002D002D002D002D002D002D002D002D002D002D002D002D002D002D002D
 002D002D002D002D002D002D002D002D002D002D002D002D002D002D002D002D002D002D002D002D002D002D002D002D
-002D002D002D002D002D002D002D002D002D002D002D002D002D002D002D002D002D002D002D002D002D002D002D002D
-002D000D00230020004E004F00540045003A000D002300200050006F0073007300690062006C006500200042006F0078
-00200043006F006E00660069006700730020002D003E00200044002C00200049002C00200058002C00200054002C0020
-00580059000D>
+002D002D002D002D000D00230020004E004F00540045003A000D002300200050006F0073007300690062006C00650020
+0042006F007800200043006F006E00660069006700730020002D003E00200044002C00200049002C00200058002C0020
+0054002C002000580059000D>
 /BS : << /S /S /Type /Border /W 0.125 >>
 /AP : << /N 385 0 R >>
 /NM : (BZYVAHTMSVSIIXGK)
@@ -249,16 +251,15 @@
 /BS : << /S /S /Type /Border /W 1 >>
 /DS : (font: Helvetica 12pt; text-align:center; line-height:13.8pt; color:#FF0000)
 /AlignOnSegment : True
-/MeasurementTypes : 130
+/MeasurementTypes : 2
 /IT : /PolyLineDimension
-/M : (D:20210816185748-05'00')
+/M : (D:20210819084423-05'00')
 /AP : << /N 413 0 R >>
-/Vertices : [ 45.141 785.678 45.141 779.563 ]
-/RC : (<?xml version="1.0"?><body xmlns:xfa="http://www.xfa.org/schema/xfa-data/1.0/" xfa:contentType="text/html" xfa:APIVersion="BluebeamPDFRevu:2018" xfa:spec="2.2.0" style="font:Helvetica 12pt; text-align:center; line-height:13.8pt; color:#FF0000" xmlns="http://www.w3.org/1999/xhtml">Hanger Rod To Structure - 0' 0"<p>1'-4 1/4"</p></body>)
-/Label : (Hanger Rod To Structure - 0' 0")
-/Rect : [ 39.641 774.063 50.641 791.178 ]
-/Contents : <FEFF00480061006E00670065007200200052006F006400200054006F00200053007400720075006300740075007200650020002D
-002000300027002000300022000D00310027002D003400200031002F00340022>
+/Vertices : [ 45.141 785.678 45.141 670.609 ]
+/RC : (<?xml version="1.0"?><body xmlns:xfa="http://www.xfa.org/schema/xfa-data/1.0/" xfa:contentType="text/html" xfa:APIVersion="BluebeamPDFRevu:2018" xfa:spec="2.2.0" style="font:Helvetica 12pt; text-align:center; line-height:13.8pt; color:#FF0000" xmlns="http://www.w3.org/1999/xhtml"><p>25'-6 3/4"</p></body>)
+/Label : (Hanger Rod To Structure - 20' 0")
+/Rect : [ 39.641 665.109 50.641 791.178 ]
+/Contents : (25'-6 3/4")
 /NM : (ZENBWCQZLOZROCRQ)
 
 /Subj : (3/4" - EMT - Conduit Run - Supported - jm1.0.0)
@@ -274,16 +275,15 @@
 /BS : << /S /S /Type /Border /W 1 >>
 /DS : (font: Helvetica 12pt; text-align:center; line-height:13.8pt; color:#FF0000)
 /AlignOnSegment : True
-/MeasurementTypes : 130
+/MeasurementTypes : 2
 /IT : /PolyLineDimension
-/M : (D:20210816185751-05'00')
+/M : (D:20210818125020-05'00')
 /AP : << /N 417 0 R >>
-/Vertices : [ 54.734 787.562 54.734 780.223 ]
-/RC : (<?xml version="1.0"?><body xmlns:xfa="http://www.xfa.org/schema/xfa-data/1.0/" xfa:contentType="text/html" xfa:APIVersion="BluebeamPDFRevu:2018" xfa:spec="2.2.0" style="font:Helvetica 12pt; text-align:center; line-height:13.8pt; color:#FF0000" xmlns="http://www.w3.org/1999/xhtml">Hanger Rod To Structure - 0' 0"<p>1'-7 1/2"</p></body>)
+/Vertices : [ 54.734 787.562 54.734 655.726 ]
+/RC : (<?xml version="1.0"?><body xmlns:xfa="http://www.xfa.org/schema/xfa-data/1.0/" xfa:contentType="text/html" xfa:APIVersion="BluebeamPDFRevu:2018" xfa:spec="2.2.0" style="font:Helvetica 12pt; text-align:center; line-height:13.8pt; color:#FF0000" xmlns="http://www.w3.org/1999/xhtml"><p>29'-3 1/2"</p></body>)
 /Label : (Hanger Rod To Structure - 0' 0")
-/Rect : [ 49.234 774.723 60.234 793.062 ]
-/Contents : <FEFF00480061006E00670065007200200052006F006400200054006F00200053007400720075006300740075007200650020002D
-002000300027002000300022000D00310027002D003700200031002F00320022>
+/Rect : [ 49.234 650.226 60.234 793.062 ]
+/Contents : (29'-3 1/2")
 /NM : (CNFKXUOAVWTNCNCJ)
 
 /Subj : (1" - EMT - Conduit Run - Supported - jm1.0.0)
@@ -299,16 +299,15 @@
 /BS : << /S /S /Type /Border /W 1 >>
 /DS : (font: Helvetica 12pt; text-align:center; line-height:13.8pt; color:#FF0000)
 /AlignOnSegment : True
-/MeasurementTypes : 130
+/MeasurementTypes : 2
 /IT : /PolyLineDimension
-/M : (D:20210816185803-05'00')
+/M : (D:20210818125033-05'00')
 /AP : << /N 421 0 R >>
-/Vertices : [ 59.902 787.367 59.902 780.207 ]
-/RC : (<?xml version="1.0"?><body xmlns:xfa="http://www.xfa.org/schema/xfa-data/1.0/" xfa:contentType="text/html" xfa:APIVersion="BluebeamPDFRevu:2018" xfa:spec="2.2.0" style="font:Helvetica 12pt; text-align:center; line-height:13.8pt; color:#FF0000" xmlns="http://www.w3.org/1999/xhtml">Hanger Rod To Structure - 0' 0"<p>1'-7"</p></body>)
+/Vertices : [ 59.902 787.367 59.902 652.154 ]
+/RC : (<?xml version="1.0"?><body xmlns:xfa="http://www.xfa.org/schema/xfa-data/1.0/" xfa:contentType="text/html" xfa:APIVersion="BluebeamPDFRevu:2018" xfa:spec="2.2.0" style="font:Helvetica 12pt; text-align:center; line-height:13.8pt; color:#FF0000" xmlns="http://www.w3.org/1999/xhtml"><p>30'-1/2"</p></body>)
 /Label : (Hanger Rod To Structure - 0' 0")
-/Rect : [ 54.402 774.707 65.402 792.867 ]
-/Contents : <FEFF00480061006E00670065007200200052006F006400200054006F00200053007400720075006300740075007200650020002D
-002000300027002000300022000D00310027002D00370022>
+/Rect : [ 54.402 646.654 65.402 792.867 ]
+/Contents : (30'-1/2")
 /NM : (ZAVXHPRCDWZZOIJI)
 
 /Subj : (1 1/4" - EMT - Conduit Run - Supported - jm1.0.0)
@@ -324,16 +323,15 @@
 /BS : << /S /S /Type /Border /W 1 >>
 /DS : (font: Helvetica 12pt; text-align:center; line-height:13.8pt; color:#FF0000)
 /AlignOnSegment : True
-/MeasurementTypes : 130
+/MeasurementTypes : 2
 /IT : /PolyLineDimension
-/M : (D:20210816185956-05'00')
+/M : (D:20210818142442-05'00')
 /AP : << /N 425 0 R >>
-/Vertices : [ 63.839 786.384 63.839 777.75 ]
-/RC : (<?xml version="1.0"?><body xmlns:xfa="http://www.xfa.org/schema/xfa-data/1.0/" xfa:contentType="text/html" xfa:APIVersion="BluebeamPDFRevu:2018" xfa:spec="2.2.0" style="font:Helvetica 12pt; text-align:center; line-height:13.8pt; color:#FF0000" xmlns="http://www.w3.org/1999/xhtml"><p>Hanger Rod To Structure - 0' 0"</p><p>1'-11"</p></body>)
+/Vertices : [ 63.839 786.384 63.839 658.703 ]
+/RC : (<?xml version="1.0"?><body xmlns:xfa="http://www.xfa.org/schema/xfa-data/1.0/" xfa:contentType="text/html" xfa:APIVersion="BluebeamPDFRevu:2018" xfa:spec="2.2.0" style="font:Helvetica 12pt; text-align:center; line-height:13.8pt; color:#FF0000" xmlns="http://www.w3.org/1999/xhtml"><p>28'-4 1/2"</p></body>)
 /Label : (Hanger Rod To Structure - 0' 0")
-/Rect : [ 58.339 772.25 69.339 791.884 ]
-/Contents : <FEFF00480061006E00670065007200200052006F006400200054006F00200053007400720075006300740075007200650020002D
-002000300027002000300022000D00310027002D003100310022>
+/Rect : [ 58.339 653.203 69.339 791.884 ]
+/Contents : (28'-4 1/2")
 /NM : (BKZIKLPTUYXUMUIB)
 
 /Subj : (1 1/2" - EMT - Conduit Run - Supported - jm1.0.0)
@@ -349,16 +347,15 @@
 /BS : << /S /S /Type /Border /W 1 >>
 /DS : (font: Helvetica 12pt; text-align:center; line-height:13.8pt; color:#FF0000)
 /AlignOnSegment : True
-/MeasurementTypes : 130
+/MeasurementTypes : 2
 /IT : /PolyLineDimension
-/M : (D:20210816185956-05'00')
+/M : (D:20210818142449-05'00')
 /AP : << /N 433 0 R >>
-/Vertices : [ 68.31 787.308 68.31 777.976 ]
-/RC : (<?xml version="1.0"?><body xmlns:xfa="http://www.xfa.org/schema/xfa-data/1.0/" xfa:contentType="text/html" xfa:APIVersion="BluebeamPDFRevu:2018" xfa:spec="2.2.0" style="font:Helvetica 12pt; text-align:center; line-height:13.8pt; color:#FF0000" xmlns="http://www.w3.org/1999/xhtml"><p>Hanger Rod To Structure - 0' 0"</p><p>2'-1"</p></body>)
+/Vertices : [ 68.31 787.308 68.31 664.656 ]
+/RC : (<?xml version="1.0"?><body xmlns:xfa="http://www.xfa.org/schema/xfa-data/1.0/" xfa:contentType="text/html" xfa:APIVersion="BluebeamPDFRevu:2018" xfa:spec="2.2.0" style="font:Helvetica 12pt; text-align:center; line-height:13.8pt; color:#FF0000" xmlns="http://www.w3.org/1999/xhtml"><p>27'-3"</p></body>)
 /Label : (Hanger Rod To Structure - 0' 0")
-/Rect : [ 62.81 772.476 73.81 792.808 ]
-/Contents : <FEFF00480061006E00670065007200200052006F006400200054006F00200053007400720075006300740075007200650020002D
-002000300027002000300022000D00320027002D00310022>
+/Rect : [ 62.81 659.156 73.81 792.808 ]
+/Contents : (27'-3")
 /NM : (KKLJYIWPIBOKSIWH)
 
 /Subj : (2" - EMT - Conduit Run - Supported - jm1.0.0)
@@ -374,16 +371,15 @@
 /BS : << /S /S /Type /Border /W 1 >>
 /DS : (font: Helvetica 12pt; text-align:center; line-height:13.8pt; color:#FF0000)
 /AlignOnSegment : True
-/MeasurementTypes : 130
+/MeasurementTypes : 2
 /IT : /PolyLineDimension
-/M : (D:20210816190001-05'00')
+/M : (D:20210818142455-05'00')
 /AP : << /N 437 0 R >>
-/Vertices : [ 73.482 787.328 73.482 778.693 ]
-/RC : (<?xml version="1.0"?><body xmlns:xfa="http://www.xfa.org/schema/xfa-data/1.0/" xfa:contentType="text/html" xfa:APIVersion="BluebeamPDFRevu:2018" xfa:spec="2.2.0" style="font:Helvetica 12pt; text-align:center; line-height:13.8pt; color:#FF0000" xmlns="http://www.w3.org/1999/xhtml"><p>Hanger Rod To Structure - 0' 0"</p><p>1'-11"</p></body>)
+/Vertices : [ 73.482 787.328 73.482 662.87 ]
+/RC : (<?xml version="1.0"?><body xmlns:xfa="http://www.xfa.org/schema/xfa-data/1.0/" xfa:contentType="text/html" xfa:APIVersion="BluebeamPDFRevu:2018" xfa:spec="2.2.0" style="font:Helvetica 12pt; text-align:center; line-height:13.8pt; color:#FF0000" xmlns="http://www.w3.org/1999/xhtml"><p>27'-8"</p></body>)
 /Label : (Hanger Rod To Structure - 0' 0")
-/Rect : [ 67.982 773.193 78.982 792.828 ]
-/Contents : <FEFF00480061006E00670065007200200052006F006400200054006F00200053007400720075006300740075007200650020002D
-002000300027002000300022000D00310027002D003100310022>
+/Rect : [ 67.982 657.37 78.982 792.828 ]
+/Contents : (27'-8")
 /NM : (BIQHURQBGKOROMVE)
 
 /Subj : (1/2" - PVC - Conduit Run - Supported - jm1.0.0)
@@ -399,16 +395,15 @@
 /BS : << /S /S /Type /Border /W 1 >>
 /DS : (font: Helvetica 12pt; text-align:center; line-height:13.8pt; color:#FF0000)
 /AlignOnSegment : True
-/MeasurementTypes : 130
+/MeasurementTypes : 2
 /IT : /PolyLineDimension
-/M : (D:20210816185849-05'00')
+/M : (D:20210818142914-05'00')
 /AP : << /N 441 0 R >>
-/Vertices : [ 43.922 767.333 43.922 758.699 ]
-/RC : (<?xml version="1.0"?><body xmlns:xfa="http://www.xfa.org/schema/xfa-data/1.0/" xfa:contentType="text/html" xfa:APIVersion="BluebeamPDFRevu:2018" xfa:spec="2.2.0" style="font:Helvetica 12pt; text-align:center; line-height:13.8pt; color:#FF0000" xmlns="http://www.w3.org/1999/xhtml"><p>Hanger Rod To Structure - 0' 0"</p><p>1'-11"</p></body>)
+/Vertices : [ 93.262 786.963 93.262 665.499 ]
+/RC : (<?xml version="1.0"?><body xmlns:xfa="http://www.xfa.org/schema/xfa-data/1.0/" xfa:contentType="text/html" xfa:APIVersion="BluebeamPDFRevu:2018" xfa:spec="2.2.0" style="font:Helvetica 12pt; text-align:center; line-height:13.8pt; color:#FF0000" xmlns="http://www.w3.org/1999/xhtml"><p>27'-0"</p></body>)
 /Label : (Hanger Rod To Structure - 0' 0")
-/Rect : [ 38.422 753.199 49.422 772.833 ]
-/Contents : <FEFF00480061006E00670065007200200052006F006400200054006F00200053007400720075006300740075007200650020002D
-002000300027002000300022000D00310027002D003100310022>
+/Rect : [ 87.762 659.999 98.762 792.463 ]
+/Contents : (27'-0")
 /NM : (YBQRAYXLSPIOZWEI)
 
 /Subj : (3/4" - PVC - Conduit Run - Supported - jm1.0.0)
@@ -424,16 +419,15 @@
 /BS : << /S /S /Type /Border /W 1 >>
 /DS : (font: Helvetica 12pt; text-align:center; line-height:13.8pt; color:#FF0000)
 /AlignOnSegment : True
-/MeasurementTypes : 130
+/MeasurementTypes : 2
 /IT : /PolyLineDimension
-/M : (D:20210816185945-05'00')
+/M : (D:20210818142525-05'00')
 /AP : << /N 449 0 R >>
-/Vertices : [ 54.775 765.274 54.775 757.303 ]
-/RC : (<?xml version="1.0"?><body xmlns:xfa="http://www.xfa.org/schema/xfa-data/1.0/" xfa:contentType="text/html" xfa:APIVersion="BluebeamPDFRevu:2018" xfa:spec="2.2.0" style="font:Helvetica 12pt; text-align:center; line-height:13.8pt; color:#FF0000" xmlns="http://www.w3.org/1999/xhtml"><p>Hanger Rod To Structure - 0' 0"</p><p>1'-9 1/4"</p></body>)
+/Vertices : [ 103.785 784.656 103.785 666.442 ]
+/RC : (<?xml version="1.0"?><body xmlns:xfa="http://www.xfa.org/schema/xfa-data/1.0/" xfa:contentType="text/html" xfa:APIVersion="BluebeamPDFRevu:2018" xfa:spec="2.2.0" style="font:Helvetica 12pt; text-align:center; line-height:13.8pt; color:#FF0000" xmlns="http://www.w3.org/1999/xhtml"><p>26'-3 1/4"</p></body>)
 /Label : (Hanger Rod To Structure - 0' 0")
-/Rect : [ 49.275 751.803 60.275 770.774 ]
-/Contents : <FEFF00480061006E00670065007200200052006F006400200054006F00200053007400720075006300740075007200650020002D
-002000300027002000300022000D00310027002D003900200031002F00340022>
+/Rect : [ 98.285 660.942 109.285 790.156 ]
+/Contents : (26'-3 1/4")
 /NM : (POCQFHZEUIPVHIZG)
 
 /Subj : (1" - PVC - Conduit Run - Supported - jm1.0.0)
@@ -449,16 +443,15 @@
 /BS : << /S /S /Type /Border /W 1 >>
 /DS : (font: Helvetica 12pt; text-align:center; line-height:13.8pt; color:#FF0000)
 /AlignOnSegment : True
-/MeasurementTypes : 130
+/MeasurementTypes : 2
 /IT : /PolyLineDimension
-/M : (D:20210816185945-05'00')
+/M : (D:20210818142532-05'00')
 /AP : << /N 453 0 R >>
-/Vertices : [ 59.975 765.792 59.975 758.032 ]
-/RC : (<?xml version="1.0"?><body xmlns:xfa="http://www.xfa.org/schema/xfa-data/1.0/" xfa:contentType="text/html" xfa:APIVersion="BluebeamPDFRevu:2018" xfa:spec="2.2.0" style="font:Helvetica 12pt; text-align:center; line-height:13.8pt; color:#FF0000" xmlns="http://www.w3.org/1999/xhtml"><p>Hanger Rod To Structure - 0' 0"</p><p>1'-8 3/4"</p></body>)
+/Vertices : [ 108.985 785.175 108.985 665.846 ]
+/RC : (<?xml version="1.0"?><body xmlns:xfa="http://www.xfa.org/schema/xfa-data/1.0/" xfa:contentType="text/html" xfa:APIVersion="BluebeamPDFRevu:2018" xfa:spec="2.2.0" style="font:Helvetica 12pt; text-align:center; line-height:13.8pt; color:#FF0000" xmlns="http://www.w3.org/1999/xhtml"><p>26'-6 1/4"</p></body>)
 /Label : (Hanger Rod To Structure - 0' 0")
-/Rect : [ 54.475 752.532 65.475 771.292 ]
-/Contents : <FEFF00480061006E00670065007200200052006F006400200054006F00200053007400720075006300740075007200650020002D
-002000300027002000300022000D00310027002D003800200033002F00340022>
+/Rect : [ 103.485 660.346 114.485 790.675 ]
+/Contents : (26'-6 1/4")
 /NM : (CDJOVOFMOCYORUPM)
 
 /Subj : (1 1/4" - PVC - Conduit Run - Supported - jm1.0.0)
@@ -474,16 +467,15 @@
 /BS : << /S /S /Type /Border /W 1 >>
 /DS : (font: Helvetica 12pt; text-align:center; line-height:13.8pt; color:#FF0000)
 /AlignOnSegment : True
-/MeasurementTypes : 130
+/MeasurementTypes : 2
 /IT : /PolyLineDimension
-/M : (D:20210816185945-05'00')
+/M : (D:20210818142538-05'00')
 /AP : << /N 457 0 R >>
-/Vertices : [ 64.158 765.019 64.158 757.146 ]
-/RC : (<?xml version="1.0"?><body xmlns:xfa="http://www.xfa.org/schema/xfa-data/1.0/" xfa:contentType="text/html" xfa:APIVersion="BluebeamPDFRevu:2018" xfa:spec="2.2.0" style="font:Helvetica 12pt; text-align:center; line-height:13.8pt; color:#FF0000" xmlns="http://www.w3.org/1999/xhtml"><p>Hanger Rod To Structure - 0' 0"</p><p>1'-9"</p></body>)
+/Vertices : [ 113.169 784.402 113.169 672.99 ]
+/RC : (<?xml version="1.0"?><body xmlns:xfa="http://www.xfa.org/schema/xfa-data/1.0/" xfa:contentType="text/html" xfa:APIVersion="BluebeamPDFRevu:2018" xfa:spec="2.2.0" style="font:Helvetica 12pt; text-align:center; line-height:13.8pt; color:#FF0000" xmlns="http://www.w3.org/1999/xhtml"><p>24'-9"</p></body>)
 /Label : (Hanger Rod To Structure - 0' 0")
-/Rect : [ 58.658 751.646 69.658 770.519 ]
-/Contents : <FEFF00480061006E00670065007200200052006F006400200054006F00200053007400720075006300740075007200650020002D
-002000300027002000300022000D00310027002D00390022>
+/Rect : [ 107.669 667.49 118.669 789.902 ]
+/Contents : (24'-9")
 /NM : (BARAQHTAYBSTLFET)
 
 /Subj : (1 1/2" - PVC - Conduit Run - Supported - jm1.0.0)
@@ -499,16 +491,15 @@
 /BS : << /S /S /Type /Border /W 1 >>
 /DS : (font: Helvetica 12pt; text-align:center; line-height:13.8pt; color:#FF0000)
 /AlignOnSegment : True
-/MeasurementTypes : 130
+/MeasurementTypes : 2
 /IT : /PolyLineDimension
-/M : (D:20210816185945-05'00')
+/M : (D:20210818142543-05'00')
 /AP : << /N 461 0 R >>
-/Vertices : [ 68.334 765.614 68.334 758.518 ]
-/RC : (<?xml version="1.0"?><body xmlns:xfa="http://www.xfa.org/schema/xfa-data/1.0/" xfa:contentType="text/html" xfa:APIVersion="BluebeamPDFRevu:2018" xfa:spec="2.2.0" style="font:Helvetica 12pt; text-align:center; line-height:13.8pt; color:#FF0000" xmlns="http://www.w3.org/1999/xhtml"><p>Hanger Rod To Structure - 0' 0"</p><p>1'-7"</p></body>)
+/Vertices : [ 117.345 784.997 117.345 671.799 ]
+/RC : (<?xml version="1.0"?><body xmlns:xfa="http://www.xfa.org/schema/xfa-data/1.0/" xfa:contentType="text/html" xfa:APIVersion="BluebeamPDFRevu:2018" xfa:spec="2.2.0" style="font:Helvetica 12pt; text-align:center; line-height:13.8pt; color:#FF0000" xmlns="http://www.w3.org/1999/xhtml"><p>25'-1 3/4"</p></body>)
 /Label : (Hanger Rod To Structure - 0' 0")
-/Rect : [ 62.834 753.018 73.834 771.114 ]
-/Contents : <FEFF00480061006E00670065007200200052006F006400200054006F00200053007400720075006300740075007200650020002D
-002000300027002000300022000D00310027002D00370022>
+/Rect : [ 111.845 666.299 122.845 790.497 ]
+/Contents : (25'-1 3/4")
 /NM : (UGQKHSMDMGELZFCX)
 
 /Subj : (2" - PVC - Conduit Run - Supported - jm1.0.0)
@@ -524,16 +515,15 @@
 /BS : << /S /S /Type /Border /W 1 >>
 /DS : (font: Helvetica 12pt; text-align:center; line-height:13.8pt; color:#FF0000)
 /AlignOnSegment : True
-/MeasurementTypes : 130
+/MeasurementTypes : 2
 /IT : /PolyLineDimension
-/M : (D:20210816185950-05'00')
+/M : (D:20210818142913-05'00')
 /AP : << /N 465 0 R >>
-/Vertices : [ 73.611 765.594 73.611 758.498 ]
-/RC : (<?xml version="1.0"?><body xmlns:xfa="http://www.xfa.org/schema/xfa-data/1.0/" xfa:contentType="text/html" xfa:APIVersion="BluebeamPDFRevu:2018" xfa:spec="2.2.0" style="font:Helvetica 12pt; text-align:center; line-height:13.8pt; color:#FF0000" xmlns="http://www.w3.org/1999/xhtml"><p>Hanger Rod To Structure - 0' 0"</p><p>1'-7"</p></body>)
+/Vertices : [ 122.622 784.976 122.622 663.465 ]
+/RC : (<?xml version="1.0"?><body xmlns:xfa="http://www.xfa.org/schema/xfa-data/1.0/" xfa:contentType="text/html" xfa:APIVersion="BluebeamPDFRevu:2018" xfa:spec="2.2.0" style="font:Helvetica 12pt; text-align:center; line-height:13.8pt; color:#FF0000" xmlns="http://www.w3.org/1999/xhtml"><p>27'-0"</p></body>)
 /Label : (Hanger Rod To Structure - 0' 0")
-/Rect : [ 68.111 752.998 79.111 771.094 ]
-/Contents : <FEFF00480061006E00670065007200200052006F006400200054006F00200053007400720075006300740075007200650020002D
-002000300027002000300022000D00310027002D00370022>
+/Rect : [ 117.122 657.965 128.122 790.476 ]
+/Contents : (27'-0")
 /NM : (DRWRGYANXPEICYBO)
 
 /Subj : (1/2" - PVC - Fire Alarm Connector)
@@ -592,7 +582,7 @@
 /RT : /Group
 /IRT : 466 0 R
 
-/Subj : (4" Fire Alarm Box - jm1.0.0)
+/Subj : (4" - Fire Alarm Box - jm1.0.0)
 /Type : /Annot
 /P : 130 0 R
 /F : 4
@@ -603,14 +593,15 @@
 /Rect : [ 15.277 775.794 17.371 777.889 ]
 /IC : [ 1 0 0 ]
 /RD : [ 0.063 0.063 0.063 0.063 ]
-/M : (D:20210816235808-05'00')
-/RC : (<?xml version="1.0"?><body xmlns:xfa="http://www.xfa.org/schema/xfa-data/1.0/" xfa:contentType="text/html" xfa:APIVersion="BluebeamPDFRevu:2018" xfa:spec="2.2.0" xmlns="http://www.w3.org/1999/xhtml"><p>Box Configuration: D</p><p>#</p><p># -------------------------------------------------</p><p># NOTE:</p><p># Possible Box Configs -&gt; D, I, X, T, XY</p><p /></body>)
-/Contents : <FEFF0042006F007800200043006F006E00660069006700750072006100740069006F006E003A00200044000D0023000D00230020
+/M : (D:20210817071653-05'00')
+/RC : (<?xml version="1.0"?><body xmlns:xfa="http://www.xfa.org/schema/xfa-data/1.0/" xfa:contentType="text/html" xfa:APIVersion="BluebeamPDFRevu:2018" xfa:spec="2.2.0" xmlns="http://www.w3.org/1999/xhtml"><p>Box Configuration: D</p><p>Threaded Rod Length: 0' 0"</p><p>#</p><p># -------------------------------------------------</p><p># NOTE:</p><p># Possible Box Configs -&gt; D, I, X, T, XY</p><p /></body>)
+/Contents : <FEFF0042006F007800200043006F006E00660069006700750072006100740069006F006E003A00200044000D0054006800720065
+006100640065006400200052006F00640020004C0065006E006700740068003A002000300027002000300022000D0023
+000D00230020002D002D002D002D002D002D002D002D002D002D002D002D002D002D002D002D002D002D002D002D002D
 002D002D002D002D002D002D002D002D002D002D002D002D002D002D002D002D002D002D002D002D002D002D002D002D
-002D002D002D002D002D002D002D002D002D002D002D002D002D002D002D002D002D002D002D002D002D002D002D002D
-002D000D00230020004E004F00540045003A000D002300200050006F0073007300690062006C006500200042006F0078
-00200043006F006E00660069006700730020002D003E00200044002C00200049002C00200058002C00200054002C0020
-00580059000D>
+002D002D002D002D000D00230020004E004F00540045003A000D002300200050006F0073007300690062006C00650020
+0042006F007800200043006F006E00660069006700730020002D003E00200044002C00200049002C00200058002C0020
+0054002C002000580059000D>
 /BS : << /S /S /Type /Border /W 0.125 >>
 /AP : << /N 467 0 R >>
 /NM : (AQOAPPHHHTVWPXZK)

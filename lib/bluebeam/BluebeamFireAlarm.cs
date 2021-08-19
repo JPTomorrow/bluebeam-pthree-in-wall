@@ -8,52 +8,92 @@ using PdfSharp.Pdf.Annotations;
 
 namespace JPMorrow.Pdf.Bluebeam.FireAlarm
 {
+    public class BluebeamSingleHanger
+    {
+        public double ThreadedRodLength { get; private set; }
+        public string ThreadedRodSize { get; private set; }
+        public string ThreadedRodLengthFtIn { get => Measure.LengthFromDbl(ThreadedRodLength); }
+        public string BatwingAttachment { get; private set; }
+
+        private string[] Hardware { get; set; }
+        public string Anchor { get => Hardware[0]; }
+        public string HexNut { get => Hardware[1]; }
+        public string Washer { get => Hardware[2]; }
+        
+        private static string[] batwingNames = new string[] { "Batwing - K-12", "Batwing - K-16" };
+        private static string[] threadedRodSizes = new string[] { "1/4\"", "3/8\"", "1/2\"" };
+
+        public BluebeamSingleHanger(double threaded_rod_length, string conduit_size, string inividual_hanger_threaded_rod_size)
+        {
+            ThreadedRodLength = threaded_rod_length;
+            if (!BluebeamPdfUtil.FireAlarmConduitSizes.Any(x => x.Equals(conduit_size)))
+                throw new Exception("The provided conduit size is not valid. It should be in the format -> 1 1/2\"");
+
+            var dbl_length = Measure.LengthDbl(conduit_size);
+            var cmp_length = Measure.LengthDbl("3/4\"");
+            var bw = dbl_length <= cmp_length ? batwingNames[0] : batwingNames[1];
+            BatwingAttachment = bw + " - " + conduit_size;
+
+            var rod_dia_test = Measure.LengthDbl(inividual_hanger_threaded_rod_size);
+            if (rod_dia_test < 0) throw new Exception("The provided threaded rod size of '" + inividual_hanger_threaded_rod_size + "' is not valid");
+            ThreadedRodSize = inividual_hanger_threaded_rod_size;
+
+            Hardware = new string[]
+            {
+                "Hilti Concrete Anchor - " + inividual_hanger_threaded_rod_size,
+                "Washer - " + inividual_hanger_threaded_rod_size,
+                "Hex Nut - " + inividual_hanger_threaded_rod_size,
+            };
+        }
+
+        public static IEnumerable<BluebeamSingleHanger> SingleHangersFromConduitPackage(BluebeamConduitPackage p, string threaded_rod_size)
+        {
+            var ret = new List<BluebeamSingleHanger>();
+
+            foreach(var c in p.Conduit)
+            {
+                ret.Add(new BluebeamSingleHanger(c.HangerElevation, c.Size, threaded_rod_size));
+            }
+
+            return ret;
+        }
+    }
+
+    public class BluebeamConduit
+    {
+        public string Size { get; private set; }
+        public double Length { get; private set; }
+        public string Type { get; private set; }
+        public double HangerElevation { get; private set; }
+
+        public BluebeamConduit(string size, double length, string type, double hanger_elevation)
+        {
+            Size = size;
+            Length = length;
+            Type = type;
+            HangerElevation = hanger_elevation;
+        }
+    }
+
     /// <summary>
     /// takes poly lines representing conduit in bluebeam and extracts the total length of them
     /// </summary>
     public class BluebeamConduitPackage
     {
-        private static string[] conduitSizes = new string[] { "1/2\"", "3/4\"", "1\"", "1 1/4\"", "1 1/2\"", "2\"" };
-        private Dictionary<string, List<double>> TotalEmtLength { get; set; } = new Dictionary<string, List<double>>()
-        {
-            {conduitSizes[0], new List<double>()},
-            {conduitSizes[1], new List<double>()},
-            {conduitSizes[2], new List<double>()},
-            {conduitSizes[3], new List<double>()},
-            {conduitSizes[4], new List<double>()},
-            {conduitSizes[5], new List<double>()},
-        };
+        private static string[] conduitTypes = new string[] { "EMT", "PVC", "MC" };
 
-        private Dictionary<string, List<double>> TotalPvcLength { get; set; } = new Dictionary<string, List<double>>() 
-        {
-            {conduitSizes[0], new List<double>()},
-            {conduitSizes[1], new List<double>()},
-            {conduitSizes[2], new List<double>()},
-            {conduitSizes[3], new List<double>()},
-            {conduitSizes[4], new List<double>()},
-            {conduitSizes[5], new List<double>()},
-        };
-
-        private Dictionary<string, List<double>> TotalMcCableLength { get; set; } = new Dictionary<string, List<double>>() 
-        {
-            {conduitSizes[0], new List<double>()},
-            {conduitSizes[1], new List<double>()},
-            {conduitSizes[2], new List<double>()},
-            {conduitSizes[3], new List<double>()},
-            {conduitSizes[4], new List<double>()},
-            {conduitSizes[5], new List<double>()},
-        };
+        public List<BluebeamConduit> Conduit { get; set; } = new List<BluebeamConduit>();
 
         public override string ToString()
         {
             var o = "\nConduit Package\n";
-            foreach(var s in conduitSizes) o += "emt length - " + s + ": " + GetTotalEmtLengthFeetIn(s) + "\n";
-            foreach(var s in conduitSizes) o += "pvc length - " + s + ": " + GetTotalPvcLengthFeetIn(s) + "\n";
-            foreach(var s in conduitSizes) o += "mc length - " + s + ": " + GetTotalMcCableLengthFeetIn(s) + "\n";
+            foreach(var s in BluebeamPdfUtil.FireAlarmConduitSizes) o += "emt length - " + s + ": " + GetTotalEmtLengthFeetIn(s) + "\n";
+            foreach(var s in BluebeamPdfUtil.FireAlarmConduitSizes) o += "pvc length - " + s + ": " + GetTotalPvcLengthFeetIn(s) + "\n";
+            foreach(var s in BluebeamPdfUtil.FireAlarmConduitSizes) o += "mc length - " + s + ": " + GetTotalMcCableLengthFeetIn(s) + "\n";
 
-            foreach(var s in conduitSizes) o += "emt couplings - " + s + ": " + GetTotalEmtCouplings(s) + "\n";
-            foreach(var s in conduitSizes) o += "pvc couplings - " + s + ": " + GetTotalPvcCouplings(s) + "\n";
-            foreach(var s in conduitSizes) o += "mc couplings - " + s + ": " + GetTotalMcCableCouplings(s) + "\n";
+            foreach(var s in BluebeamPdfUtil.FireAlarmConduitSizes) o += "emt couplings - " + s + ": " + GetTotalEmtCouplings(s) + "\n";
+            foreach(var s in BluebeamPdfUtil.FireAlarmConduitSizes) o += "pvc couplings - " + s + ": " + GetTotalPvcCouplings(s) + "\n";
+            foreach(var s in BluebeamPdfUtil.FireAlarmConduitSizes) o += "mc couplings - " + s + ": " + GetTotalMcCableCouplings(s) + "\n";
             o += "\n";
             return o;
         }
@@ -64,44 +104,44 @@ namespace JPMorrow.Pdf.Bluebeam.FireAlarm
         
         public string GetTotalEmtLengthFeetIn(string conduit_size) 
         {
-            bool s = TotalEmtLength.TryGetValue(conduit_size, out var doubles);
-            if(!s) throw new Exception("Could not retrieve TotalEmtLength in feet and inches for size " + conduit_size);
-            return Measure.LengthFromDbl(doubles.Sum());
+            var length = Conduit.Where(x => x.Size.Equals(conduit_size) && x.Type.Equals("EMT"))
+                .Select(x => x.Length).Sum();
+            return Measure.LengthFromDbl(length);
         }
 
         public string GetTotalPvcLengthFeetIn(string conduit_size)
         {
-            bool s = TotalPvcLength.TryGetValue(conduit_size, out var doubles);
-            if(!s) throw new Exception("Could not retrieve TotalPvcLength in feet and inches for size " + conduit_size);
-            return Measure.LengthFromDbl(doubles.Sum());
+            var length = Conduit.Where(x => x.Size.Equals(conduit_size) && x.Type.Equals("PVC"))
+                .Select(x => x.Length).Sum();
+            return Measure.LengthFromDbl(length);
         }
 
         public string GetTotalMcCableLengthFeetIn(string conduit_size)
         {
-            bool s = TotalMcCableLength.TryGetValue(conduit_size, out var doubles);
-            if(!s) throw new Exception("Could not retrieve TotalMcCableLength in feet and inches for size " + conduit_size);
-            return Measure.LengthFromDbl(doubles.Sum());
+            var length = Conduit.Where(x => x.Size.Equals(conduit_size) && x.Type.Equals("MC"))
+                .Select(x => x.Length).Sum();
+            return Measure.LengthFromDbl(length);
         }
 
         public int GetTotalEmtLengthRounded(string conduit_size) 
         {
-            bool s = TotalEmtLength.TryGetValue(conduit_size, out var doubles);
-            if(!s) throw new Exception("Could not retrieve TotalEmtLength rounded for size " + conduit_size);
-            return (int)(Math.Ceiling(doubles.Sum() / 10.0d) * 10);
+            var length = Conduit.Where(x => x.Size.Equals(conduit_size) && x.Type.Equals("EMT"))
+                .Select(x => x.Length).Sum();
+            return (int)(Math.Ceiling(length / 10.0d) * 10);
         }
 
         public int GetTotalPvcLengthRounded(string conduit_size)
         {
-            bool s = TotalPvcLength.TryGetValue(conduit_size, out var doubles);
-            if(!s) throw new Exception("Could not retrieve TotalPvcLength rounded for size " + conduit_size);
-            return (int)(Math.Ceiling(doubles.Sum() / 10.0d) * 10);
+            var length = Conduit.Where(x => x.Size.Equals(conduit_size) && x.Type.Equals("PVC"))
+                .Select(x => x.Length).Sum();
+            return (int)(Math.Ceiling(length / 10.0d) * 10);
         }
 
         public int GetTotalMcCableLengthRounded(string conduit_size)
         {
-            bool s = TotalMcCableLength.TryGetValue(conduit_size, out var doubles);
-            if(!s) throw new Exception("Could not retrieve TotalMcCableLength rounded for size " + conduit_size);
-            return (int)(Math.Ceiling(doubles.Sum() / 10.0d) * 10);
+            var length = Conduit.Where(x => x.Size.Equals(conduit_size) && x.Type.Equals("MC"))
+                .Select(x => x.Length).Sum();
+            return (int)(Math.Ceiling(length / 10.0d) * 10);
         }
 
         /// <summary>
@@ -110,40 +150,39 @@ namespace JPMorrow.Pdf.Bluebeam.FireAlarm
         
         public int GetTotalEmtCouplings(string conduit_size)
         {
-            bool s = TotalMcCableLength.TryGetValue(conduit_size, out var doubles);
-            if(!s) throw new Exception("Could not get total connectors for emt of size " + conduit_size);
-            var coupling_count = Math.Ceiling(doubles.Sum()) / 10;
-            return (int)coupling_count;
+            var length = Conduit.Where(x => x.Size.Equals(conduit_size) && x.Type.Equals("EMT"))
+                .Select(x => x.Length).Sum();
+            return (int)(Math.Ceiling(length) / 10);
         }
 
         public int GetTotalPvcCouplings(string conduit_size)
         {
-            bool s = TotalPvcLength.TryGetValue(conduit_size, out var doubles);
-            if(!s) throw new Exception("Could not get total connectors for pvc of size " + conduit_size);
-            var coupling_count = Math.Ceiling(doubles.Sum()) / 10;
-            return (int)coupling_count;
+            var length = Conduit.Where(x => x.Size.Equals(conduit_size) && x.Type.Equals("PVC"))
+                .Select(x => x.Length).Sum();
+            return (int)(Math.Ceiling(length) / 10);
         }
 
         public int GetTotalMcCableCouplings(string conduit_size)
         {
-            bool s = TotalMcCableLength.TryGetValue(conduit_size, out var doubles);
-            if(!s) throw new Exception("Could not get total connectors for mc cable of size " + conduit_size);
-            var coupling_count = Math.Ceiling(doubles.Sum()) / 10;
-            return (int)coupling_count;
+            var length = Conduit.Where(x => x.Size.Equals(conduit_size) && x.Type.Equals("MC"))
+                .Select(x => x.Length).Sum();
+            return (int)(Math.Ceiling(length) / 10);
         }
 
-        private static string[] fireAlarmSubjectTags = new string[] {
-            "emt - conduit run - supported",
-            "pvc - conduit run - supported",
-            "mc - conduit run - supported"
-         }; 
+        /// <summary>
+        /// Single Hanger Totals
+        /// </summary>
+        
+        
 
         private BluebeamConduitPackage(IEnumerable<PdfAnnotation> annotations)
         {
             foreach(var a in annotations)
             {
                 if(a == null) throw new Exception("The annotation provided is null");
-                StoreConduitSizeAndLength(GetSubject(a), GetRcContents(a));
+                bool has_label = GetAnnotationLabel(a, out string label);
+                if(!has_label) throw new Exception("No valid label");
+                StoreConduitSizeAndLength(BluebeamPdfUtil.GetSubject(a), BluebeamPdfUtil.GetRcContents(a), label);
             }
         }
 
@@ -152,64 +191,45 @@ namespace JPMorrow.Pdf.Bluebeam.FireAlarm
             var conduit_poly_line_annots = new List<PdfAnnotation>();
             foreach(var a in annotations)
             {
-                if(IsPolyLine(a) && HasFireAlarmSubject(a))
+                if(BluebeamPdfUtil.IsPolyLine(a) && HasFireAlarmConduitSubject(a))
                     conduit_poly_line_annots.Add(a);
             }
             return new BluebeamConduitPackage(conduit_poly_line_annots);
         }
 
-        private static bool IsPolyLine(PdfAnnotation a)
-        {
-            var elements = a.Elements;
-            bool has_sub_type = elements.TryGetString("/Subtype", out string sub_type);
-            if(!has_sub_type || !sub_type.Equals("/PolyLine")) return false;
-            return true;
-        }
-
-        private static bool HasFireAlarmSubject(PdfAnnotation a)
+        private static bool HasFireAlarmConduitSubject(PdfAnnotation a)
         {
             var elements = a.Elements;
             bool has_subj_name = elements.TryGetString("/Subj", out string subject);
             if(!has_subj_name) return false;
-            if(!fireAlarmSubjectTags.Any(x => subject.ToLower().Contains(x))) return false;
+            if(!BluebeamPdfUtil.FireAlarmConduitSubjectTags.Any(x => subject.ToLower().Contains(x))) return false;
             return true;
         }
 
-        private static string GetRcContents(PdfAnnotation a)
+        private bool GetAnnotationLabel(PdfAnnotation a, out string label)
         {
+            label = null;
             var elements = a.Elements;
-            bool has_subj_name = elements.TryGetString("/RC", out string rc);
-
-            if(!has_subj_name)
-                throw new Exception("The provided annotation does not have any /RC data");
-
-            return rc;
+            bool has_subj_name = elements.TryGetString("/Label", out string l);
+            if(!has_subj_name) return false;
+            label = l;
+            return true;
         }
 
-        private static string GetSubject(PdfAnnotation a)
-        {
-            var elements = a.Elements;
-            bool has_subj_name = elements.TryGetString("/Subj", out string subject);
-            
-            if(!has_subj_name)
-                 throw new Exception("The provided annotation has no subject");
-
-            return subject;
-        }
-
-        private void StoreConduitSizeAndLength(string subject, string rc_contents)
+        private void StoreConduitSizeAndLength(string subject, string rc_contents, string label)
         {
             var conduit_size = subject.Split(" - ").First();
             conduit_size = conduit_size.Trim(' ');
 
-            if(!conduitSizes.Any(x => x.Equals(conduit_size)))
-                throw new Exception("The provided poly line is not the corrent type");
-                
+            if(!BluebeamPdfUtil.FireAlarmConduitSizes.Any(x => x.Equals(conduit_size)))
+                throw new Exception("The provided poly line is not the correct type");
+
             // parse rc contents to get the length
-            var length_match = Regex.Matches(rc_contents, "<p>(.*?)</p>")
+            var matches = Regex.Matches(rc_contents, "<p>(.*?)</p>");
+            var length_match = matches
                 .Select(x => x.Value).Last().Replace("<p>", "")
                 .Replace("</p>", "").Replace("-", " ");
-                
+
             var length = Measure.LengthDbl(length_match);
 
             //@TODO: CHECK THAT MEASUREMENTS ARE WORKING BECAUSE THEY ARE NOT
@@ -218,10 +238,20 @@ namespace JPMorrow.Pdf.Bluebeam.FireAlarm
                 throw new Exception("Conduit length resolved to a negative value");
 
             string s = subject.ToLower();
+            var tags = BluebeamPdfUtil.FireAlarmConduitSubjectTags;
 
-            if(s.Contains(fireAlarmSubjectTags[0])) TotalEmtLength[conduit_size].Add(length);
-            else if(s.Contains(fireAlarmSubjectTags[1])) TotalPvcLength[conduit_size].Add(length);
-            else if(s.Contains(fireAlarmSubjectTags[2])) TotalMcCableLength[conduit_size].Add(length);
+            string type = null;
+            if(s.Contains(tags[0])) type = "EMT";
+            else if(s.Contains(tags[1])) type = "PVC";
+            else if(s.Contains(tags[2])) type = "MC";
+
+            if(type == null) throw new Exception("There is no conduit type matching the provided subject '" + subject + "'");
+
+            var hanger_label_len = label.Split(" - ").Last().Trim();
+            var hanger_support_len = Measure.LengthDbl(hanger_label_len);
+            if(hanger_support_len < 0) throw new Exception("Hanger support length is invalid: " + label);
+
+            Conduit.Add(new BluebeamConduit(conduit_size, length, type, hanger_support_len));
         }
     }
 
@@ -339,27 +369,24 @@ namespace JPMorrow.Pdf.Bluebeam.FireAlarm
         /// </summary>
         private static string fireAlarmBoxMarkupVersion = "1.0.0";
 
-        public List<BluebeamFireAlarmBox> boxes { get; set; } = new List<BluebeamFireAlarmBox>();
+        public List<BluebeamFireAlarmBox> Boxes { get; set; } = new List<BluebeamFireAlarmBox>();
 
         private static string[] fireAlarmBoxIdentifierTags = new string[] {
-            "4\" fire alarm box - jm" + fireAlarmBoxMarkupVersion,
-            "4 11/16\" fire alarm box - jm" + fireAlarmBoxMarkupVersion,
+            "4\" - fire alarm box - jm" + fireAlarmBoxMarkupVersion,
+            "4 11/16\" - fire alarm box - jm" + fireAlarmBoxMarkupVersion,
         };
 
         public override string ToString()
         {
             var o = "\n Fire Alarm Box Package\n";
-            foreach(var b in boxes)
+            foreach(var b in Boxes)
             {
 
             }
             return o;
         }
 
-        private BlubeamFireAlarmBoxPackage()
-        {
-
-        }
+        private BlubeamFireAlarmBoxPackage() {}
 
         /// <summary>
         /// 
@@ -368,26 +395,30 @@ namespace JPMorrow.Pdf.Bluebeam.FireAlarm
         /// <returns> a package of fire alarm boxes</returns>
         public static BlubeamFireAlarmBoxPackage BoxPackageFromAnnotations(IEnumerable<PdfAnnotation> annotations)
         {
-            var filtered_annots = new List<PdfAnnotation>();
             BlubeamFireAlarmBoxPackage package = new BlubeamFireAlarmBoxPackage();
 
             foreach (var a in annotations)
             {
-                bool is_rect = IsRectangle(a);
+                bool is_rect = BluebeamPdfUtil.IsRectangle(a);
                 bool has_fabs = HasFireAlarmBoxSubject(a, out string subject);
-                bool has_group = HasGroupNesting(a, out var group_codes);
+                bool has_group = BluebeamPdfUtil.HasGroupNesting(a, out var group_codes);
 
                 if (!is_rect || !has_fabs || !has_group) continue;
 
                 List<PdfAnnotation> connector_annots = new List<PdfAnnotation>();
                 foreach(var g in group_codes)
                 {
-                    var found_annots = FindAnnotationByGroupCode(g, annotations);
+                    var found_annots = BluebeamPdfUtil.FindAnnotationsByGroupCode(g, annotations);
                     connector_annots.AddRange(found_annots);
                 }
 
-                var box_size = subject.Split(" - ").First().Trim();
-                var configs = GetRcContents(a).ToList();
+
+                var box_size = subject.Contains("4 11/16\"") ? "4 11/16\"" : "4\"";
+
+                var configs = Regex.Matches(BluebeamPdfUtil.GetRcContents(a), "<p>(.*?)</p>")
+                .Select(x => x.Value.Replace("<p>", "")
+                .Replace("</p>", "")).Where(x => !x.ToLower()
+                .StartsWith("#")).ToList();
 
                 var idx = configs.FindIndex(x => x.StartsWith("Box Configuration"));
                 if(idx == -1) continue;
@@ -395,40 +426,13 @@ namespace JPMorrow.Pdf.Bluebeam.FireAlarm
                 package.AddBox(new BluebeamFireAlarmBox(box_size, box_config, connector_annots));
             }
 
-            return null;
+            return package;
         }
 
         /// <summary>
         /// Add a fire alarm box to the package
         /// </summary>
-        public void AddBox(BluebeamFireAlarmBox box)
-        {
-            boxes.Add(box);
-        }
-
-        private static IEnumerable<string> GetRcContents(PdfAnnotation a)
-        {
-            var elements = a.Elements;
-            bool has_subj_name = elements.TryGetString("/RC", out string rc);
-
-            if(!has_subj_name)
-                throw new Exception("The provided annotation does not have any /RC data");
-
-            var contents = Regex.Matches(rc, "<p>(.*?)</p>")
-                .Select(x => x.Value.Replace("<p>", "")
-                .Replace("</p>", "")).Where(x => !x.ToLower().StartsWith("#")).ToList();
-            return contents;
-        }
-
-        /// <summary>
-        /// Tell whether the provided pdf annotation is of subtype /Rectangle
-        /// </summary>
-        private static bool IsRectangle(PdfAnnotation a)
-        {
-            var elements = a.Elements;
-            bool s = elements.TryGetString("/Subtype", out string sub_type);
-            return s && sub_type.Equals("/Square");
-        }
+        public void AddBox(BluebeamFireAlarmBox box) => Boxes.Add(box);
 
         /// <summary>
         /// Does the provided Pdf annotation have the correct subject for a fire alarm box
@@ -440,37 +444,6 @@ namespace JPMorrow.Pdf.Bluebeam.FireAlarm
             bool s = elements.TryGetString("/Subj", out string subject);
             if (s) ret_subject = subject;
             return s && fireAlarmBoxIdentifierTags.Any(x => x.Equals(subject.Trim().ToLower()));
-        }
-
-        private static bool HasGroupNesting(PdfAnnotation a, out List<string> ret_group_codes)
-        {
-            ret_group_codes = new List<string>();
-            var elements = a.Elements;
-            bool s = elements.TryGetValue("/GroupNesting", out PdfItem item);
-
-            if (!s) return false;
-
-            var groups = item.ToString()
-                .Split(" ").Where(x => x.StartsWith('/'))
-                .Select(x => x.Substring(1)).ToList();
-
-            ret_group_codes = groups;
-            return groups.Any();
-        }
-
-        private static IEnumerable<PdfAnnotation> FindAnnotationByGroupCode(string group_code, IEnumerable<PdfAnnotation> search)
-        {
-            List<PdfAnnotation> ret = new List<PdfAnnotation>();
-
-            foreach(var a in search)
-            {
-                var elements = a.Elements;
-                bool s = elements.TryGetString("/NM", out string cmp_code);
-                if(!s || string.IsNullOrWhiteSpace(cmp_code)) continue;
-                if(cmp_code.Equals(group_code)) ret.Add(a);
-            }
-
-            return ret;
-        }
+        }   
     }
 }

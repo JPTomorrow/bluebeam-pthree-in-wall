@@ -50,7 +50,7 @@
                 // Do not generate summary otherwise it leads to duplicate errors in Problems panel
                 "/consoleloggerparameters:NoSummary",
                 "/p:Configuration=Release",
-                "/p:FIRE_ALARM",
+                "/p:FIRE_ALARM=1",
             ],
             "group": "build",
             "presentation": {

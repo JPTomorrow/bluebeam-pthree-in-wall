@@ -39,6 +39,7 @@
     </ItemGroup> 
 
     <Copy SourceFiles="@(_CopyItems_1)" DestinationFolder="./bin/Debug/net5.0/win-x64/publish/labor" SkipUnchangedFiles="false" OverwriteReadOnlyFiles="true" />
+    <Copy SourceFiles="@(_CopyItems_1)" DestinationFolder="./bin/Release/net5.0/win-x64/publish/labor" SkipUnchangedFiles="false" OverwriteReadOnlyFiles="true" />
     <Copy SourceFiles="@(_CopyItems_2)" DestinationFolder="./bin/Debug/net5.0/win-x64/publish" SkipUnchangedFiles="false" OverwriteReadOnlyFiles="true" />
     <Copy SourceFiles="@(_CopyItems_2)" DestinationFolder="./bin/Release/net5.0/win-x64/publish" SkipUnchangedFiles="false" OverwriteReadOnlyFiles="true" />
   </Target>

@@ -32,7 +32,7 @@ namespace JPMorrow.Measurements
                 string exp4 = "^\\d+[\\/]\\d+[\"]$"; // 1/2"
                 string exp5 = "^\\d+[\"]$"; // 2"
                 string exp6 = "^\\d+[']\\s\\d+[\"]$"; // 11' 7"
-                string exp7 = "^\\d+[']\\s\\d+\\s\\d+[\\/]\\d+[\"]$"; // 11' 7 1/2"
+                string exp8 = "^\\d+[']\\s\\d+[\\/]\\d+[\"]$"; // 11' 1/2"
 
                 if( !Regex.Match(length, exp1).Success &&
                     !Regex.Match(length, exp2).Success &&
@@ -40,7 +40,7 @@ namespace JPMorrow.Measurements
                     !Regex.Match(length, exp4).Success &&
                     !Regex.Match(length, exp5).Success &&
                     !Regex.Match(length, exp6).Success &&
-                    !Regex.Match(length, exp7).Success)
+                    !Regex.Match(length, exp8).Success)
                 {
                     return -1;
                 }
@@ -63,7 +63,7 @@ namespace JPMorrow.Measurements
                     var whole_in = int.Parse(inch_raw.Split(" ").First());
                     var fractional_top = inch_raw.Split(" ").Last().Split("/").First();
                     var fractional_bottom = inch_raw.Split(" ").Last().Split("/").Last();
-                    double fraction = (double.Parse(fractional_top) / double.Parse(fractional_bottom));
+                    double fraction = ((double.Parse(fractional_top) / double.Parse(fractional_bottom)) / 12.0);
                     final += ((double)whole_in / 12.0);
                     final += fraction;
 
@@ -93,7 +93,7 @@ namespace JPMorrow.Measurements
                     var whole_in = int.Parse(inch_raw.Split(" ").First());
                     var fractional_top = inch_raw.Split(" ").Last().Split("/").First();
                     var fractional_bottom = inch_raw.Split(" ").Last().Split("/").Last();
-                    double fraction = (double.Parse(fractional_top) / double.Parse(fractional_bottom));
+                    double fraction = ((double.Parse(fractional_top) / double.Parse(fractional_bottom)) / 12.0);
                     final += ((double)whole_in / 12.0);
                     final += fraction;
 
@@ -108,7 +108,7 @@ namespace JPMorrow.Measurements
 
                     var fractional_top = inch_raw.Split("/").First();
                     var fractional_bottom = inch_raw.Split("/").Last();
-                    double fraction = (double.Parse(fractional_top) / double.Parse(fractional_bottom));
+                    double fraction = ((double.Parse(fractional_top) / double.Parse(fractional_bottom)) / 12.0);
                     final += fraction;
 
                     return final;
@@ -125,22 +125,21 @@ namespace JPMorrow.Measurements
                     var split = length.Split(" ").ToList();
                     var feet_raw = split.First();
                     feet_raw = feet_raw.Remove(feet_raw.Length - 1);
-                    split.Remove(split.First());
-                    var inch_raw = string.Join(" ", split);
+                    var inch_raw = split.Last();
                     inch_raw = inch_raw.Remove(inch_raw.Length - 1);
 
                     double final = 0.0;
 
                     // parse feet
-                    var feet = int.Parse(feet_raw);
+                    var feet = double.Parse(feet_raw);
                     final += feet;
 
                     // parse inches
-                    final += int.Parse(inch_raw) / 12.0;
+                    final += double.Parse(inch_raw) / 12.0;
 
                     return final;
                 }
-                else if(Regex.Match(length, exp7).Success)
+                /* else if(Regex.Match(length, exp7).Success)
                 {
                     var split = length.Split(" ").ToList();
                     var feet_raw = split.First();
@@ -162,6 +161,30 @@ namespace JPMorrow.Measurements
                     double fraction = (double.Parse(fractional_top) / double.Parse(fractional_bottom));
                     final += ((double)whole_in / 12.0);
                     final += fraction;
+                    Console.WriteLine(length + " -> " + final);
+                    
+                    return final;
+                } */
+                else if(Regex.Match(length, exp8).Success)
+                {
+                    var split = length.Split(" ").ToList();
+                    var feet_raw = split.First();
+                    feet_raw = feet_raw.Remove(feet_raw.Length - 1);
+                    split.Remove(split.First());
+                    var inch_raw = string.Join(" ", split);
+                    inch_raw = inch_raw.Remove(inch_raw.Length - 1);
+
+                    double final = 0.0;
+
+                    // parse feet
+                    var feet = int.Parse(feet_raw);
+                    final += feet;
+
+                    // parse inches
+                    var fractional_top = inch_raw.Split("/").First();
+                    var fractional_bottom = inch_raw.Split("/").Last();
+                    double fraction = ((double.Parse(fractional_top) / double.Parse(fractional_bottom)) / 12.0);
+                    final += fraction;
 
                     return final;
                 }
@@ -174,8 +197,14 @@ namespace JPMorrow.Measurements
             public static string ToString(double length)
             {
                 string final = "";
-                double whole = Math.Truncate(length);
-                var remainder = length - whole;
+
+                double whole = 0.0;
+                var remainder = 0.0;
+                whole = Math.Truncate(length);
+                remainder = (length - whole) * 12.0;
+                if(remainder > 0.99 && remainder < 1.0) remainder = Math.Round(remainder);
+
+
 
                 if(whole > 0.0)
                 {

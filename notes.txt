@@ -1,1 +1,4 @@
 -The measurements are wrong, re evaluate the ToDouble function
+-need to finish mc functionality
+-need to do strut hangers
+- need to finish individual hanger bom output

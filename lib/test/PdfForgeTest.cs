@@ -1,5 +1,6 @@
 namespace JPMorrow.Test.Console
 {
+    using JPMorrow.Measurements;
     using JPMorrow.PDF;
     using System;
     using System.Diagnostics;
@@ -108,6 +109,23 @@ namespace JPMorrow.Test.Console
 
             f2.DeleteOutputFile();
             a.Assert("Delete output file", !File.Exists(f.OutputFilepath));
+        }
+
+        public static void TestMeasurements(string exe_path, TestAssert a)
+        {
+            var test_sizes = new string[] { "1/2\"", "1 1/2\"", "1'", "1' 1\"", "1' 1/2\"", "1' 1 1/2\"" };
+
+            foreach(var size in test_sizes)
+            {
+                var d1 = Measure.LengthDbl(size);
+                var s1 = Measure.LengthFromDbl(d1);
+                var d2 = Measure.LengthDbl(s1);
+                var s2 = Measure.LengthFromDbl(d2);
+                var assert_str = "Convert back and forth from double to string: " +
+                size + " { " + d1.ToString() + ", " + d2.ToString() + ", " + s1 + ", " + s2 + " }"; 
+                a.Assert(assert_str, d1 == d2 && s1.Equals(s2) && s2.Equals(size));
+            }
+            
         }
     }
 }

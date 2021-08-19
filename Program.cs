@@ -7,10 +7,12 @@ using System.Linq;
 using System.Threading;
 using JPMorrow.Bluebeam.Markup;
 using JPMorrow.Excel;
+using JPMorrow.Measurements;
 using JPMorrow.P3;
 using JPMorrow.Pdf.Bluebeam.FireAlarm;
 using JPMorrow.PDF;
 using JPMorrow.Test.Console;
+using OfficeOpenXml;
 
 namespace BluebeamP3InWall
 {
@@ -52,7 +54,7 @@ namespace BluebeamP3InWall
             }
             catch(Exception ex)
             {
-                Console.WriteLine(ex.ToString());
+                Console.WriteLine(ex.Message.ToString());
                 Console.ReadKey();
             }
 
@@ -85,7 +87,7 @@ namespace BluebeamP3InWall
             split_path.Remove(split_path.Last()); 
             return string.Join("\\", split_path) + "\\";
         }
-        
+
         /// <summary>
         /// Process the fire alarm from a bluebeam document
         /// </summary>
@@ -94,7 +96,7 @@ namespace BluebeamP3InWall
         {
             string pdf_input_path = GetPdfInputFileName(exe_path);
 
-            if(string.IsNullOrWhiteSpace(pdf_input_path) || !File.Exists(pdf_input_path)) 
+            if (string.IsNullOrWhiteSpace(pdf_input_path) || !File.Exists(pdf_input_path))
             {
                 Console.WriteLine("Failed to retrieve pdf file name");
                 Console.ReadKey();
@@ -105,6 +107,41 @@ namespace BluebeamP3InWall
                 Console.WriteLine("Using pdf file: " + pdf_input_path);
             }
 
+            
+
+            double hanger_spacing = -1;
+            do
+            {
+                Console.Write("\nPlease enter hanger spacing in feet and inches (ex. 0' 0\"): ");
+                var spacing_str = Console.ReadLine();
+                var s = Measure.LengthDbl(spacing_str);
+                if (s < 0) Console.WriteLine("That is an invalid hanger spacing. Hanger spacing should be provided in feet and inches");
+                else hanger_spacing = s;
+            } while (hanger_spacing < 0);
+
+            // get threaded rod selection
+            string[] rod_size_sels = new string[] { 
+                "1. 1/4\"",
+                "2. 3/8\"",
+                "3. 1/2\"",
+            };
+
+            string threaded_rod_size = null;
+            Console.WriteLine();
+            do
+            {
+                Console.WriteLine("Threaded rod sizes:");
+                rod_size_sels.ToList().ForEach(x => Console.WriteLine(x));
+                Console.Write("\nPlease enter a number (1-3) coresponding to the size of threaded rod you would like to use: ");
+                var tr_in = Console.ReadLine();
+                var idx = rod_size_sels.ToList().FindIndex(x => x.StartsWith(tr_in));
+                if (idx == -1)
+                    Console.WriteLine("Selection not recognized. Please provide one of the choice numbers (1-3)");
+                else
+                    threaded_rod_size = rod_size_sels[idx].Split(' ').Last();
+            } while (threaded_rod_size == null);
+
+
             var pdf_output_path = exe_path +
                  Path.GetFileNameWithoutExtension(pdf_input_path) + 
                  "_fire_alarm_processed.pdf";
@@ -113,7 +150,9 @@ namespace BluebeamP3InWall
             Pdforge f = new Pdforge(pdf_input_path, pdf_output_path);
             var poly_lines = f.GetAnnotationsBySubType(f.GetPage(0), "PolyLine");
             BluebeamConduitPackage conduit_pkg = BluebeamConduitPackage.PackageFromPolyLines(poly_lines);
-            Console.WriteLine(conduit_pkg.ToString());
+            var hangers = BluebeamSingleHanger.SingleHangersFromConduitPackage(conduit_pkg, threaded_rod_size);
+
+            // Console.WriteLine(conduit_pkg.ToString());
 
             // parse all groups into fire alarm boxes with connectors package
             BlubeamFireAlarmBoxPackage box_package = BlubeamFireAlarmBoxPackage.BoxPackageFromAnnotations(f.AllAnnotations);
@@ -121,16 +160,36 @@ namespace BluebeamP3InWall
             // parse all individual hangers into fire alarm hanger package
 
             // Output to Excel
-            KillExcelProcess();
-            CleanupExcelFiles();
+            var excel_out_path = exe_path + Path.GetFileNameWithoutExtension(pdf_input_path) + ".xlsx";
+
+            if(FileIsLocked(excel_out_path, FileAccess.Read))
+            {
+                Process[] workers = Process.GetProcessesByName("excel");
+                foreach (Process worker in workers)
+                {
+                    if(worker.MainWindowTitle.Contains(excel_out_path))
+                    {
+                        Console.WriteLine("Killing open excel process -> " + worker.MainWindowTitle);
+                        worker.Kill();
+                        worker.WaitForExit();
+                        worker.Dispose();
+                    }
+                }
+            }
             
+            if(File.Exists(excel_out_path))
+                File.Delete(excel_out_path);
+
+            ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
+
             ExcelEngine exporter = null;
+            
 
             try
             {
-                exporter = new ExcelEngine(ExcelOutputFilePath);
+                exporter = new ExcelEngine(excel_out_path);
 
-                if(!ExcelEngine.PrepExportFile(ExcelOutputFilePath)) 
+                if(!ExcelEngine.PrepExportFile(excel_out_path)) 
                 {
                     Console.WriteLine("Failed to generate Excel output.");
                     Console.ReadKey();
@@ -138,11 +197,15 @@ namespace BluebeamP3InWall
                 }
 
                 ExcelOutputSheet s1 = new ExcelOutputSheet(ExportStyle.FireAlarm);
-                Console.WriteLine("Generating Bill of Material:"); 
+                Console.WriteLine("\nGenerating Bill of Material:"); 
                 Console.WriteLine("\tCreated sheet");
                 exporter.RegisterSheets("Fire Alarm", s1);
                 Console.WriteLine("\tRegistered sheet");
-                s1.GenerateFireAlarmSheet(LaborFilePath, "<Project Title Goes Here>", conduit_pkg, box_package);
+
+                var labor_path = exe_path + "labor\\";
+                labor_path = labor_path + @"labor_entries.json";
+
+                s1.GenerateFireAlarmSheet(labor_path, "<Project Title Goes Here>", conduit_pkg, box_package, hangers, hanger_spacing);
                 Console.WriteLine("\tFilled Sheet");
                 exporter.Close();
                 Console.WriteLine("\tBill of Material Generated!");
@@ -151,13 +214,13 @@ namespace BluebeamP3InWall
             }
             catch(Exception ex)
             {
-                Console.WriteLine(ex.ToString());
+                Console.WriteLine("Excel Engine failure: " + ex.Message.ToString());
                 Console.ReadKey();
             }
 
             Console.WriteLine("\nBill of Material: ");
-            Console.WriteLine("\tFilename - " + ExcelOutputFilePath.Split("\\").Last());
-            Console.WriteLine("\tFull Path - " + ExcelOutputFilePath);
+            Console.WriteLine("\tFilename - " + excel_out_path.Split("\\").Last());
+            Console.WriteLine("\tFull Path - " + excel_out_path);
 
             Console.ReadKey();
         }
@@ -214,7 +277,7 @@ namespace BluebeamP3InWall
         /// <summary>
         /// 
         /// </summary>
-        public static void KillExcelProcess()
+        public static void KillExcelProcess( )
         {
             if(FileIsLocked(ExcelOutputFilePath, FileAccess.Read))
             {
