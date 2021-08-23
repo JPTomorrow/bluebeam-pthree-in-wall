@@ -1,4 +1,5 @@
--The measurements are wrong, re evaluate the ToDouble function
--need to finish mc functionality
--need to do strut hangers
-- need to finish individual hanger bom output
+@TODO:
+
+- Finish mc functionality
+- Implement strut hangers
+- Need to take the Fire Alarm name out of the conduit markups to make them work for both P3 and Fire Alarm

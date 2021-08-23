@@ -8,6 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using JPMorrow.P3;
+using JPMorrow.Pdf.Bluebeam;
 using JPMorrow.Pdf.Bluebeam.FireAlarm;
 using JPMorrow.Revit.Labor;
 using OfficeOpenXml.Style;
