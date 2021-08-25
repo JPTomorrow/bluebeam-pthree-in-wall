@@ -19,16 +19,6 @@ namespace BluebeamP3InWall
 {
     class Program
     {
-        private static bool TestAppOnStartup { get => true; }
-
-        public static string ExcelOutputPath { get; set; } = "";
-        public static string ExcelOutputFileExt { get; set; } =  "_P3_In_Wall_BOM.xlsx";
-        public static string LaborFilePath { get; set; } = "";
-
-        public static string ExcelOutputFilePath { get {
-                return ExcelOutputPath + PdfImportFilename.Split('.').First() + ExcelOutputFileExt;
-            }}
-
         static void Main(string[] args)
         {
             string exe_path = GetThisExecutablePath();
@@ -36,7 +26,7 @@ namespace BluebeamP3InWall
 #if DEBUG
             Console.WriteLine(exe_path + "\n");
             bool passed = TestBedConsole.TestAll(exe_path);
-            if(!passed)
+            if (!passed)
             {
                 Console.ReadKey();
                 return;
@@ -46,33 +36,20 @@ namespace BluebeamP3InWall
             try
             {
 #if FIRE_ALARM
-            Console.WriteLine("Fire Alarm");
-            RunFireAlarm(exe_path);
+                Console.WriteLine("Fire Alarm");
+                RunFireAlarm(exe_path);
 #else
-            Console.WriteLine("P3 in wall");
-            RunP3InWall(exe_path);
+                Console.WriteLine("P3 in wall");
+                RunP3InWall(exe_path);
 #endif
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 Console.WriteLine(ex.Message.ToString());
                 Console.ReadKey();
             }
 
-            /* bool got_pdf_fn = ResolvePdfInputFilePath(exe_path);
-
-            if(!got_pdf_fn) 
-            {
-                Console.WriteLine("Failed to retrieve pdf file name");
-                Console.ReadKey();
-                return;
-            }
-
-            Console.WriteLine("Parsing file: " + PdfImportFilename);
-            GenerateFilePaths(exe_path);
-            CleanupPdfOutputFiles();
-            ParsePdf();
-            Console.ReadKey();
+            /* 
             return; */
         }
 
@@ -85,7 +62,7 @@ namespace BluebeamP3InWall
                 .GetCurrentProcess().MainModule.FileName
                 .Split("\\").ToList();
 
-            split_path.Remove(split_path.Last()); 
+            split_path.Remove(split_path.Last());
             return string.Join("\\", split_path) + "\\";
         }
 
@@ -95,7 +72,7 @@ namespace BluebeamP3InWall
         /// <param name="exe_path"></param>
         private static void RunFireAlarm(string exe_path)
         {
-            string pdf_input_path = GetPdfInputFileName(exe_path);
+            string pdf_input_path = GetPdfInputFileName(exe_path, "");
 
             if (string.IsNullOrWhiteSpace(pdf_input_path) || !File.Exists(pdf_input_path))
             {
@@ -108,9 +85,8 @@ namespace BluebeamP3InWall
                 Console.WriteLine("Using pdf file: " + pdf_input_path);
             }
 
-            
-
             double hanger_spacing = -1;
+
             do
             {
                 Console.Write("\nPlease enter hanger spacing in feet and inches (ex. 0' 0\"): ");
@@ -121,7 +97,7 @@ namespace BluebeamP3InWall
             } while (hanger_spacing < 0);
 
             // get threaded rod selection
-            string[] rod_size_sels = new string[] { 
+            string[] rod_size_sels = new string[] {
                 "1. 1/4\"",
                 "2. 3/8\"",
                 "3. 1/2\"",
@@ -144,7 +120,7 @@ namespace BluebeamP3InWall
 
 
             var pdf_output_path = exe_path +
-                 Path.GetFileNameWithoutExtension(pdf_input_path) + 
+                 Path.GetFileNameWithoutExtension(pdf_input_path) +
                  "_fire_alarm_processed.pdf";
 
             // parse poly lines into conduit package
@@ -163,12 +139,12 @@ namespace BluebeamP3InWall
             // Output to Excel
             var excel_out_path = exe_path + Path.GetFileNameWithoutExtension(pdf_input_path) + ".xlsx";
 
-            if(FileIsLocked(excel_out_path, FileAccess.Read))
+            if (FileIsLocked(excel_out_path, FileAccess.Read))
             {
                 Process[] workers = Process.GetProcessesByName("excel");
                 foreach (Process worker in workers)
                 {
-                    if(worker.MainWindowTitle.Contains(excel_out_path))
+                    if (worker.MainWindowTitle.Contains(excel_out_path))
                     {
                         Console.WriteLine("Killing open excel process -> " + worker.MainWindowTitle);
                         worker.Kill();
@@ -177,8 +153,8 @@ namespace BluebeamP3InWall
                     }
                 }
             }
-            
-            if(File.Exists(excel_out_path))
+
+            if (File.Exists(excel_out_path))
                 File.Delete(excel_out_path);
 
             ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
@@ -189,7 +165,7 @@ namespace BluebeamP3InWall
             {
                 exporter = new ExcelEngine(excel_out_path);
 
-                if(!ExcelEngine.PrepExportFile(excel_out_path)) 
+                if (!ExcelEngine.PrepExportFile(excel_out_path))
                 {
                     Console.WriteLine("Failed to generate Excel output.");
                     Console.ReadKey();
@@ -197,7 +173,7 @@ namespace BluebeamP3InWall
                 }
 
                 ExcelOutputSheet s1 = new ExcelOutputSheet(ExportStyle.FireAlarm);
-                Console.WriteLine("\nGenerating Bill of Material:"); 
+                Console.WriteLine("\nGenerating Bill of Material:");
                 Console.WriteLine("\tCreated sheet");
                 exporter.RegisterSheets("Fire Alarm", s1);
                 Console.WriteLine("\tRegistered sheet");
@@ -212,7 +188,7 @@ namespace BluebeamP3InWall
                 exporter.OpenExcel();
                 // exporter.OpenPDF(PdfCopyFilename);
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 Console.WriteLine("Excel Engine failure: " + ex.Message.ToString());
                 Console.ReadKey();
@@ -230,61 +206,83 @@ namespace BluebeamP3InWall
         /// </summary>
         private static void RunP3InWall(string exe_path)
         {
-            
+            // FDFImportPath = exe_path + @"p3export.fdf";
+            // FDFOutputPath = exe_path + @"p3export_with_markups.fdf";
+
+            var labor_path = exe_path + "labor\\labor_entries.json";
+            var excel_output_path = exe_path;
+
+            var pdf_output_suffix = "_p3inwall_device_codes.pdf";
+            var pdf_input_path = GetPdfInputFileName(exe_path, pdf_output_suffix);
+
+            // check the input file path
+            if (string.IsNullOrWhiteSpace(pdf_input_path) || !File.Exists(pdf_input_path))
+            {
+                Console.WriteLine("Failed to retrieve pdf file name");
+                Console.ReadKey();
+                return;
+            }
+            else
+            {
+                Console.WriteLine("Using pdf file: " + pdf_input_path);
+            }
+
+            var pdf_output_path = exe_path + Path.GetFileNameWithoutExtension(pdf_input_path) + pdf_output_suffix;
+
+            /* bool got_pdf_fn = ResolvePdfInputFilePath(exe_path);
+
+            if (!got_pdf_fn)
+            {
+                Console.WriteLine("Failed to retrieve pdf file name");
+                Console.ReadKey();
+                return;
+            } */
+
+            Console.WriteLine("Parsing file: " + Path.GetFileNameWithoutExtension(pdf_input_path));
+            // GenerateFilePaths(exe_path);
+            CleanupPdfOutputFiles(pdf_output_path);
+
+            // @TODO need to 
+            var markups = PdfManager.EditBluebeamMarkups(pdf_input_path);
+            PdfManager.CreateCopyDocument(pdf_input_path, pdf_output_path, markups);
+            ParsePdfMarkups(markups, pdf_output_path, excel_output_path, labor_path);
+
+            Console.ReadKey();
         }
 
-        
 
-        /// <summary>
-        /// Generate all of the paths that the program will use
-        /// </summary>
-        public static void GenerateFilePaths(string exe_path)
+        /* public static void CleanupFDFInputFiles()
         {
-            var labor_path = exe_path + "labor\\";
-            LaborFilePath = labor_path + @"labor_entries.json";
-            ExcelOutputPath = exe_path;
-            FDFImportPath = exe_path + @"p3export.fdf";
-            FDFOutputPath = exe_path + @"p3export_with_markups.fdf";
-            PdfImportPath = exe_path; 
-            PdfCopyPath = exe_path;
-        }
-
-
-        public static void CleanupFDFInputFiles() 
-        {
-            if(File.Exists(FDFImportPath))
+            if (File.Exists(FDFImportPath))
                 File.Delete(FDFImportPath);
-        }
+        } */
 
-        public static void CleanupFDFOutputFiles ()
+        /* public static void CleanupFDFOutputFiles()
         {
-            if(File.Exists(FDFOutputPath))
+            if (File.Exists(FDFOutputPath))
                 File.Delete(FDFOutputPath);
+        } */
+
+        public static void CleanupExcelFiles(params string[] excel_file_paths)
+        {
+            foreach (var p in excel_file_paths)
+                if (File.Exists(p)) File.Delete(p);
         }
 
-        public static void CleanupExcelFiles() 
+        public static void CleanupPdfOutputFiles(params string[] pdf_output_file_paths)
         {
-            if(File.Exists(ExcelOutputFilePath))
-                File.Delete(ExcelOutputFilePath);
+            foreach (var p in pdf_output_file_paths)
+                if (File.Exists(p)) File.Delete(p);
         }
 
-        public static void CleanupPdfOutputFiles()
+        public static void KillExcelProcess(string excel_output_path)
         {
-            if(File.Exists(PdfCopyPath + PdfCopyFilename))
-                File.Delete(PdfCopyPath + PdfCopyFilename);
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        public static void KillExcelProcess( )
-        {
-            if(FileIsLocked(ExcelOutputFilePath, FileAccess.Read))
+            if (FileIsLocked(excel_output_path, FileAccess.Read))
             {
                 Process[] workers = Process.GetProcessesByName("excel");
                 foreach (Process worker in workers)
                 {
-                    if(worker.MainWindowTitle.Contains(ExcelOutputFileExt))
+                    if (worker.MainWindowTitle.Contains(Path.GetFileNameWithoutExtension(excel_output_path)))
                     {
                         Console.WriteLine("Killing open excel process -> " + worker.MainWindowTitle);
                         worker.Kill();
@@ -295,32 +293,18 @@ namespace BluebeamP3InWall
             }
         }
 
-        /// 
-        /// Pdf METHOD
-        /// 
-
-        public static string PdfImportPath { get; set; } = "";
-        public static string PdfCopyPath { get; set; } = "";
-
-        public static string PdfImportFilename { get; set; } = "";
-        public static string PdfCopyFilenameExt { get; set; } = "_Floorplan_With_Device_Codes";
-
-        public static string PdfCopyFilename { get {
-                var split = PdfImportFilename.Split('.');
-                if(split.Length != 2) throw new Exception("PdfImportFilename is incorrect value");
-                return split[0] + PdfCopyFilenameExt + "." + split[1];
-            } }
-
         /// <summary>
         /// Get user input to select a pdf file name if multiple are present
         /// </summary>
-        public static string GetPdfInputFileName(string exe_path)
+        public static string GetPdfInputFileName(string exe_path, string pdf_suffix)
         {
             var raw_fns = Directory
                 .GetFiles(exe_path)
-                .Where(x => x.ToLower().EndsWith(".pdf") && !x.Contains(PdfCopyFilenameExt));
+                .Where(x =>
+                    x.ToLower().EndsWith(".pdf") &&
+                    !x.Contains(string.IsNullOrWhiteSpace(pdf_suffix) ? "STUPIDBYPASS" : pdf_suffix));
 
-            if(!raw_fns.Any()) return String.Empty;
+            if (!raw_fns.Any()) return String.Empty;
 
             string get_fn(string raw_fn) => raw_fn.Split('\\').Last();
 
@@ -328,7 +312,7 @@ namespace BluebeamP3InWall
             {
                 return get_fn(raw_fns.First());
             }
-            else 
+            else
             {
                 List<string> fns = new List<string>();
                 fns.AddRange(raw_fns.Select(x => get_fn(x)));
@@ -349,10 +333,10 @@ namespace BluebeamP3InWall
                     var str_resp = Console.ReadLine();
                     bool s = int.TryParse(str_resp, out int result);
 
-                    if(!s || ((result - 1) > (fns.Count() - 1) || (result - 1) < 0))
+                    if (!s || ((result - 1) > (fns.Count() - 1) || (result - 1) < 0))
                     {
                         Console.WriteLine(
-                            "Please provide a number in the range 1 - " + 
+                            "Please provide a number in the range 1 - " +
                             fns.Count());
                     }
                     else
@@ -368,83 +352,64 @@ namespace BluebeamP3InWall
             }
         }
 
-        /// <summary>
-        /// Parse a pdf bluebeam document for p3 in wall
-        /// </summary>
-        private static void ParsePdf()
+        private static void ParsePdfMarkups(
+            IEnumerable<P3BluebeamFDFMarkup> markups,
+            string pdf_output_path, string excel_output_path,
+            string labor_path)
         {
-            try
-            {
-                var markups = PdfManager.EditBluebeamMarkups(PdfImportPath + PdfImportFilename);
-                PdfManager.CreateCopyDocument(PdfImportPath + PdfImportFilename, PdfCopyPath + PdfCopyFilename, markups);
-                ParsePdfMarkups(markups);
-            }
-            catch(Exception ex)
-            {
-                Console.WriteLine(ex.ToString());
-                Console.ReadKey();
-            }
-        }
+            KillExcelProcess(excel_output_path);
+            CleanupExcelFiles(excel_output_path);
 
-        private static void ParsePdfMarkups(IEnumerable<P3BluebeamFDFMarkup> markups) 
-        {
-            KillExcelProcess();
-            CleanupExcelFiles();
-            
             ExcelEngine exporter = null;
 
             try
             {
-                exporter = new ExcelEngine(ExcelOutputFilePath);
+                exporter = new ExcelEngine(excel_output_path);
 
                 /* var rows = P3CSVRow.ParseCSV(CSVImportPath);
                 Console.WriteLine(P3CSVRow.PrintRaw(rows)); */
 
-                if(!ExcelEngine.PrepExportFile(ExcelOutputFilePath)) 
+                if (!ExcelEngine.PrepExportFile(excel_output_path))
                 {
                     Console.WriteLine("Failed to generate Excel output.");
                     Console.ReadKey();
                     return;
                 }
-                
+
                 var parts = P3InWall.GetLegacyDevices(markups);
                 // Console.WriteLine(string.Join("\n", parts.Select(x => x.ToString())));
                 ExcelOutputSheet s1 = new ExcelOutputSheet(ExportStyle.LegacyP3InWall);
-                Console.WriteLine("Generating Bill of Material:"); 
+                Console.WriteLine("Generating Bill of Material:");
                 Console.WriteLine("\tCreated sheet");
                 exporter.RegisterSheets("P3 in wall", s1);
                 Console.WriteLine("\tRegistered sheet");
-                s1.GenerateLegacyP3InWallSheet(LaborFilePath, "<Project Title Goes Here>", parts);
+                s1.GenerateLegacyP3InWallSheet(labor_path, "<Project Title Goes Here>", parts);
                 Console.WriteLine("\tFilled Sheet");
                 exporter.Close();
                 Console.WriteLine("\tBill of Material Generated!");
                 exporter.OpenExcel();
-                exporter.OpenPDF(PdfCopyFilename);
+                exporter.OpenPDF(pdf_output_path);
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 Console.WriteLine(ex.ToString());
                 Console.ReadKey();
             }
 
             Console.WriteLine("\nBill of Material: ");
-            Console.WriteLine("\tFilename - " + ExcelOutputFilePath.Split("\\").Last());
-            Console.WriteLine("\tFull Path - " + ExcelOutputFilePath);
+            Console.WriteLine("\tFilename - " + excel_output_path.Split("\\").Last());
+            Console.WriteLine("\tFull Path - " + excel_output_path);
 
             Console.WriteLine("\nFloorplan w/ Device Codes: ");
-            Console.WriteLine("\tFilename - " + PdfCopyFilename);
-            Console.WriteLine("\tFull Path - " + PdfCopyPath + PdfCopyFilename);
+            Console.WriteLine("\tFilename - " + Path.GetFileName(pdf_output_path));
+            Console.WriteLine("\tFull Path - " + pdf_output_path);
         }
-        
-        //
-        // FDF METHOD
-        //
 
-        public static string FDFImportPath { get; set; } = "";
-        public static string FDFOutputPath { get; set; } = "";
+        /* public static string FDFImportPath { get; set; } = "";
+        public static string FDFOutputPath { get; set; } = ""; */
         // public static string CSVImportPath { get; set; } = "";
 
-        /// <summary>
+        /* /// <summary>
         /// Error handler for watcher class
         /// </summary>
         private static void OnError(object sender, ErrorEventArgs e)
@@ -458,9 +423,9 @@ namespace BluebeamP3InWall
                 Console.WriteLine("Error: Watched directory not accessible at " + DateTime.Now);
             }
             Console.ReadKey();
-        }
+        } */
 
-        /// <summary>
+        /* /// <summary>
         /// file system watcher changed handler that looks for fdf file in directory
         /// </summary>
         /// <param name="watch_path">the path the watch</param>
@@ -486,12 +451,12 @@ namespace BluebeamP3InWall
                 Console.WriteLine("Listening for .fdf input file at: " + FDFImportPath);
                 watcher.WaitForChanged(WatcherChangeTypes.Created);
             } while (true);
-        }
+        } */
 
         /// <summary>
         /// Parse .fdf bluebeam markup export file when detected in directory
         /// </summary>
-        private static void OnChanged(object sender, FileSystemEventArgs e)
+        /* private static void OnChanged(object sender, FileSystemEventArgs e)
         {
             CleanupFDFOutputFiles();
 
@@ -499,10 +464,10 @@ namespace BluebeamP3InWall
             CleanupExcelFiles();
             KillExcelProcess();
 
-            while(FileIsLocked(FDFImportPath, FileAccess.Read)) 
+            while (FileIsLocked(FDFImportPath, FileAccess.Read))
                 Thread.Sleep(100);
 
-            
+
             Console.WriteLine("File is ready to be parsed at: " + ExcelOutputFilePath + "\n");
 
             ExcelEngine exporter = null;
@@ -512,9 +477,8 @@ namespace BluebeamP3InWall
             try
             {
                 export = new BluebeamP3MarkupExport(FDFImportPath, FDFOutputPath);
-                // Console.WriteLine(string.Join("\n", export.Markups.Select(x => x.DeviceCode)));
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 Console.WriteLine(ex.ToString());
             }
@@ -523,16 +487,13 @@ namespace BluebeamP3InWall
             {
                 exporter = new ExcelEngine(ExcelOutputFilePath);
 
-                /* var rows = P3CSVRow.ParseCSV(CSVImportPath);
-                Console.WriteLine(P3CSVRow.PrintRaw(rows)); */
-
-                if(!ExcelEngine.PrepExportFile(ExcelOutputFilePath)) 
+                if (!ExcelEngine.PrepExportFile(ExcelOutputFilePath))
                 {
                     Console.WriteLine("Failed to generate Excel output.");
                     Console.ReadKey();
                     return;
                 }
-                
+
                 var parts = P3InWall.GetLegacyDevices(export);
                 // Console.WriteLine(string.Join("\n", parts.Select(x => x.ToString())));
                 ExcelOutputSheet s1 = new ExcelOutputSheet(ExportStyle.LegacyP3InWall);
@@ -545,18 +506,18 @@ namespace BluebeamP3InWall
                 exporter.OpenExcel();
                 export.Save();
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 Console.WriteLine(ex.ToString());
                 CleanupFDFInputFiles();
                 Console.ReadKey();
             }
-            
+
             CleanupFDFInputFiles();
             Console.WriteLine("Finished");
             Console.WriteLine("----------------------------------------------\n");
             Console.WriteLine("A file named 'p3export_with_markups.fdf' has been generated in the folder that you just exported markups too. Go to [Markups List -> Markups -> Import] and import 'p3export_with_markups.fdf' to place Device Codes on the markups in your file");
-        }
+        } */
 
         /* public static void CleanupCSVFiles() {
             if(File.Exists(CSVImportPath))
