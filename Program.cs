@@ -66,6 +66,21 @@ namespace BluebeamP3InWall
             return string.Join("\\", split_path) + "\\";
         }
 
+        public static void PrintAllAnnotationPropertiesToFile(string exe_path, string pdf_doc_path)
+        {
+#if DEBUG
+            var input_path = exe_path + Path.GetFileName(pdf_doc_path);
+            var properties_txt_path = exe_path + "annotation_properties.txt";
+
+            Pdforge f = new Pdforge(pdf_doc_path, Path.GetFullPath(input_path));
+
+            var page = f.GetPage(0);
+            f.PrintAllElementProperies(page, properties_txt_path);
+
+            Process.Start("notepad.exe", properties_txt_path);
+#endif
+        }
+
         /// <summary>
         /// Process the fire alarm from a bluebeam document
         /// </summary>
@@ -84,6 +99,8 @@ namespace BluebeamP3InWall
             {
                 Console.WriteLine("Using pdf file: " + pdf_input_path);
             }
+
+            PrintAllAnnotationPropertiesToFile(exe_path, pdf_input_path);
 
             double hanger_spacing = -1;
 
@@ -226,6 +243,8 @@ namespace BluebeamP3InWall
             {
                 Console.WriteLine("Using pdf file: " + pdf_input_path);
             }
+
+            PrintAllAnnotationPropertiesToFile(exe_path, Path.GetFullPath(pdf_input_path));
 
             var pdf_output_path = exe_path + Path.GetFileNameWithoutExtension(pdf_input_path) + pdf_output_suffix;
 

@@ -8,7 +8,8 @@ using PdfSharp.Pdf;
 using PdfSharp.Pdf.Annotations;
 using PdfSharp.Pdf.IO;
 
-namespace JPMorrow.PDF {
+namespace JPMorrow.PDF
+{
     public class Pdforge
     {
         public string InputFilepath { get; private set; } = "";
@@ -17,31 +18,35 @@ namespace JPMorrow.PDF {
         public string OutputFilename { get => Path.GetFileName(OutputFilepath); }
 
         private PdfDocument _inputDocument { get; set; }
-        public PdfDocument InputDocument { get {
-            if(_inputDocument == null)
-                throw new FileNotFoundException("The Input PDF file is not valid.");
-            return _inputDocument;
-        } }
+        public PdfDocument InputDocument
+        {
+            get
+            {
+                if (_inputDocument == null)
+                    throw new FileNotFoundException("The Input PDF file is not valid.");
+                return _inputDocument;
+            }
+        }
 
         public List<PdfAnnotation> AllAnnotations { get => GetPage(0).Annotations.Select(x => x as PdfAnnotation).ToList(); }
 
-        public Pdforge(string input_filepath, string output_filepath) 
+        public Pdforge(string input_filepath, string output_filepath)
         {
             InputFilepath = input_filepath;
             OutputFilepath = output_filepath;
 
-            if(!File.Exists(InputFilepath))
+            if (!File.Exists(InputFilepath))
                 throw new FileNotFoundException("Input file path does not resolve to a valid PDF file", InputFilename);
 
             var out_dir = Path.GetDirectoryName(OutputFilepath);
 
-            if(!Directory.Exists(out_dir))
+            if (!Directory.Exists(out_dir))
                 throw new FileNotFoundException("Output file path does not resolve to a valid location", OutputFilename);
 
             _inputDocument = PdfReader.Open(InputFilepath, PdfDocumentOpenMode.Import);
         }
 
-        public PdfPage GetPage(int page_idx) 
+        public PdfPage GetPage(int page_idx)
         {
             return InputDocument.Pages[page_idx];
         }
@@ -75,14 +80,14 @@ namespace JPMorrow.PDF {
             {
                 var annot = page.Annotations[i];
                 if (annot == null) continue;
-                
+
                 bool s = annot.Elements.TryGetValue(el_name, out var item);
-                
-                if(!s) continue;
+
+                if (!s) continue;
                 var str = item.ToString().Trim(' ', '[', ']', '(', ')');
-                
+
                 bool has_value = contains_value ? str.Contains(annotation_element_value) : str.Equals(annotation_element_value);
-                if(has_value) results.Add(annot);
+                if (has_value) results.Add(annot);
                 else results.Add(annot);
             }
 
@@ -93,31 +98,28 @@ namespace JPMorrow.PDF {
         {
             var pname = property_name.StartsWith("/") ? property_name : "/" + property_name;
             bool s = annotation.Elements.TryGetValue(pname, out PdfItem item);
-            if(!s) return;
+            if (!s) return;
             annotation.Elements.SetValue(pname, new PdfString(property_value));
         }
 
         public void SetAnnotationStringPropertys(IEnumerable<PdfAnnotation> annotations, string property_name, string property_value)
         {
-            foreach(var annot in annotations)
+            foreach (var annot in annotations)
             {
                 SetAnnotationStringProperty(annot, property_name, property_value);
             }
         }
 
-        
-
         public void PrintAllFirstPageData()
         {
-            
+
             // var bsi_columns = InputDocument.
             var data = InputDocument.Internals.GetAllObjects();
             Console.WriteLine("data count: ", data.Count().ToString());
-            foreach(var v in data)
+            foreach (var v in data)
             {
                 Console.WriteLine(string.Format("{0}", v.ToString()));
                 Console.WriteLine();
-                // Console.WriteLine(string.Format("{0} : {1}", v.Key, v.Value));
             }
         }
 
@@ -133,7 +135,7 @@ namespace JPMorrow.PDF {
         {
             PdfDocument copy = new PdfDocument();
 
-            for(int Pg = 0; Pg < InputDocument.Pages.Count; Pg++)
+            for (int Pg = 0; Pg < InputDocument.Pages.Count; Pg++)
             {
                 var origin_page = InputDocument.Pages[Pg];
                 copy.AddPage(origin_page);
@@ -148,11 +150,11 @@ namespace JPMorrow.PDF {
         /// <summary>
         /// Delete the input pdf document file on disk
         /// </summary>
-        public bool DeleteInputFile() 
+        public bool DeleteInputFile()
         {
-            if(!File.Exists(InputFilepath)) return false;
+            if (!File.Exists(InputFilepath)) return false;
 
-            while(FileIsLocked(InputFilepath, FileAccess.ReadWrite))
+            while (FileIsLocked(InputFilepath, FileAccess.ReadWrite))
             {
                 Console.WriteLine("Waiting for PDF input file lock.");
                 Thread.Sleep(1000);
@@ -161,17 +163,17 @@ namespace JPMorrow.PDF {
             File.Delete(InputFilepath);
             return true;
         }
-        
+
         /// <summary>
         /// Delete the PDF output file on disk
         /// </summary>
-        public bool DeleteOutputFile(string output_path = null) 
+        public bool DeleteOutputFile(string output_path = null)
         {
-            if(output_path == null) output_path = OutputFilepath;
+            if (output_path == null) output_path = OutputFilepath;
 
-            if(!File.Exists(output_path)) return false;
+            if (!File.Exists(output_path)) return false;
 
-            while(FileIsLocked(output_path, FileAccess.ReadWrite))
+            while (FileIsLocked(output_path, FileAccess.ReadWrite))
             {
                 Console.WriteLine("Waiting for PDF output file lock.");
                 Thread.Sleep(1000);
@@ -185,12 +187,12 @@ namespace JPMorrow.PDF {
         {
             var o = "";
 
-            foreach(PdfAnnotation annot in page.Annotations)
+            foreach (PdfAnnotation annot in page.Annotations)
             {
-                if(annot == null) continue;
+                if (annot == null) continue;
                 var elements = annot.Elements;
 
-                foreach( var p in elements)
+                foreach (var p in elements)
                 {
                     o += string.Format("{0} : {1}", p.Key, p.Value) + "\n";
                 }
@@ -199,7 +201,7 @@ namespace JPMorrow.PDF {
             }
 
             File.WriteAllText(txt_file_path, o);
-        }   
+        }
 
         /// <summary>
         /// Check if qfile is locked
@@ -225,5 +227,16 @@ namespace JPMorrow.PDF {
         }
     }
 
-    
+    public class PdfCustomColumnCollection
+    {
+        public PdfCustomColumnCollection(Pdforge forge)
+        {
+            var page = forge.GetPage(0);
+            var annots = page.Annotations;
+
+            foreach (var a in annots)
+            {
+            }
+        }
+    }
 }

@@ -9,22 +9,6 @@ namespace JPMorrow.Test.Console
 
     public static partial class TestBed
     {
-        public static void TestPdforgePrintAllAnnotationPropertiesToFile(string exe_path, TestAssert a)
-        {   
-            var input_path = exe_path + "Test Document 1.pdf";
-            var properties_txt_path = exe_path + "annotation_properties.txt";
-
-            Pdforge f = new Pdforge(input_path, input_path);
-            a.Assert("Check if input file exists", File.Exists(f.InputFilepath));
-            a.Assert("Check if output file exists", Directory.Exists(Path.GetDirectoryName(f.OutputFilepath)));
-
-            var page = f.GetPage(0);
-            f.PrintAllElementProperies(page, properties_txt_path);
-            a.Assert("Properties File Created", File.Exists(properties_txt_path));
-
-            Process.Start("notepad.exe", properties_txt_path);
-        }
-
         public static void TestPdforgeConstructor(string exe_path, TestAssert a)
         {
             var input_path = exe_path + "Test Document 1.pdf";
@@ -44,7 +28,7 @@ namespace JPMorrow.Test.Console
             Pdforge f = new Pdforge(input_path, output_path);
             a.Assert("Check if input file exists", File.Exists(f.InputFilepath));
             a.Assert("Check if output file exists", Directory.Exists(Path.GetDirectoryName(f.OutputFilepath)));
-            
+
             f.DeleteInputFile();
             a.Assert("Delete input file", !File.Exists(f.InputFilepath));
 
@@ -70,7 +54,7 @@ namespace JPMorrow.Test.Console
             var output_path = exe_path + "Test Document 1 (OUTPUT).pdf";
 
             Pdforge f = new Pdforge(input_path, output_path);
-            
+
             a.Assert("Check if input file exists", File.Exists(f.InputFilepath));
             a.Assert("Check if output file exists", Directory.Exists(Path.GetDirectoryName(f.OutputFilepath)));
 
@@ -115,17 +99,17 @@ namespace JPMorrow.Test.Console
         {
             var test_sizes = new string[] { "1/2\"", "1 1/2\"", "1'", "1' 1\"", "1' 1/2\"", "1' 1 1/2\"" };
 
-            foreach(var size in test_sizes)
+            foreach (var size in test_sizes)
             {
                 var d1 = Measure.LengthDbl(size);
                 var s1 = Measure.LengthFromDbl(d1);
                 var d2 = Measure.LengthDbl(s1);
                 var s2 = Measure.LengthFromDbl(d2);
                 var assert_str = "Convert back and forth from double to string: " +
-                size + " { " + d1.ToString() + ", " + d2.ToString() + ", " + s1 + ", " + s2 + " }"; 
+                size + " { " + d1.ToString() + ", " + d2.ToString() + ", " + s1 + ", " + s2 + " }";
                 a.Assert(assert_str, d1 == d2 && s1.Equals(s2) && s2.Equals(size));
             }
-            
+
         }
     }
 }
