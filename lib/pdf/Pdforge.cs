@@ -5,8 +5,10 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using PdfSharp.Pdf;
+using PdfSharp.Pdf.Advanced;
 using PdfSharp.Pdf.Annotations;
 using PdfSharp.Pdf.IO;
+using static PdfSharp.Pdf.PdfArray;
 
 namespace JPMorrow.PDF
 {
@@ -115,6 +117,14 @@ namespace JPMorrow.PDF
 
             // var bsi_columns = InputDocument.
             var data = InputDocument.Internals.GetAllObjects();
+            PdfCatalog pdf_catalog = InputDocument.Internals.Catalog;
+
+            Console.WriteLine("Catalog Data:\n");
+            foreach (var v in pdf_catalog.Elements)
+            {
+                Console.WriteLine(string.Format("{0} : {1}", v.Key, v.Value));
+            }
+
             Console.WriteLine("data count: ", data.Count().ToString());
             foreach (var v in data)
             {
@@ -183,20 +193,32 @@ namespace JPMorrow.PDF
             return true;
         }
 
-        public void PrintAllElementProperies(PdfPage page, string txt_file_path)
+        public void PrintAllPdfProperies(string txt_file_path)
         {
             var o = "";
 
-            foreach (PdfAnnotation annot in page.Annotations)
+            var data = InputDocument.Internals.GetAllObjects();
+            var annots = GetPage(0).Annotations;
+
+            o += "data count: " + data.Count().ToString() + "\n\n";
+            foreach (var v in data)
             {
-                if (annot == null) continue;
-                var elements = annot.Elements;
-
-                foreach (var p in elements)
+                var s = PrintFormatInternalObject(v);
+                foreach (var arr in s)
                 {
-                    o += string.Format("{0} : {1}", p.Key, p.Value) + "\n";
+                    foreach (var kvp in arr)
+                    {
+                        o += string.Format("{0} : {1}\n", kvp.Key, kvp.Value);
+                    }
+                    if (s.Any()) o += "\n";
                 }
+            }
 
+            foreach (var a in annots)
+            {
+                var els = (a as PdfAnnotation).Elements;
+                foreach (var e in els)
+                    o += string.Format("{0} : {1}\n", e.Key, e.Value.ToString());
                 o += "\n";
             }
 
@@ -225,18 +247,131 @@ namespace JPMorrow.PDF
                 throw;
             }
         }
+
+        public IEnumerable<KeyValuePair<string, string>[]> PrintFormatInternalObject(PdfObject o)
+        {
+            // handle each type individually
+            var type = o.GetType();
+            var ret = new List<KeyValuePair<string, string>[]>();
+
+            if (type == typeof(PdfArray))
+            {
+                // ret.Add(type.ToString());
+                var arr = (o as PdfArray).Elements;
+
+                for (int i = 0; i < arr.Count(); i++)
+                {
+                    var el = arr[i];
+                    var tt = el.GetType();
+                    if (tt != typeof(PdfDictionary)) continue;
+                    List<KeyValuePair<string, string>> f = new List<KeyValuePair<string, string>>();
+                    foreach (var p in (el as PdfDictionary).ToList())
+                        f.Add(new KeyValuePair<string, string>(p.Key, p.Value.ToString()));
+                    ret.Add(f.ToArray());
+                }
+            }
+            else if (type == typeof(PdfAnnotation))
+            {
+                var els = (o as PdfAnnotation).Elements;
+                var arr = els.Select(x => new KeyValuePair<string, string>(x.Key, x.Value.ToString()));
+                ret.Add(arr.ToArray());
+            }
+
+            return ret;
+        }
     }
 
+    /// <summary>
+    /// Custom Column header data for matching up BISColumnData
+    /// </summary>
     public class PdfCustomColumnCollection
     {
+        private class PdfCustomColumn
+        {
+            public int DisplayOrder { get; private set; } = -1;
+            public string SubType { get; private set; } = string.Empty;
+            public string HeaderName { get; private set; } = string.Empty;
+            public string DefaultValue { get; private set; } = string.Empty;
+
+            public PdfCustomColumn(KeyValuePair<string, string>[] custom_column_data)
+            {
+                foreach (var p in custom_column_data)
+                {
+                    if (p.Key.Equals(customColumnStrings[0])) DisplayOrder = int.Parse(p.Value);
+                    else if (p.Key.Equals(customColumnStrings[1])) HeaderName = p.Value.Trim('(', ')');
+                    else if (p.Key.Equals(customColumnStrings[2])) DefaultValue = p.Value.Trim('(', ')');
+                    else if (p.Key.Equals(customColumnStrings[3])) SubType = p.Value.TrimStart('/');
+                }
+            }
+
+            public override string ToString()
+            {
+                return string.Format("Column: [ {0}, {1}, {2}, {3} ]", HeaderName, DisplayOrder, SubType, DefaultValue);
+            }
+        }
+
+        private List<PdfCustomColumn> columns { get; set; } = new List<PdfCustomColumn>();
+
+        private static string[] customColumnStrings = new string[] {
+            "/DisplayOrder",
+            "/Name",
+            "/DefaultValue",
+            "/Subtype"
+        };
         public PdfCustomColumnCollection(Pdforge forge)
         {
-            var page = forge.GetPage(0);
-            var annots = page.Annotations;
+            var all_obj = forge.InputDocument.Internals.GetAllObjects();
 
-            foreach (var a in annots)
+
+            foreach (var obj in all_obj)
             {
+                var type = obj.GetType();
+                if (type != typeof(PdfArray)) continue;
+
+                // match the keys
+                var custom_columns = forge.PrintFormatInternalObject(obj);
+
+                foreach (var arr in custom_columns)
+                {
+                    if (customColumnStrings.Any(x => arr.Select(x => x.Key).ToList().Contains(x)))
+                        columns.Add(new PdfCustomColumn(arr));
+                }
             }
+        }
+
+        public override string ToString()
+        {
+            string o = string.Join("\n", columns.Select(x => x.ToString()));
+            return o;
+        }
+
+        public bool HasExpectedColumnHeaders(string[] column_header_names, out List<string> missing_names)
+        {
+            missing_names = new List<string>();
+
+            foreach (var c in column_header_names)
+            {
+                if (columns.Any(x => x.HeaderName.Equals(c))) continue;
+                missing_names.Add(c);
+            }
+
+            if (missing_names.Any()) return false;
+            else return true;
+        }
+
+        public Dictionary<string, string> MatchColumnHeaderToBISData(PdfAnnotation a)
+        {
+            var dict = new Dictionary<string, string>();
+            var bis_data = (a.Elements["/BSIColumnData"] as PdfArray)
+                .ToArray().Select(x => x.ToString().Trim('(', ')')).ToArray();
+
+            foreach (var c in columns)
+            {
+                var val = bis_data[c.DisplayOrder];
+                dict.Add(c.HeaderName, val);
+            }
+
+            return dict;
         }
     }
 }

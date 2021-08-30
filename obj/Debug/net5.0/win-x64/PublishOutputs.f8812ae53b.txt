@@ -234,6 +234,7 @@ D:\Code\C#\BluebeamP3InWall\bin\Debug\net5.0\win-x64\publish\Microsoft.Extension
 D:\Code\C#\BluebeamP3InWall\bin\Debug\net5.0\win-x64\publish\Microsoft.Extensions.Primitives.dll
 D:\Code\C#\BluebeamP3InWall\bin\Debug\net5.0\win-x64\publish\Microsoft.IO.RecyclableMemoryStream.dll
 D:\Code\C#\BluebeamP3InWall\bin\Debug\net5.0\win-x64\publish\Microsoft.Win32.SystemEvents.dll
+D:\Code\C#\BluebeamP3InWall\bin\Debug\net5.0\win-x64\publish\MoreLinq.dll
 D:\Code\C#\BluebeamP3InWall\bin\Debug\net5.0\win-x64\publish\Newtonsoft.Json.dll
 D:\Code\C#\BluebeamP3InWall\bin\Debug\net5.0\win-x64\publish\PdfSharp.Charting.dll
 D:\Code\C#\BluebeamP3InWall\bin\Debug\net5.0\win-x64\publish\PdfSharp.dll

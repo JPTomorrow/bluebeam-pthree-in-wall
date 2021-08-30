@@ -1,8 +1,8 @@
 {
   "runtimeOptions": {
     "additionalProbingPaths": [
-      "C:\\Users\\Jmorrow\\.dotnet\\store\\|arch|\\|tfm|",
-      "C:\\Users\\Jmorrow\\.nuget\\packages",
+      "C:\\Users\\justi\\.dotnet\\store\\|arch|\\|tfm|",
+      "C:\\Users\\justi\\.nuget\\packages",
       "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
     ]
   }

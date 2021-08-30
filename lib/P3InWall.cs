@@ -7,15 +7,17 @@ using System.IO;
 using System.Linq;
 using JPMorrow.Bluebeam.Markup;
 using JPMorrow.Measurements;
+using JPMorrow.Pdf.Bluebeam.P3;
 
 namespace JPMorrow.P3
 {
-    
-    public enum P3PartCategory {
-		Box, Plaster_Ring, Bracket, 
-        Hardware, Connector, Stinger, 
+
+    public enum P3PartCategory
+    {
+        Box, Plaster_Ring, Bracket,
+        Hardware, Connector, Stinger,
         Clip
-	}
+    }
 
     /// <summary>
     /// Main Library Class
@@ -96,7 +98,7 @@ namespace JPMorrow.P3
             { "4|C", "1" },
             { "5|C", "1 1/4" },
             { "6|C", "1 1/2" },
-            { "8|C", "2" },   
+            { "8|C", "2" },
             { "M", "M" },
         };
 
@@ -295,7 +297,7 @@ namespace JPMorrow.P3
             { "4 11/16|4|A", "4 11/16\" Square Plaster Ring - Steel - 4-Gang - Adjustable" },
             { "4 11/16|R|A", "4 11/16\" Round Plaster Ring - Steel - Adjustable" },
         };
-        
+
         /// <summary>
         /// Represents a device code and a quantity of how many 
         /// are present in model
@@ -312,36 +314,36 @@ namespace JPMorrow.P3
             }
         }
 
-       /*  /// <summary>
-        /// Extract device codes and quantities from a text file 
-        /// describing those boxes
-        /// </summary>
-        public static IEnumerable<DeviceCodeQtyPair> GetDevicesFromFile(string file_name)
-        {
-            var all_txt = File.ReadAllText(file_name);
-            var lines = all_txt.Split('\n');
+        /*  /// <summary>
+         /// Extract device codes and quantities from a text file 
+         /// describing those boxes
+         /// </summary>
+         public static IEnumerable<DeviceCodeQtyPair> GetDevicesFromFile(string file_name)
+         {
+             var all_txt = File.ReadAllText(file_name);
+             var lines = all_txt.Split('\n');
 
-            List<DeviceCodeQtyPair> pairs = new List<DeviceCodeQtyPair>();
-            foreach(var l in lines)
-            {
-                var entry = l.Split('|');
-                if(entry.Length != 2) continue;
-                pairs.Add(new DeviceCodeQtyPair(entry[0].Trim(), int.Parse(entry[1].Trim())));
-            }
+             List<DeviceCodeQtyPair> pairs = new List<DeviceCodeQtyPair>();
+             foreach(var l in lines)
+             {
+                 var entry = l.Split('|');
+                 if(entry.Length != 2) continue;
+                 pairs.Add(new DeviceCodeQtyPair(entry[0].Trim(), int.Parse(entry[1].Trim())));
+             }
 
-            return pairs;
-        } */
+             return pairs;
+         } */
 
         /// <summary>
         /// Get Legacy device codes from file and return a collection 
         /// of parts to make up the box
         /// </summary>
-        public static IEnumerable<P3PartCollection> GetLegacyDevices(BluebeamP3MarkupExport export)
+        public static IEnumerable<P3PartCollection> GetLegacyDevices(IEnumerable<BluebeamP3Box> boxes)
         {
             var codes = new List<P3Code>();
-            foreach(var dc in export.Markups.Select(x => x.DeviceCode))
+            foreach (var b in boxes)
             {
-                codes.Add(P3Code.GetCodeFromDeviceCode(dc));
+                codes.Add(P3Code.GetCodeFromDeviceCode(b.DeviceCode, b.Config.BundleName));
             }
 
             var devices = ParseLegacyDeviceCodes(codes);
@@ -351,7 +353,7 @@ namespace JPMorrow.P3
         public static IEnumerable<P3PartCollection> GetLegacyDevices(IEnumerable<P3BluebeamFDFMarkup> markups)
         {
             var codes = new List<P3Code>();
-            foreach(var m in markups)
+            foreach (var m in markups)
             {
                 var bundle_name = m.BundleRegion == null ? string.Empty : m.BundleRegion.BundleName;
                 var code = P3Code.GetCodeFromDeviceCode(m.DeviceCode, bundle_name);
@@ -369,7 +371,7 @@ namespace JPMorrow.P3
         public static IEnumerable<P3PartCollection> GetLegacyDevices(IEnumerable<P3CSVRow> rows)
         {
             var codes = new List<P3Code>();
-            foreach(var r in rows)
+            foreach (var r in rows)
             {
                 codes.Add(P3Code.GetCodeFromP3CSV(r));
             }
@@ -377,33 +379,33 @@ namespace JPMorrow.P3
             var devices = ParseLegacyDeviceCodes(codes);
             return devices;
         }
-/* 
-        /// <summary>
-        /// get legacy device codes from fixtures in the revit model 
-        /// and return a collection of parts to make up the box
-        /// </summary>
-        public static IEnumerable<P3PartCollection> GetLegacyDevices(
-            ModelInfo info, IEnumerable<ElementId> fixture_ids)
-        {
-            if(!fixture_ids.Any())
-            {
-                Console.WriteLine("No boxes to process");
-                return new List<P3PartCollection>();
-            }
+        /* 
+                /// <summary>
+                /// get legacy device codes from fixtures in the revit model 
+                /// and return a collection of parts to make up the box
+                /// </summary>
+                public static IEnumerable<P3PartCollection> GetLegacyDevices(
+                    ModelInfo info, IEnumerable<ElementId> fixture_ids)
+                {
+                    if(!fixture_ids.Any())
+                    {
+                        Console.WriteLine("No boxes to process");
+                        return new List<P3PartCollection>();
+                    }
 
-            // collect the device codes
-            var device_codes = new List<P3Code>();
+                    // collect the device codes
+                    var device_codes = new List<P3Code>();
 
-            foreach (var id in fixture_ids)
-            {
-                var code = P3Code.GetDeviceCodeFromFixture(info.DOC, id);
-                if (code.IsValidCode) device_codes.Add(code);
-            }
+                    foreach (var id in fixture_ids)
+                    {
+                        var code = P3Code.GetDeviceCodeFromFixture(info.DOC, id);
+                        if (code.IsValidCode) device_codes.Add(code);
+                    }
 
-            return ParseLegacyDeviceCodes(info, device_codes);
-        } */
+                    return ParseLegacyDeviceCodes(info, device_codes);
+                } */
 
-        private static IEnumerable<P3PartCollection> ParseLegacyDeviceCodes(IEnumerable<P3Code> codes) 
+        private static IEnumerable<P3PartCollection> ParseLegacyDeviceCodes(IEnumerable<P3Code> codes)
         {
             static IEnumerable<P3PartCollection> set_return_state(string debug_message)
             {
@@ -427,12 +429,12 @@ namespace JPMorrow.P3
                 if (!has_box_part || !has_conduit_size || !has_connector_part || !has_plaster_ring) continue;
 
                 P3Part conduit_clip = null;
-                if(connector_size != "M") 
+                if (connector_size != "M")
                 {
                     conduit_clip = GetConduitClip(code.BoxSizeCode, connector_size);
                     hardware_parts.Add(conduit_clip);
                 }
-                
+
                 if (code.BoxSizeCode.Contains("P"))
                 {
                     hardware_parts.Add(new P3Part("Ground Stinger #12 Copper", 1, P3PartCategory.Stinger));
@@ -440,8 +442,8 @@ namespace JPMorrow.P3
                     hardware_parts.Add(new P3Part("Wafer Head Tek Screw", 4, P3PartCategory.Hardware));
 
                     bool s = ConnectorSizeToConduit.TryGetValue(connector_size, out var conduit);
-                    if(!s) throw new Exception("conduit material not found");
-                    
+                    if (!s) throw new Exception("conduit material not found");
+
                     if (connector_size.Contains("M"))
                     {
                         hardware_parts.Add(new P3Part(conduit, 15, P3PartCategory.Hardware));
@@ -460,7 +462,7 @@ namespace JPMorrow.P3
                     hardware_parts.Add(new P3Part("Wafer Head Tek Screw", 4, P3PartCategory.Hardware));
 
                     bool s = ConnectorSizeToConduit.TryGetValue(connector_size, out var conduit);
-                    if(!s) throw new Exception("conduit material not found");
+                    if (!s) throw new Exception("conduit material not found");
 
                     if (connector_size.Contains("M"))
                     {
@@ -474,12 +476,12 @@ namespace JPMorrow.P3
                     }
                 }
 
-                foreach(var connector in code.ExtraConnectors)
+                foreach (var connector in code.ExtraConnectors)
                 {
-                    if(connector_size.Contains("M")) continue;
+                    if (connector_size.Contains("M")) continue;
                     var part_name = connector + "|" + connector_size;
                     bool s = ExtraConnectorToConnectorPartName.TryGetValue(part_name, out string con_part);
-                    if(!s) continue;
+                    if (!s) continue;
                     hardware_parts.Add(new P3Part(con_part, 1, P3PartCategory.Connector));
                 }
 
@@ -491,23 +493,23 @@ namespace JPMorrow.P3
                     hardware_parts.Add(new P3Part("1/4\"x20 - 1/2\" Long Screw", 1, P3PartCategory.Hardware));
 
                 var p_idx = part_colls.FindIndex(x => x.DeviceCode.Equals(code.RawDeviceCode) && x.BundleName.Equals(code.BundleName));
-                if(p_idx == -1) 
+                if (p_idx == -1)
                 {
                     hardware_parts.Add(final_box_part);
                     hardware_parts.Add(plaster_ring_part);
                     var coll = new P3PartCollection(
-						code.RawDeviceCode, hardware_parts);
+                        code.RawDeviceCode, hardware_parts);
                     coll.BundleName = code.BundleName;
                     part_colls.Add(coll);
-				}
-				else 
+                }
+                else
                 {
-					part_colls[p_idx].AddPart(final_box_part);
-					part_colls[p_idx].AddPart(plaster_ring_part);
+                    part_colls[p_idx].AddPart(final_box_part);
+                    part_colls[p_idx].AddPart(plaster_ring_part);
 
-					foreach(var part in hardware_parts)
+                    foreach (var part in hardware_parts)
                         part_colls[p_idx].AddPart(part);
-				}
+                }
             }
 
             Console.WriteLine("\nDevice Codes Extracted:");
@@ -526,17 +528,17 @@ namespace JPMorrow.P3
             var one_inch = -1.0;
             try
             {
-                 three_quarters = Measure.LengthDbl("3/4\"");
-                 one_half = Measure.LengthDbl("1/2\"");
-                 one_inch = Measure.LengthDbl("1\"");                                                             
+                three_quarters = Measure.LengthDbl("3/4\"");
+                one_half = Measure.LengthDbl("1/2\"");
+                one_inch = Measure.LengthDbl("1\"");
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 Console.WriteLine(ex.ToString());
                 Console.ReadKey();
             }
-            
-            
+
+
 
             var c_size = connector + "\"";
             var cc_size = Measure.LengthDbl(c_size);
@@ -575,7 +577,7 @@ namespace JPMorrow.P3
             return null;
         }
 
-        public class P3Code 
+        public class P3Code
         {
             //public ElementId FixtureId { get; private set; }
             public string RawDeviceCode { get; private set; }
@@ -634,43 +636,49 @@ namespace JPMorrow.P3
                 return new P3Code(row.DeviceCode);
             }
 
-            public override string ToString() 
+            public override string ToString()
             {
                 string o = RawDeviceCode + "\n{\n";
                 o += string.Format(
-                    "\tBox Size Code: {0},\n\tGang Size Code: {1},\n\tConnector Size Code: {2}\n", 
+                    "\tBox Size Code: {0},\n\tGang Size Code: {1},\n\tConnector Size Code: {2}\n",
                     BoxSizeCode ?? "null", GangCode ?? "null", ConnectorSizeCode ?? "null");
                 o += "}\n";
                 return o;
             }
 
-            internal class InternalPrintFormat {
+            internal class InternalPrintFormat
+            {
                 public string Code { get; set; }
                 public int Qty { get; set; }
 
-                public InternalPrintFormat(string code, int qty) {
+                public InternalPrintFormat(string code, int qty)
+                {
                     Code = code;
                     Qty = qty;
                 }
             }
 
-            public static string PrintDevices(IEnumerable<P3Code> devices) {
+            public static string PrintDevices(IEnumerable<P3Code> devices)
+            {
                 string ret = "";
                 List<InternalPrintFormat> flatten = new List<InternalPrintFormat>();
 
-                foreach(var device in devices) {
+                foreach (var device in devices)
+                {
                     var idx = flatten.FindIndex(x => x.Code.Equals(device.RawDeviceCode));
 
-                    if(idx == -1)
+                    if (idx == -1)
                         flatten.Add(new InternalPrintFormat(device.RawDeviceCode, 1));
-                    else {
+                    else
+                    {
                         var cnt = flatten[idx].Qty;
                         flatten.RemoveAt(idx);
                         flatten.Add(new InternalPrintFormat(device.RawDeviceCode, cnt + 1));
                     }
                 }
 
-                foreach(var f in flatten) {
+                foreach (var f in flatten)
+                {
                     ret += string.Format("{0}\t{1}\n",
                     f.Code.Trim(),
                     f.Qty.ToString());
@@ -701,7 +709,8 @@ namespace JPMorrow.P3
             /// <summary>
             /// Process device code into its parts
             /// </summary>
-            private void ProcessCode() {
+            private void ProcessCode()
+            {
                 if (RawDeviceCode == string.Empty) return;
 
                 var code_split = RawDeviceCode.Split('-');
@@ -751,7 +760,7 @@ namespace JPMorrow.P3
 
                 bool has_connector_size = DeviceCodeToConduitConnectorSize
                     .TryGetValue(ConnectorSizeCode, out var connector_size);
-                
+
                 if (!has_connector_size) return;
 
                 BoxSizeCode += "|" + connector_size;
@@ -808,28 +817,31 @@ namespace JPMorrow.P3
     /// A collection of P3 In Wall Parts that 
     /// belong to a specific device code
     /// </summary>
-	public class P3PartCollection 
+	public class P3PartCollection
     {
-		public string DeviceCode { get; private set; }
+        public string DeviceCode { get; private set; }
         public List<P3Part> Parts { get; set; } = new List<P3Part>();
         public string BundleName { get; set; } = string.Empty;
 
-        public P3PartCollection(string device_code, IEnumerable<P3Part> parts) {
-			DeviceCode = device_code;
-			foreach(var p in parts) AddPart(p);
-		}
-        
-        public P3PartCollection(string device_code) {
-			DeviceCode = device_code;
-			Parts = new List<P3Part>();
-		}
+        public P3PartCollection(string device_code, IEnumerable<P3Part> parts)
+        {
+            DeviceCode = device_code;
+            foreach (var p in parts) AddPart(p);
+        }
 
-		public void AddPart(P3Part part) {
+        public P3PartCollection(string device_code)
+        {
+            DeviceCode = device_code;
+            Parts = new List<P3Part>();
+        }
+
+        public void AddPart(P3Part part)
+        {
             var idx = Parts.FindIndex(x => x.Name.Equals(part.Name));
-            if(idx > -1) Parts[idx].AddQty(part.Qty);
+            if (idx > -1) Parts[idx].AddQty(part.Qty);
             else Parts.Add(part.Clone() as P3Part);
             Parts = Parts.OrderBy(x => x.Name).ToList();
-		}
+        }
 
         public override string ToString()
         {
@@ -852,12 +864,12 @@ namespace JPMorrow.P3
         public static IEnumerable<P3PartCollection> GetPartTotalsByCategory(IEnumerable<P3PartCollection> pcolls, params P3PartCategory[] cats)
         {
             var copy_colls = pcolls.ToList().ConvertAll(x => new P3PartCollection(x.DeviceCode, x.Parts));
-            foreach(var coll in copy_colls)
+            foreach (var coll in copy_colls)
             {
                 List<P3Part> remove_parts = new List<P3Part>();
-                foreach(var part in coll.Parts)
+                foreach (var part in coll.Parts)
                 {
-                    if(!cats.Any(x => part.Category == x))
+                    if (!cats.Any(x => part.Category == x))
                         remove_parts.Add(part);
                 }
                 remove_parts.ForEach(x => coll.Parts.Remove(x));
@@ -873,20 +885,21 @@ namespace JPMorrow.P3
         public static Dictionary<string, List<P3PartCollection>> GetPartTotalsByBundleThenCategory(IEnumerable<P3PartCollection> pcolls, params P3PartCategory[] cats)
         {
             Dictionary<string, List<P3PartCollection>> dict = new Dictionary<string, List<P3PartCollection>>();
-            var copy_colls = pcolls.ToList().ConvertAll(x => {
+            var copy_colls = pcolls.ToList().ConvertAll(x =>
+            {
                 var pp = new P3PartCollection(x.DeviceCode, x.Parts);
                 pp.BundleName = x.BundleName;
                 return pp;
             });
 
-            foreach(var coll in copy_colls)
+            foreach (var coll in copy_colls)
             {
                 bool s = dict.TryGetValue(coll.BundleName, out var list);
 
                 List<P3Part> remove_parts = new List<P3Part>();
-                foreach(var part in coll.Parts)
+                foreach (var part in coll.Parts)
                 {
-                    if(!cats.Any(x => part.Category == x))
+                    if (!cats.Any(x => part.Category == x))
                         remove_parts.Add(part);
                 }
                 remove_parts.ForEach(x => coll.Parts.Remove(x));
@@ -906,12 +919,12 @@ namespace JPMorrow.P3
             dict = dict.OrderBy(x => x.Key).ToDictionary(x => x.Key, x => x.Value);
             return dict;
         }
-	}
+    }
 
     /// <summary>
     /// A collection of P3 In Wall Parts
     /// </summary>
-    public class P3PartTotal 
+    public class P3PartTotal
     {
         public List<P3Part> Parts { get; set; } = new List<P3Part>();
 
@@ -919,13 +932,13 @@ namespace JPMorrow.P3
 
         public P3PartTotal(IEnumerable<P3Part> parts)
         {
-            foreach(var p in parts) AddPart(p);
+            foreach (var p in parts) AddPart(p);
         }
 
         public void AddPart(P3Part part)
         {
             var idx = Parts.FindIndex(x => x.Name.Equals(part.Name));
-            if(idx > -1) Parts[idx].AddQty(part.Qty);
+            if (idx > -1) Parts[idx].AddQty(part.Qty);
             else Parts.Add(part.Clone() as P3Part);
             Parts = Parts.OrderBy(x => x.Name).ToList();
         }
@@ -949,9 +962,9 @@ namespace JPMorrow.P3
         {
             var total = new P3PartTotal();
 
-            foreach(var p in pcolls.SelectMany(x => x.Parts)) 
+            foreach (var p in pcolls.SelectMany(x => x.Parts))
             {
-                if(!cats.Any(x => x == p.Category)) continue;
+                if (!cats.Any(x => x == p.Category)) continue;
                 total.AddPart(p);
             }
 
@@ -959,29 +972,29 @@ namespace JPMorrow.P3
         }
     }
 
-	/// <summary>
-	/// A Set P3 In Wall hardware part
-	/// </summary>
-	public class P3Part : ICloneable
+    /// <summary>
+    /// A Set P3 In Wall hardware part
+    /// </summary>
+    public class P3Part : ICloneable
     {
-		public string Name { get; private set; }
-		public int Qty { get; private set; }
-		public P3PartCategory Category { get; private set; }
+        public string Name { get; private set; }
+        public int Qty { get; private set; }
+        public P3PartCategory Category { get; private set; }
 
-		public int IncrementQty() 
+        public int IncrementQty()
         {
-			Qty += 1;
-			return Qty;
-		}
+            Qty += 1;
+            return Qty;
+        }
 
         public void AddQty(int qty) => Qty += qty;
 
-		public P3Part(string name, int qty, P3PartCategory category) 
+        public P3Part(string name, int qty, P3PartCategory category)
         {
-			Name = name;
-			Qty = qty;
-			Category = category;
-		}
+            Name = name;
+            Qty = qty;
+            Category = category;
+        }
 
         public override string ToString()
         {

@@ -11,9 +11,11 @@ using JPMorrow.Measurements;
 using JPMorrow.P3;
 using JPMorrow.Pdf.Bluebeam;
 using JPMorrow.Pdf.Bluebeam.FireAlarm;
+using JPMorrow.Pdf.Bluebeam.P3;
 using JPMorrow.PDF;
 using JPMorrow.Test.Console;
 using OfficeOpenXml;
+using PdfSharp.Pdf.Annotations;
 
 namespace BluebeamP3InWall
 {
@@ -45,7 +47,11 @@ namespace BluebeamP3InWall
             }
             catch (Exception ex)
             {
+#if DEBUG
+                Console.WriteLine(ex.ToString());
+#else
                 Console.WriteLine(ex.Message.ToString());
+#endif
                 Console.ReadKey();
             }
 
@@ -73,9 +79,7 @@ namespace BluebeamP3InWall
             var properties_txt_path = exe_path + "annotation_properties.txt";
 
             Pdforge f = new Pdforge(pdf_doc_path, Path.GetFullPath(input_path));
-
-            var page = f.GetPage(0);
-            f.PrintAllElementProperies(page, properties_txt_path);
+            f.PrintAllPdfProperies(properties_txt_path);
 
             Process.Start("notepad.exe", properties_txt_path);
 #endif
@@ -146,12 +150,8 @@ namespace BluebeamP3InWall
             BluebeamConduitPackage conduit_pkg = BluebeamConduitPackage.PackageFromPolyLines(poly_lines);
             var hangers = BluebeamSingleHanger.SingleHangersFromConduitPackage(conduit_pkg, threaded_rod_size);
 
-            // Console.WriteLine(conduit_pkg.ToString());
-
             // parse all groups into fire alarm boxes with connectors package
             BlubeamFireAlarmBoxPackage box_package = BlubeamFireAlarmBoxPackage.BoxPackageFromAnnotations(f.AllAnnotations);
-
-            // parse all individual hangers into fire alarm hanger package
 
             // Output to Excel
             var excel_out_path = exe_path + Path.GetFileNameWithoutExtension(pdf_input_path) + ".xlsx";
@@ -248,39 +248,112 @@ namespace BluebeamP3InWall
 
             var pdf_output_path = exe_path + Path.GetFileNameWithoutExtension(pdf_input_path) + pdf_output_suffix;
 
-            /* bool got_pdf_fn = ResolvePdfInputFilePath(exe_path);
-
-            if (!got_pdf_fn)
-            {
-                Console.WriteLine("Failed to retrieve pdf file name");
-                Console.ReadKey();
-                return;
-            } */
-
             Console.WriteLine("Parsing file: " + Path.GetFileNameWithoutExtension(pdf_input_path));
-            // GenerateFilePaths(exe_path);
             CleanupPdfOutputFiles(pdf_output_path);
 
-            // @TODO need to 
-            var markups = PdfManager.EditBluebeamMarkups(pdf_input_path);
-            PdfManager.CreateCopyDocument(pdf_input_path, pdf_output_path, markups);
-            ParsePdfMarkups(markups, pdf_output_path, excel_output_path, labor_path);
+            Pdforge f = new Pdforge(pdf_input_path, pdf_output_path);
+            PdfCustomColumnCollection columns = new PdfCustomColumnCollection(f);
+
+            // check the columns for expected
+            if (!columns.HasExpectedColumnHeaders(BluebeamP3BoxCollection.ExpectedBluebeamColumns, out var missing_columns))
+            {
+                Console.WriteLine("\nThe following custom columns are not loaded in the PDF in Bluebeam:");
+                missing_columns.ToList().ForEach(x => Console.WriteLine(x));
+                Console.WriteLine("\nPlease load the columns into the selected PDF document using Bluebeam and then rerun this program");
+                Console.ReadKey();
+                return;
+            }
+            else
+            {
+                Console.WriteLine("All expected custom columns are loaded correctly");
+            }
+
+            var box_annots = f.GetPage(0).Annotations.Select(x => x as PdfAnnotation);
+            BluebeamP3BoxCollection boxes = BluebeamP3BoxCollection.BoxPackageFromAnnotations(box_annots, columns);
+
+            Console.WriteLine("\nShorthand Device Code Pairs:");
+            Console.WriteLine(boxes.BSHD_Resolver.ToString());
+
+            // Generate Pdf with device codes
+            while (File.Exists(pdf_output_path) && FileIsLocked(pdf_output_path, FileAccess.ReadWrite))
+            {
+                Console.WriteLine("The pdf output file " + Path.GetFileName(pdf_output_path) + " is in use. Please close it in Bluebeam");
+                Thread.Sleep(500);
+            }
+
+            if (File.Exists(pdf_output_path)) File.Delete(pdf_output_path);
+
+            boxes.SaveMarkupPdf(pdf_input_path, pdf_output_path, f);
+
+            // @TODO: Open Pdf file after save
+            //Process.Start(pdf_output_path);
+
+            // Output to Excel
+            var excel_out_path = exe_path + Path.GetFileNameWithoutExtension(pdf_input_path) + ".xlsx";
+
+            if (FileIsLocked(excel_out_path, FileAccess.Read))
+            {
+                Process[] workers = Process.GetProcessesByName("excel");
+                foreach (Process worker in workers)
+                {
+                    if (worker.MainWindowTitle.Contains(excel_out_path))
+                    {
+                        Console.WriteLine("Killing open excel process -> " + worker.MainWindowTitle);
+                        worker.Kill();
+                        worker.WaitForExit();
+                        worker.Dispose();
+                    }
+                }
+            }
+
+            if (File.Exists(excel_out_path))
+                File.Delete(excel_out_path);
+
+            ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
+
+            ExcelEngine exporter = null;
+
+            try
+            {
+                exporter = new ExcelEngine(excel_out_path);
+
+                if (!ExcelEngine.PrepExportFile(excel_out_path))
+                {
+                    Console.WriteLine("Failed to generate Excel output.");
+                    Console.ReadKey();
+                    return;
+                }
+
+                var parts = P3InWall.GetLegacyDevices(boxes.Boxes);
+
+                // print bundle names
+                Console.WriteLine("\nBundle Names:");
+                Console.WriteLine(string.Join("\n", parts.Select(x => x.BundleName)));
+
+                ExcelOutputSheet s1 = new ExcelOutputSheet(ExportStyle.LegacyP3InWall);
+                Console.WriteLine("\nGenerating Bill of Material:");
+                Console.WriteLine("\tCreated sheet");
+                exporter.RegisterSheets("P3 In Wall", s1);
+                Console.WriteLine("\tRegistered sheet");
+
+                s1.GenerateLegacyP3InWallSheet(labor_path, "<Project Title Goes Here>", parts);
+                Console.WriteLine("\tFilled Sheet");
+                exporter.Close();
+                Console.WriteLine("\tBill of Material Generated!");
+                exporter.OpenExcel();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Excel Engine failure: " + ex.Message.ToString());
+                Console.ReadKey();
+            }
+
+            Console.WriteLine("\nBill of Material: ");
+            Console.WriteLine("\tFilename - " + excel_out_path.Split("\\").Last());
+            Console.WriteLine("\tFull Path - " + excel_out_path);
 
             Console.ReadKey();
         }
-
-
-        /* public static void CleanupFDFInputFiles()
-        {
-            if (File.Exists(FDFImportPath))
-                File.Delete(FDFImportPath);
-        } */
-
-        /* public static void CleanupFDFOutputFiles()
-        {
-            if (File.Exists(FDFOutputPath))
-                File.Delete(FDFOutputPath);
-        } */
 
         public static void CleanupExcelFiles(params string[] excel_file_paths)
         {
@@ -371,7 +444,27 @@ namespace BluebeamP3InWall
             }
         }
 
-        private static void ParsePdfMarkups(
+        public static bool FileIsLocked(string filename, FileAccess file_access)
+        {
+            // Try to open the file with the indicated access.
+            try
+            {
+                FileStream fs =
+                    new FileStream(filename, FileMode.Open, file_access);
+                fs.Close();
+                return false;
+            }
+            catch (IOException)
+            {
+                return true;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        /* private static void ParsePdfMarkups(
             IEnumerable<P3BluebeamFDFMarkup> markups,
             string pdf_output_path, string excel_output_path,
             string labor_path)
@@ -384,9 +477,6 @@ namespace BluebeamP3InWall
             try
             {
                 exporter = new ExcelEngine(excel_output_path);
-
-                /* var rows = P3CSVRow.ParseCSV(CSVImportPath);
-                Console.WriteLine(P3CSVRow.PrintRaw(rows)); */
 
                 if (!ExcelEngine.PrepExportFile(excel_output_path))
                 {
@@ -422,7 +512,7 @@ namespace BluebeamP3InWall
             Console.WriteLine("\nFloorplan w/ Device Codes: ");
             Console.WriteLine("\tFilename - " + Path.GetFileName(pdf_output_path));
             Console.WriteLine("\tFull Path - " + pdf_output_path);
-        }
+        } */
 
         /* public static string FDFImportPath { get; set; } = "";
         public static string FDFOutputPath { get; set; } = ""; */
@@ -542,26 +632,6 @@ namespace BluebeamP3InWall
             if(File.Exists(CSVImportPath))
                 File.Delete(CSVImportPath);
         } */
-
-        public static bool FileIsLocked(string filename, FileAccess file_access)
-        {
-            // Try to open the file with the indicated access.
-            try
-            {
-                FileStream fs =
-                    new FileStream(filename, FileMode.Open, file_access);
-                fs.Close();
-                return false;
-            }
-            catch (IOException)
-            {
-                return true;
-            }
-            catch (Exception)
-            {
-                throw;
-            }
-        }
     }
 }
 
