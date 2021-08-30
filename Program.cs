@@ -283,7 +283,7 @@ namespace BluebeamP3InWall
 
             if (File.Exists(pdf_output_path)) File.Delete(pdf_output_path);
 
-            boxes.SaveMarkupPdf(pdf_input_path, pdf_output_path, f);
+            boxes.SaveMarkupPdf(pdf_input_path, pdf_output_path, f, columns);
 
             // @TODO: Open Pdf file after save
             //Process.Start(pdf_output_path);
@@ -328,7 +328,9 @@ namespace BluebeamP3InWall
 
                 // print bundle names
                 Console.WriteLine("\nBundle Names:");
-                Console.WriteLine(string.Join("\n", parts.Select(x => x.BundleName)));
+                var b_name_print = parts.Select(x => x.BundleName).Distinct().ToList();
+                b_name_print.Sort();
+                Console.WriteLine(string.Join("\n", b_name_print));
 
                 ExcelOutputSheet s1 = new ExcelOutputSheet(ExportStyle.LegacyP3InWall);
                 Console.WriteLine("\nGenerating Bill of Material:");

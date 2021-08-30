@@ -228,7 +228,9 @@ namespace JPMorrow.Pdf.Bluebeam.P3
             "Top Connectors - MC",
             "Bottom Connectors - MC",
             "Bundle Name",
-            "Box Elevation"
+            "Box Elevation",
+            "Short Device Code",
+            "Long Device Code"
         };
 
         public BluebeamP3ShorhandDeviceCodeResolver BSHD_Resolver { get; private set; } = new BluebeamP3ShorhandDeviceCodeResolver();
@@ -293,7 +295,9 @@ namespace JPMorrow.Pdf.Bluebeam.P3
             return s && has_subj;
         }
 
-        public void SaveMarkupPdf(string input_pdf_filepath, string pdf_output_path, Pdforge f)
+        public void SaveMarkupPdf(
+            string input_pdf_filepath, string pdf_output_path,
+            Pdforge f, PdfCustomColumnCollection columns)
         {
             PdfDocument copy = PdfReader.Open(input_pdf_filepath, PdfDocumentOpenMode.Import);
 
@@ -303,9 +307,23 @@ namespace JPMorrow.Pdf.Bluebeam.P3
 
                 foreach (PdfAnnotation a in page.Annotations)
                 {
-                    //if (Boxes.Any(x => x.Config.Annotation.Equals(aa)))
-                    a.Elements.SetString("/Subj", "POOPOOCACA");
 
+                    foreach (var b in Boxes)
+                    {
+                        var annot = b.Config.Annotation;
+                        bool has_id1 = annot.Elements.TryGetString("/NM", out string id);
+                        bool has_id2 = a.Elements.TryGetString("/NM", out string id2);
+
+                        if (has_id1 && has_id2 && id.Equals(id2))
+                        {
+                            var new_data1 = columns.ModifyBSIData(copy, a, "Short Device Code", BSHD_Resolver.RetrieveShorthandCode(b.DeviceCode));
+                            a.Elements.SetValue("/BSIColumnData", new_data1);
+                            var new_data2 = columns.ModifyBSIData(copy, a, "Long Device Code", b.DeviceCode);
+                            a.Elements.SetValue("/BSIColumnData", new_data2);
+                            PdfTextAnnotation txt = new PdfTextAnnotation();
+                        }
+
+                    }
                 }
             }
 

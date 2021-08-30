@@ -318,6 +318,7 @@ namespace JPMorrow.PDF
             "/DefaultValue",
             "/Subtype"
         };
+
         public PdfCustomColumnCollection(Pdforge forge)
         {
             var all_obj = forge.InputDocument.Internals.GetAllObjects();
@@ -372,6 +373,31 @@ namespace JPMorrow.PDF
             }
 
             return dict;
+        }
+
+        public PdfArray ModifyBSIData(PdfDocument doc, PdfAnnotation a, string column_header, string value)
+        {
+            var bis_data = (a.Elements["/BSIColumnData"] as PdfArray).ToArray();
+            var new_data = new List<PdfItem>();
+
+            int ch_idx = columns.FindIndex(x => x.HeaderName.Equals(column_header));
+            if (ch_idx == -1) throw new Exception("Provided column header does not exist");
+            var col = columns[ch_idx];
+
+            foreach (var d in bis_data)
+            {
+                var idx = bis_data.ToList().IndexOf(d);
+                if (idx == col.DisplayOrder)
+                {
+                    new_data.Add(new PdfString(value) as PdfItem);
+                }
+                else
+                {
+                    new_data.Add(d);
+                }
+            }
+
+            return new PdfArray(doc, new_data.ToArray());
         }
     }
 }
