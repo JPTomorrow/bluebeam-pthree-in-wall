@@ -9,6 +9,7 @@ using MoreLinq;
 using PdfSharp.Pdf;
 using PdfSharp.Pdf.Annotations;
 using PdfSharp.Pdf.IO;
+using PdfSharp.Drawing;
 
 namespace JPMorrow.Pdf.Bluebeam.P3
 {
@@ -299,27 +300,44 @@ namespace JPMorrow.Pdf.Bluebeam.P3
             string input_pdf_filepath, string pdf_output_path,
             Pdforge f, PdfCustomColumnCollection columns)
         {
+            Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
+            var enc1252 = Encoding.GetEncoding(1252);
+
             PdfDocument copy = PdfReader.Open(input_pdf_filepath, PdfDocumentOpenMode.Import);
+            copy.Save(pdf_output_path);
+            PdfDocument doc = PdfReader.Open(pdf_output_path, PdfDocumentOpenMode.Modify);
 
-            for (int Pg = 0; Pg < f.InputDocument.Pages.Count; Pg++)
+            for (int Pg = 0; Pg < doc.Pages.Count; Pg++)
             {
-                var page = copy.Pages[Pg];
+                var page = doc.Pages[Pg];
 
-                // ungoup all the annotations in the document in order to process them better
+                /* // ungoup all the annotations in the document in order to process them better
                 foreach (PdfAnnotation a in page.Annotations)
                 {
                     bool s = a.Elements.TryGetValue("/GroupNesting", out var nestings);
                     bool ss = a.Elements.TryGetString("/RT", out var rt);
                     bool sss = a.Elements.TryGetValue("/IRT", out var irt);
-                    if (s) a.Elements.Remove("/GroupNesting");
+
+                    if (s)
+                    {
+                        // check child annotations for p3 box
+
+
+                        foreach (PdfAnnotation a in children)
+                        {
+                            bool has_box_subject = HasP3BoxSubject(a, out string subject);
+                            bool is_rect = BluebeamPdfUtil.IsRectangle(a);
+                        }
+
+                        a.Elements.Remove("/GroupNesting");
+                    }
                     if (ss && rt.Equals("/Group")) a.Elements.Remove("/RT");
                     if (sss) a.Elements.Remove("/IRT");
-                }
+                } */
 
                 // make annotation modifications here
                 foreach (PdfAnnotation a in page.Annotations)
                 {
-
                     foreach (var b in Boxes)
                     {
                         var annot = b.Config.Annotation;
@@ -328,27 +346,59 @@ namespace JPMorrow.Pdf.Bluebeam.P3
 
                         if (has_id1 && has_id2 && id.Equals(id2))
                         {
-                            var new_data1 = columns.ModifyBSIData(copy, a, "Short Device Code", BSHD_Resolver.RetrieveShorthandCode(b.DeviceCode));
+                            var short_device_code = BSHD_Resolver.RetrieveShorthandCode(b.DeviceCode);
+                            var new_data1 = columns.ModifyBSIData(doc, a, "Short Device Code", short_device_code);
                             a.Elements.SetValue("/BSIColumnData", new_data1);
-                            var new_data2 = columns.ModifyBSIData(copy, a, "Long Device Code", b.DeviceCode);
+                            var new_data2 = columns.ModifyBSIData(doc, a, "Long Device Code", b.DeviceCode);
                             a.Elements.SetValue("/BSIColumnData", new_data2);
-
-                            PdfTextAnnotation txt = new PdfTextAnnotation();
-
+                            PlaceTextAnnotationTagForAnnotation(page, a, short_device_code);
                         }
                     }
                 }
             }
 
-            Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
-            var enc1252 = Encoding.GetEncoding(1252);
-
-            copy.Save(pdf_output_path);
+            doc.Save(pdf_output_path);
         }
 
-        private static void GetDeviceCodeTagCoordFromRect()
+        private static void PlaceTextAnnotationTagForAnnotation(
+            PdfPage page, PdfAnnotation a, string short_device_code)
         {
+            // Conversion from PdfRectangle coordinates
+            //
+            // Y ^
+            //   |                     (X2 Y2)
+            //   |        +-----------+
+            //   |        |           |
+            //   |        |           |
+            //   |        +-----------+
+            //   | (X1 Y1)
+            //   |                              
+            //   +-----------------------------> 
+            //                                 X
+            // to QuadPoints coordinates (x1 y1 x2 y2 x3 y3 x4 y4)
+            //
+            // Y ^
+            //   | (x4 y4)             (x3 y3)
+            //   |        +-----------+
+            //   |        |           |
+            //   |        |           |
+            //   |        +-----------+
+            //   | (x1 y1)             (x2 y2)
+            //   |                              
+            //   +-----------------------------> 
+            //                                 X
+            //
 
+            bool s = a.Elements.TryGetValue("/Rect", out var item);
+            if (!s) return;
+            PdfArray arr = item as PdfArray;
+
+            List<double> coords = arr.ToList().Select(x => (x as PdfReal).Value).ToList();
+            var gfx = XGraphics.FromPdfPage(page);
+            XFont font = new XFont("Helvetica", 4, XFontStyle.Bold);
+            gfx.DrawString(short_device_code, font, XBrushes.Black,
+                new XRect(coords[0], coords[1], coords[2] - coords[0], coords[3] - coords[1]),
+                XStringFormats.CenterLeft);
         }
     }
 }
