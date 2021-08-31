@@ -305,6 +305,18 @@ namespace JPMorrow.Pdf.Bluebeam.P3
             {
                 var page = copy.Pages[Pg];
 
+                // ungoup all the annotations in the document in order to process them better
+                foreach (PdfAnnotation a in page.Annotations)
+                {
+                    bool s = a.Elements.TryGetValue("/GroupNesting", out var nestings);
+                    bool ss = a.Elements.TryGetString("/RT", out var rt);
+                    bool sss = a.Elements.TryGetValue("/IRT", out var irt);
+                    if (s) a.Elements.Remove("/GroupNesting");
+                    if (ss && rt.Equals("/Group")) a.Elements.Remove("/RT");
+                    if (sss) a.Elements.Remove("/IRT");
+                }
+
+                // make annotation modifications here
                 foreach (PdfAnnotation a in page.Annotations)
                 {
 
@@ -320,9 +332,10 @@ namespace JPMorrow.Pdf.Bluebeam.P3
                             a.Elements.SetValue("/BSIColumnData", new_data1);
                             var new_data2 = columns.ModifyBSIData(copy, a, "Long Device Code", b.DeviceCode);
                             a.Elements.SetValue("/BSIColumnData", new_data2);
-                            PdfTextAnnotation txt = new PdfTextAnnotation();
-                        }
 
+                            PdfTextAnnotation txt = new PdfTextAnnotation();
+
+                        }
                     }
                 }
             }
@@ -331,6 +344,11 @@ namespace JPMorrow.Pdf.Bluebeam.P3
             var enc1252 = Encoding.GetEncoding(1252);
 
             copy.Save(pdf_output_path);
+        }
+
+        private static void GetDeviceCodeTagCoordFromRect()
+        {
+
         }
     }
 }

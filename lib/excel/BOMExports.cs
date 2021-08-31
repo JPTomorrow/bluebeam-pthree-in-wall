@@ -101,7 +101,7 @@ namespace JPMorrow.Excel
             }
 
 
-
+            InsertSingleDivider(Draw.Color.OrangeRed, Draw.Color.White, "Other Items");
             InsertSingleDivider(Draw.Color.SlateGray, Draw.Color.White, "Fixture Item Totals");
 
             foreach (var t in item_total.Parts)
