@@ -198,6 +198,28 @@ namespace JPMorrow.Excel
             print_boxes(xy_boxes_2, "4 11/16\" Square Fire Alarm Box - XY Config");
             print_boxes(y_boxes_2, "4 11/16\" Square Fire Alarm Box - Y Config");
 
+            void print_covers(int qty)
+            {
+                if (qty == 0) return;
+                var has_item = l.GetItem(out var li, qty, "Red Blank Box Cover");
+                if (!has_item) throw new Exception("No Labor item for fire alarm box cover");
+                InsertIntoRow(li.EntryName, li.Quantity, li.PerUnitLabor, li.LaborCodeLetter, li.TotalLaborValue);
+                code_one_sub += li.TotalLaborValue; NextRow(1);
+            }
+
+            print_covers(total_box_cnt);
+
+            void print_brackets(int qty)
+            {
+                if (qty == 0) return;
+                var has_item = l.GetItem(out var li, qty, "Helicopter Bracket");
+                if (!has_item) throw new Exception("No Labor item for fire alarm box helicopter bracket");
+                InsertIntoRow(li.EntryName, li.Quantity, li.PerUnitLabor, li.LaborCodeLetter, li.TotalLaborValue);
+                code_one_sub += li.TotalLaborValue; NextRow(1);
+            }
+
+            print_brackets(total_box_cnt);
+
             code_one_sub = Math.Ceiling(code_one_sub);
             code_one_gt += code_one_sub;
             InsertGrandTotal("Sub Total", ref code_one_sub, true, false, true);
@@ -382,8 +404,8 @@ namespace JPMorrow.Excel
             InsertSingleDivider(Draw.Color.SlateGray, Draw.Color.White, "Hangers");
 
             var att = hangers.GroupBy(x => x.BatwingAttachment);
-            var washers = hangers.GroupBy(x => x.Washer);
-            var hex_nuts = hangers.GroupBy(x => x.HexNut);
+            // var washers = hangers.GroupBy(x => x.Washer);
+            // var hex_nuts = hangers.GroupBy(x => x.HexNut);
             var anchors = hangers.GroupBy(x => x.Anchor);
             var threaded_rod = hangers.GroupBy(x => x.ThreadedRodSize);
 
@@ -397,8 +419,10 @@ namespace JPMorrow.Excel
             }
 
             foreach (var a in att) print_hanger_hardware(a.Count(), a.Key);
-            foreach (var w in washers) print_hanger_hardware(w.Count(), w.Key);
-            foreach (var h in hex_nuts) print_hanger_hardware(h.Count(), h.Key);
+            // foreach (var w in washers) print_hanger_hardware(w.Count(), w.Key);
+            // foreach (var h in hex_nuts) print_hanger_hardware(h.Count(), h.Key);
+            print_hanger_hardware(total_box_cnt * 2, "Washer - 1/4\"");
+            print_hanger_hardware(total_box_cnt * 2, "Hex Nut - 1/4\"");
             foreach (var a in anchors) print_hanger_hardware(a.Count(), a.Key);
             foreach (var tr in threaded_rod) print_hanger_hardware((int)(tr.Select(x => x.ThreadedRodLength).Sum() + (total_box_cnt * 10.0)), "Threaded Rod - " + tr.Key);
 

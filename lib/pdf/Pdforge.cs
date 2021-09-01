@@ -218,7 +218,7 @@ namespace JPMorrow.PDF
             {
                 var els = (a as PdfAnnotation).Elements;
                 foreach (var e in els)
-                    o += string.Format("{0} : {1}\n", e.Key, e.Value.ToString());
+                    o += string.Format("{0} : {1} -> {2}\n", e.Key, e.Value.ToString(), e.Value.GetType().ToString());
                 o += "\n";
             }
 
@@ -278,6 +278,49 @@ namespace JPMorrow.PDF
             }
 
             return ret;
+        }
+
+        public static bool TransferBSIColumnData(PdfAnnotation a, PdfAnnotation b)
+        {
+            bool has_BSI = a.Elements.TryGetValue("/BSIColumnData", out var d1);
+            if (!has_BSI) return false;
+            bool has_BSI2 = b.Elements.TryGetValue("/BSIColumnData", out var d2);
+            if (has_BSI2) return false;
+            b.Elements.SetValue("/BSIColumnData", d1);
+            return true;
+        }
+
+        public static IEnumerable<PdfAnnotation> GetChildAnnotations(PdfPage page, PdfAnnotation a)
+        {
+            var ret = new List<PdfAnnotation>();
+            bool has_nesting = a.Elements.TryGetValue("/GroupNesting", out var item);
+            if (!has_nesting) return ret;
+
+            PdfArray arr = item as PdfArray;
+            List<string> group_ids = new List<string>();
+            foreach (var aa in arr.Elements)
+            {
+                if (aa.GetType() == typeof(PdfString))
+                    group_ids.Add((aa as PdfString).Value);
+            }
+
+            var annots = page.Annotations.Select(x => x as PdfAnnotation).ToList();
+            foreach (var pa in annots)
+            {
+                bool has_group_number = pa.Elements.TryGetString("/NM", out string gn);
+                if (!has_group_number) continue;
+                if (group_ids.Any(x => x.Equals(gn))) ret.Add(pa);
+            }
+
+            return ret;
+        }
+
+        /// <summary>
+        /// Stupid hack to get PdfSharop to recognize the pages in a sheet you have imported.
+        /// </summary>
+        public static void RefreshSheetPagesHack(PdfDocument doc)
+        {
+            int pages = doc.PageCount; // updates the page resgistry for some reason
         }
     }
 
@@ -398,41 +441,6 @@ namespace JPMorrow.PDF
             }
 
             return new PdfArray(doc, new_data.ToArray());
-        }
-
-        public static bool TransferBSIColumnData(PdfAnnotation a, PdfAnnotation b)
-        {
-            bool has_BSI = a.Elements.TryGetValue("/BSIColumnData", out var d1);
-            if (!has_BSI) return false;
-            bool has_BSI2 = b.Elements.TryGetValue("/BSIColumnData", out var d2);
-            if (has_BSI2) return false;
-            b.Elements.SetValue("/BSIColumnData", d1);
-            return true;
-        }
-
-        public static IEnumerable<PdfAnnotation> GetChildAnnotations(PdfPage page, PdfAnnotation a)
-        {
-            var ret = new List<PdfAnnotation>();
-            bool has_nesting = a.Elements.TryGetValue("/GroupNesting", out var item);
-            if (!has_nesting) return ret;
-
-            PdfArray arr = item as PdfArray;
-            List<string> group_ids = new List<string>();
-            foreach (var aa in arr.Elements)
-            {
-                if (aa.GetType() == typeof(PdfString))
-                    group_ids.Add((aa as PdfString).Value);
-            }
-
-            var annots = page.Annotations.Select(x => x as PdfAnnotation).ToList();
-            foreach (var pa in annots)
-            {
-                bool has_group_number = pa.Elements.TryGetString("/NM", out string gn);
-                if (!has_group_number) continue;
-                if (group_ids.Any(x => x.Equals(gn))) ret.Add(pa);
-            }
-
-            return ret;
         }
     }
 }

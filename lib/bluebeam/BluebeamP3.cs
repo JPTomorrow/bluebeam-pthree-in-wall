@@ -10,6 +10,7 @@ using PdfSharp.Pdf;
 using PdfSharp.Pdf.Annotations;
 using PdfSharp.Pdf.IO;
 using PdfSharp.Drawing;
+using PdfSharp.Pdf.Advanced;
 
 namespace JPMorrow.Pdf.Bluebeam.P3
 {
@@ -303,9 +304,10 @@ namespace JPMorrow.Pdf.Bluebeam.P3
             Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
             var enc1252 = Encoding.GetEncoding(1252);
 
-            PdfDocument copy = PdfReader.Open(input_pdf_filepath, PdfDocumentOpenMode.Import);
-            copy.Save(pdf_output_path);
-            PdfDocument doc = PdfReader.Open(pdf_output_path, PdfDocumentOpenMode.Modify);
+            PdfDocument doc = PdfReader.Open(input_pdf_filepath, PdfDocumentOpenMode.Modify);
+            /*             copy = PdfReader.Open(input_pdf_filepath, PdfDocumentOpenMode.Import);
+                        copy.Save(pdf_output_path);
+                        PdfDocument doc = PdfReader.Open(pdf_output_path, PdfDocumentOpenMode.Modify); */
 
             for (int Pg = 0; Pg < doc.Pages.Count; Pg++)
             {
@@ -360,36 +362,58 @@ namespace JPMorrow.Pdf.Bluebeam.P3
             doc.Save(pdf_output_path);
         }
 
+        private class PdfShorthandDeviceCodeAnnotation : PdfAnnotation
+        {
+            public PdfShorthandDeviceCodeAnnotation(string short_device_code, PdfAnnotation box_annot)
+            {
+
+                PdfArray tranformed_arr = TransformTextRectangle(rect_arr, box_annot);
+
+                var text_annot_element_fields = new Dictionary<string, object>()
+                {
+                    { "/Subj", new PdfString("Short Hand Device Code") },
+                    { "/Subtype", new PdfName("/FreeText") },
+                    { "/DA", new PdfString("1 0 0 rg / Helv 4 Tf") },
+                    { "/Rect", tranformed_arr },
+                    { "/Contents", new PdfString(short_device_code) },
+                    { "/DS", new PdfString("font: Helvetica 4pt; text - align:left; margin: 3pt; line - height:13.8pt; color:#FF0000")}
+                    // { /BS : << / S / S / Type / Border / W 0 >> },
+                };
+
+                /* txt.Elements.SetValue("/Rect", arr);
+                txt.Contents = short_device_code;
+                txt.Subject = "Short Hand Device Code";
+                txt.Title = "Short Hand Device Code"; */
+
+                foreach (var f in text_annot_element_fields)
+                {
+                    bool added = Elements.TryAdd<string, PdfItem>(f.Key, f.Value as PdfItem);
+                    if (!added) throw new Exception("Failed to add field to text annotation: " + f.Key);
+                }
+            }
+
+            private static PdfArray TransformTextRectangle(PdfArray rect, PdfAnnotation box_annot)
+            {
+                bool s = box_annot.Elements.TryGetValue("/Rect", out var item);
+                if (!s) return rect;
+                PdfArray rect_arr = item as PdfArray;
+            }
+
+            private static void GetRotation
+        }
+
         private static void PlaceTextAnnotationTagForAnnotation(
             PdfPage page, PdfAnnotation a, string short_device_code)
         {
-            // Conversion from PdfRectangle coordinates
-            //
-            // Y ^
-            //   |                     (X2 Y2)
-            //   |        +-----------+
-            //   |        |           |
-            //   |        |           |
-            //   |        +-----------+
-            //   | (X1 Y1)
-            //   |                              
-            //   +-----------------------------> 
-            //                                 X
-            // to QuadPoints coordinates (x1 y1 x2 y2 x3 y3 x4 y4)
-            //
-            // Y ^
-            //   | (x4 y4)             (x3 y3)
-            //   |        +-----------+
-            //   |        |           |
-            //   |        |           |
-            //   |        +-----------+
-            //   | (x1 y1)             (x2 y2)
-            //   |                              
-            //   +-----------------------------> 
-            //                                 X
-            //
+            var txt = new PdfShorthandDeviceCodeAnnotation(short_device_code, a);
+            page.Annotations.Add(txt);
 
-            bool s = a.Elements.TryGetValue("/Rect", out var item);
+            foreach (var el in txt.Elements)
+            {
+                Console.WriteLine(string.Format("{0} : {1}", el.Key, el.Value.ToString()));
+            }
+
+            /* bool s = a.Elements.TryGetValue("/Rect", out var item);
             if (!s) return;
             PdfArray arr = item as PdfArray;
 
@@ -399,6 +423,7 @@ namespace JPMorrow.Pdf.Bluebeam.P3
             gfx.DrawString(short_device_code, font, XBrushes.Black,
                 new XRect(coords[0], coords[1], coords[2] - coords[0], coords[3] - coords[1]),
                 XStringFormats.CenterLeft);
+            Console.WriteLine("drawing text graphic"); */
         }
     }
 }

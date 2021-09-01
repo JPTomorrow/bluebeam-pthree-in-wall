@@ -16,8 +16,8 @@ namespace JPMorrow.Pdf.Bluebeam
 
         private string[] Hardware { get; set; }
         public string Anchor { get => Hardware[0]; }
-        public string HexNut { get => Hardware[1]; }
-        public string Washer { get => Hardware[2]; }
+        /* public string HexNut { get => Hardware[1]; }
+        public string Washer { get => Hardware[2]; } */
 
         private static string[] batwingNames = new string[] { "Batwing - K-12", "Batwing - K-16" };
         private static string[] threadedRodSizes = new string[] { "1/4\"", "3/8\"", "1/2\"" };
@@ -40,8 +40,8 @@ namespace JPMorrow.Pdf.Bluebeam
             Hardware = new string[]
             {
                 "Hilti Concrete Anchor - " + inividual_hanger_threaded_rod_size,
-                "Washer - " + inividual_hanger_threaded_rod_size,
-                "Hex Nut - " + inividual_hanger_threaded_rod_size,
+                // "Washer - " + inividual_hanger_threaded_rod_size,
+                // "Hex Nut - " + inividual_hanger_threaded_rod_size,
             };
         }
 

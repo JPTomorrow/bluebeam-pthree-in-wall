@@ -971,7 +971,7 @@
         "X Config" :                             [ "E", 0.023 ],
         "T Config" :                             [ "E", 0.023 ],
         "XY Config" :                             [ "E", 0.023 ],
-        "Y Config" :                             [ "E", 0.023 ],
+        "Y Config" :                             [ "E", 0.023 ]
     },
     "4 11/16\" Square Fire Alarm Box" : {
         "D Config" :                             [ "E", 0.023 ],
@@ -979,7 +979,7 @@
         "X Config" :                             [ "E", 0.023 ],
         "T Config" :                             [ "E", 0.023 ],
         "XY Config" :                             [ "E", 0.023 ],
-        "Y Config" :                             [ "E", 0.023 ],
+        "Y Config" :                             [ "E", 0.023 ]
     },
 
     "4\" Round Plaster Ring" : {
@@ -1117,6 +1117,8 @@
         }
     },
     
+    "Helicopter Bracket" :                   [ "E", 0.078 ],
+    "Red Blank Box Cover" :                   [ "E", 0.01 ],
     "Ground Stinger #12 Copper" :            [ "C", 0.025 ],
     "1/4\"x20 - 1/2\" Long Screw" :          [ "M", 0.078 ],
     "Wafer Head Tek Screw" :                 [ "M", 0.030 ],
