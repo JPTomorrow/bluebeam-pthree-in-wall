@@ -366,8 +366,8 @@ namespace JPMorrow.Pdf.Bluebeam.P3
         {
             public PdfShorthandDeviceCodeAnnotation(string short_device_code, PdfAnnotation box_annot)
             {
-
-                PdfArray tranformed_arr = TransformTextRectangle(rect_arr, box_annot);
+                PdfArray tranformed_arr = TransformTextRectangle(box_annot);
+                if (tranformed_arr == null) throw new Exception("failed to resolve pdf annotation");
 
                 var text_annot_element_fields = new Dictionary<string, object>()
                 {
@@ -380,11 +380,6 @@ namespace JPMorrow.Pdf.Bluebeam.P3
                     // { /BS : << / S / S / Type / Border / W 0 >> },
                 };
 
-                /* txt.Elements.SetValue("/Rect", arr);
-                txt.Contents = short_device_code;
-                txt.Subject = "Short Hand Device Code";
-                txt.Title = "Short Hand Device Code"; */
-
                 foreach (var f in text_annot_element_fields)
                 {
                     bool added = Elements.TryAdd<string, PdfItem>(f.Key, f.Value as PdfItem);
@@ -392,14 +387,19 @@ namespace JPMorrow.Pdf.Bluebeam.P3
                 }
             }
 
-            private static PdfArray TransformTextRectangle(PdfArray rect, PdfAnnotation box_annot)
+            private static PdfArray TransformTextRectangle(PdfAnnotation box_annot)
             {
                 bool s = box_annot.Elements.TryGetValue("/Rect", out var item);
-                if (!s) return rect;
+                if (!s) return null; ;
                 PdfArray rect_arr = item as PdfArray;
+
+                List<double> coords = rect_arr.ToList().Select(x => (x as PdfReal).Value).ToList();
             }
 
-            private static void GetRotation
+            private static void GetRotation()
+            {
+
+            }
         }
 
         private static void PlaceTextAnnotationTagForAnnotation(
