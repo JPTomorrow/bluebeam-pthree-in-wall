@@ -406,11 +406,15 @@ namespace JPMorrow.PDF
         public Dictionary<string, string> MatchColumnHeaderToBISData(PdfAnnotation a)
         {
             var dict = new Dictionary<string, string>();
-            var bis_data = (a.Elements["/BSIColumnData"] as PdfArray)
-                .ToArray().Select(x => x.ToString().Trim('(', ')')).ToArray();
+
+            bool s = a.Elements.TryGetValue("/BSIColumnData", out var item);
+            if (!s) return dict;
+            var bis_data = (item as PdfArray).ToArray()
+            .Select(x => x.ToString().Trim('(', ')')).ToArray();
 
             foreach (var c in columns)
             {
+                if (c.DisplayOrder == -1) continue;
                 var val = bis_data[c.DisplayOrder];
                 dict.Add(c.HeaderName, val);
             }

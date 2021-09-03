@@ -5,12 +5,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using JPMorrow.PDF;
-using MoreLinq;
 using PdfSharp.Pdf;
 using PdfSharp.Pdf.Annotations;
 using PdfSharp.Pdf.IO;
 using PdfSharp.Drawing;
 using PdfSharp.Pdf.Advanced;
+using MB = MoreLinq.Extensions.MaxByExtension;
 
 namespace JPMorrow.Pdf.Bluebeam.P3
 {
@@ -106,7 +106,8 @@ namespace JPMorrow.Pdf.Bluebeam.P3
         private ShorthandDeviceCodePair GetMostRecentShorthandDeviceCode()
         {
             if (!Pairs.Any()) return null;
-            return Pairs.MaxBy(x => x.ShorthandCodeNumber).First();
+            var ret = MB.MaxBy(Pairs, x => x.ShorthandCodeNumber).First();
+            return ret;
         }
 
         public override string ToString()
@@ -364,21 +365,50 @@ namespace JPMorrow.Pdf.Bluebeam.P3
 
         private class PdfShorthandDeviceCodeAnnotation : PdfAnnotation
         {
-            public PdfShorthandDeviceCodeAnnotation(string short_device_code, PdfAnnotation box_annot)
+            public PdfShorthandDeviceCodeAnnotation(PdfPage page, string short_device_code, PdfAnnotation box_annot)
             {
+                var rot = GetRotation(box_annot);
                 PdfArray tranformed_arr = TransformTextRectangle(box_annot);
                 if (tranformed_arr == null) throw new Exception("failed to resolve pdf annotation");
 
-                var text_annot_element_fields = new Dictionary<string, object>()
+                PdfDictionary border_props = new PdfDictionary();
+                border_props.Elements.Add("/S", new PdfName("/S"));
+                border_props.Elements.Add("/Type", new PdfName("/Border"));
+                border_props.Elements.Add("/W", new PdfInteger(0));
+
+                /* foreach (var r in (PdfDictionary))
                 {
+                    Console.WriteLine(string.Format("{0} : {1}", r.Key, r.Value));
+                } */
+
+
+                /* PdfDictionary rot_props = new PdfDictionary();
+
+                rot_props.Elements.Add("/N", new PdfInteger(15822));
+                rot_props.Elements.Add();
+
+                << / N 15822 0 R >> */
+
+                string font_size = "4";
+
+                var text_annot_element_fields = new Dictionary<string, object>()
+                 {
                     { "/Subj", new PdfString("Short Hand Device Code") },
                     { "/Subtype", new PdfName("/FreeText") },
-                    { "/DA", new PdfString("1 0 0 rg / Helv 4 Tf") },
+                    // { "/P", new PdfReference(page) },
+                    { "/DA", new PdfString("0 0 0 rg / Helv " + font_size + " Tf") },
                     { "/Rect", tranformed_arr },
                     { "/Contents", new PdfString(short_device_code) },
-                    { "/DS", new PdfString("font: Helvetica 4pt; text - align:left; margin: 3pt; line - height:13.8pt; color:#FF0000")}
-                    // { /BS : << / S / S / Type / Border / W 0 >> },
-                };
+                    { "/DS", new PdfString("font: Helvetica " + font_size + "pt; text - align:left; margin: 3pt; line - height:13.8pt; color:#FF0000") },
+                    { "/BS", border_props },
+                    { "/Rotation", new PdfInteger(rot) },
+                    /* { "/F", new PdfInteger(4) },
+                    { "/RC", "<?xml version=\"1.0\"?><body xmlns:xfa=\"http://www.xfa.org/schema/xfa-data/" +
+                        "1.0/\" xfa:contentType=\"text/html\" xfa:APIVersion=\"BluebeamPDFRevu:2018\" xfa:spec" +
+                        "=\"2.2.0\" style=\"font:Helvetica " + font_size + "pt; text-align:left; margin:3pt; line-height:" +
+                        "13.8pt; color:#000000\" xmlns=\"http://www.w3.org/1999/xhtml\"><p>" + short_device_code + "</p></body>"} */
+                 };
+
 
                 foreach (var f in text_annot_element_fields)
                 {
@@ -390,22 +420,30 @@ namespace JPMorrow.Pdf.Bluebeam.P3
             private static PdfArray TransformTextRectangle(PdfAnnotation box_annot)
             {
                 bool s = box_annot.Elements.TryGetValue("/Rect", out var item);
-                if (!s) return null; ;
+                if (!s) return null;
                 PdfArray rect_arr = item as PdfArray;
 
                 List<double> coords = rect_arr.ToList().Select(x => (x as PdfReal).Value).ToList();
+                var ret = new PdfArray();
+                ret.Elements.Add(new PdfReal(coords[0])); // bottom left x
+                ret.Elements.Add(new PdfReal(coords[1])); // bootom left y
+                ret.Elements.Add(new PdfReal(coords[2])); // top right x
+                ret.Elements.Add(new PdfReal(coords[3])); // top right y
+                return ret;
             }
 
-            private static void GetRotation()
+            private static int GetRotation(PdfAnnotation a)
             {
-
+                bool s = a.Elements.TryGetValue("/Rotation", out var val);
+                if (!s) throw new Exception("Failed to get rotation of markup");
+                return (val as PdfInteger).Value;
             }
         }
 
         private static void PlaceTextAnnotationTagForAnnotation(
             PdfPage page, PdfAnnotation a, string short_device_code)
         {
-            var txt = new PdfShorthandDeviceCodeAnnotation(short_device_code, a);
+            var txt = new PdfShorthandDeviceCodeAnnotation(page, short_device_code, a);
             page.Annotations.Add(txt);
 
             foreach (var el in txt.Elements)

@@ -244,7 +244,7 @@ namespace BluebeamP3InWall
                 Console.WriteLine("Using pdf file: " + pdf_input_path);
             }
 
-            PrintAllAnnotationPropertiesToFile(exe_path, Path.GetFullPath(pdf_input_path));
+            // PrintAllAnnotationPropertiesToFile(exe_path, Path.GetFullPath(pdf_input_path));
 
             var pdf_output_path = exe_path + Path.GetFileNameWithoutExtension(pdf_input_path) + pdf_output_suffix;
 

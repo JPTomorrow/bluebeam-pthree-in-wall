@@ -140,16 +140,17 @@ data count: 109
 /CreationDate : (D:20210831094154-05'00') -> PdfSharp.Pdf.PdfString
 /T : (jmorrow) -> PdfSharp.Pdf.PdfString
 /Subtype : /Square -> PdfSharp.Pdf.PdfName
-/Rect : [ 277.763 2084.858 303.963 2099.78 ] -> PdfSharp.Pdf.PdfArray
+/Rect : [ 276.543 2079.092 305.621 2108.17 ] -> PdfSharp.Pdf.PdfArray
 /IC : [ 0 1 0 ] -> PdfSharp.Pdf.PdfArray
 /RD : [ 0.454 0.454 0.454 0.454 ] -> PdfSharp.Pdf.PdfArray
-/M : (D:20210831111912-05'00') -> PdfSharp.Pdf.PdfString
-/Rotation : 90 -> PdfSharp.Pdf.PdfInteger
+/M : (D:20210902082019-05'00') -> PdfSharp.Pdf.PdfString
+/Rotation : -135 -> PdfSharp.Pdf.PdfInteger
 /GroupNesting : [ (Group) /HTVMSOWNTLWDGTOJ /BVHHKOVKXFUSPYQH ] -> PdfSharp.Pdf.PdfArray
 /BS : << /S /S /Type /Border /W 0.908 >> -> PdfSharp.Pdf.PdfDictionary
 /BSIColumnData : [ (powered) (4" deep) (2) (1 1/4") (EMT) (1") (0) (0) (0) (0) (0) (0) (UNSET) (UNSET) (UNSET) (UNSET) ] -> PdfSharp.Pdf.PdfArray
 /AP : << /N 15817 0 R >> -> PdfSharp.Pdf.PdfDictionary
 /NM : (HTVMSOWNTLWDGTOJ) -> PdfSharp.Pdf.PdfString
+/GroupRotation : 135 -> PdfSharp.Pdf.PdfInteger
 
 /Subj : (Ellipse) -> PdfSharp.Pdf.PdfString
 /Type : /Annot -> PdfSharp.Pdf.PdfName
@@ -159,14 +160,15 @@ data count: 109
 /CreationDate : (D:20210831094154-05'00') -> PdfSharp.Pdf.PdfString
 /T : (jmorrow) -> PdfSharp.Pdf.PdfString
 /Subtype : /Circle -> PdfSharp.Pdf.PdfName
-/Rect : [ 289.716 2087.196 298.516 2097.596 ] -> PdfSharp.Pdf.PdfArray
+/Rect : [ 282.047 2084.489 295.624 2098.065 ] -> PdfSharp.Pdf.PdfArray
 /RD : [ 0.5 0.5 0.5 0.5 ] -> PdfSharp.Pdf.PdfArray
-/M : (D:20210831094154-05'00') -> PdfSharp.Pdf.PdfString
+/M : (D:20210902082019-05'00') -> PdfSharp.Pdf.PdfString
 /RT : /Group -> PdfSharp.Pdf.PdfName
 /IRT : 15815 0 R -> PdfSharp.Pdf.Advanced.PdfReference
 /BSIColumnData : [ (powered) (4" deep) (1) (1/4") (EMT) (1/2") (0) (0) (0) (0) (0) (0) (UNSET) (0' 0") (UNSET) (UNSET) ] -> PdfSharp.Pdf.PdfArray
 /AP : << /N 15819 0 R >> -> PdfSharp.Pdf.PdfDictionary
 /NM : (BVHHKOVKXFUSPYQH) -> PdfSharp.Pdf.PdfString
+/Rotation : 135 -> PdfSharp.Pdf.PdfInteger
 
 /Subj : (Text Box) -> PdfSharp.Pdf.PdfString
 /Type : /Annot -> PdfSharp.Pdf.PdfName
@@ -179,11 +181,12 @@ data count: 109
 /BS : << /S /S /Type /Border /W 0 >> -> PdfSharp.Pdf.PdfDictionary
 /DA : (1 0 0 rg /Helv 12 Tf) -> PdfSharp.Pdf.PdfString
 /DS : (font: Helvetica 12pt; text-align:left; margin:3pt; line-height:13.8pt; color:#FF0000) -> PdfSharp.Pdf.PdfString
-/M : (D:20210901075503-05'00') -> PdfSharp.Pdf.PdfString
+/M : (D:20210902084604-05'00') -> PdfSharp.Pdf.PdfString
 /AP : << /N 15822 0 R >> -> PdfSharp.Pdf.PdfDictionary
 /BSIColumnData : [ (powered) (4" deep) (1) (1/4") (EMT) (1/2") (0) (0) (0) (0) (0) (0) (UNSET) (0' 0") (UNSET) (UNSET) ] -> PdfSharp.Pdf.PdfArray
-/Rect : [ 263.729 2102.937 302.39 2126.307 ] -> PdfSharp.Pdf.PdfArray
+/Rect : [ 216.725 2096.368 260.587 2140.23 ] -> PdfSharp.Pdf.PdfArray
 /NM : (WELRPRGAZDLOWRHQ) -> PdfSharp.Pdf.PdfString
 /RC : (<?xml version="1.0"?><body xmlns:xfa="http://www.xfa.org/schema/xfa-data/1.0/" xfa:contentType="text/html" xfa:APIVersion="BluebeamPDFRevu:2018" xfa:spec="2.2.0" style="font:Helvetica 12pt; text-align:left; margin:3pt; line-height:13.8pt; color:#FF0000" xmlns="http://www.w3.org/1999/xhtml"><p>a123</p></body>) -> PdfSharp.Pdf.PdfString
 /Contents : (a123) -> PdfSharp.Pdf.PdfString
+/Rotation : 315 -> PdfSharp.Pdf.PdfInteger
 
