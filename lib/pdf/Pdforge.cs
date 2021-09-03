@@ -197,30 +197,39 @@ namespace JPMorrow.PDF
         {
             var o = "";
 
-            var data = InputDocument.Internals.GetAllObjects();
-            var annots = GetPage(0).Annotations;
-
-            o += "data count: " + data.Count().ToString() + "\n\n";
-            foreach (var v in data)
+            try
             {
-                var s = PrintFormatInternalObject(v);
-                foreach (var arr in s)
+                var data = InputDocument.Internals.GetAllObjects();
+                var annots = GetPage(0).Annotations;
+
+                o += "data count: " + data.Count().ToString() + "\n\n";
+                foreach (var v in data)
                 {
-                    foreach (var kvp in arr)
+                    var s = PrintFormatInternalObject(v);
+                    foreach (var arr in s)
                     {
-                        o += string.Format("{0} : {1}\n", kvp.Key, kvp.Value);
+                        foreach (var kvp in arr)
+                        {
+                            o += string.Format("{0} : {1}\n", kvp.Key, kvp.Value);
+                        }
+                        if (s.Any()) o += "\n";
                     }
-                    if (s.Any()) o += "\n";
+                }
+
+                foreach (var a in annots)
+                {
+                    if ((a as PdfAnnotation) == null) continue;
+                    var els = (a as PdfAnnotation).Elements;
+                    foreach (var e in els)
+                        o += string.Format("{0} : {1} -> {2}\n", e.Key, e.Value.ToString(), e.Value.GetType().ToString());
+                    o += "\n";
                 }
             }
-
-            foreach (var a in annots)
+            catch (Exception ex)
             {
-                var els = (a as PdfAnnotation).Elements;
-                foreach (var e in els)
-                    o += string.Format("{0} : {1} -> {2}\n", e.Key, e.Value.ToString(), e.Value.GetType().ToString());
-                o += "\n";
+                throw ex;
             }
+
 
             File.WriteAllText(txt_file_path, o);
         }
@@ -336,6 +345,8 @@ namespace JPMorrow.PDF
             public string HeaderName { get; private set; } = string.Empty;
             public string DefaultValue { get; private set; } = string.Empty;
 
+            public bool IsValid { get => DisplayOrder > -1; }
+
             public PdfCustomColumn(KeyValuePair<string, string>[] custom_column_data)
             {
                 foreach (var p in custom_column_data)
@@ -362,6 +373,13 @@ namespace JPMorrow.PDF
             "/Subtype"
         };
 
+        public override string ToString()
+        {
+            string o = "";
+            foreach (var c in columns) o += string.Format("{0}\n", c.ToString());
+            return o;
+        }
+
         public PdfCustomColumnCollection(Pdforge forge)
         {
             var all_obj = forge.InputDocument.Internals.GetAllObjects();
@@ -378,15 +396,13 @@ namespace JPMorrow.PDF
                 foreach (var arr in custom_columns)
                 {
                     if (customColumnStrings.Any(x => arr.Select(x => x.Key).ToList().Contains(x)))
-                        columns.Add(new PdfCustomColumn(arr));
+                    {
+                        var new_column = new PdfCustomColumn(arr);
+                        if (!new_column.IsValid) continue;
+                        columns.Add(new_column);
+                    }
                 }
             }
-        }
-
-        public override string ToString()
-        {
-            string o = string.Join("\n", columns.Select(x => x.ToString()));
-            return o;
         }
 
         public bool HasExpectedColumnHeaders(string[] column_header_names, out List<string> missing_names)
@@ -409,8 +425,12 @@ namespace JPMorrow.PDF
 
             bool s = a.Elements.TryGetValue("/BSIColumnData", out var item);
             if (!s) return dict;
+
             var bis_data = (item as PdfArray).ToArray()
-            .Select(x => x.ToString().Trim('(', ')')).ToArray();
+                .Select(x => x.ToString().Trim('(', ')'))
+                .Where(x => !string.IsNullOrWhiteSpace(x)).ToArray();
+
+            Console.WriteLine(string.Join(", ", bis_data));
 
             foreach (var c in columns)
             {
@@ -418,6 +438,8 @@ namespace JPMorrow.PDF
                 var val = bis_data[c.DisplayOrder];
                 dict.Add(c.HeaderName, val);
             }
+
+            foreach (var d in dict) Console.WriteLine(string.Format("{0} : {1}", d.Key, d.Value));
 
             return dict;
         }

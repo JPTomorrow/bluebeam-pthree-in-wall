@@ -262,12 +262,16 @@ namespace JPMorrow.Pdf.Bluebeam.P3
                 config.PlasterRingDepth = column_data["Plaster Ring Depth"];
                 config.EntryConnectorType = column_data["Entry Connector Type"];
                 config.EntryConnectorSize = column_data["Connector Size"];
+
+                // Console.WriteLine("test: " + column_data["Top Connectors - EMT"]);
                 config.TopEmtConnectors = int.Parse(column_data["Top Connectors - EMT"]);
                 config.BottomEmtConnectors = int.Parse(column_data["Bottom Connectors - EMT"]);
                 config.TopPvcConnectors = int.Parse(column_data["Top Connectors - PVC"]);
                 config.BottomPvcConnectors = int.Parse(column_data["Bottom Connectors - PVC"]);
                 config.TopMcConnectors = int.Parse(column_data["Top Connectors - MC"]);
                 config.BottomMcConnectors = int.Parse(column_data["Bottom Connectors - MC"]);
+                Console.WriteLine("end");
+
                 config.BundleName = column_data["Bundle Name"];
                 config.BoxElevation = column_data["Box Elevation"];
                 config.Subject = subject;

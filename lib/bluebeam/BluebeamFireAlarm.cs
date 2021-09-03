@@ -60,46 +60,46 @@ namespace JPMorrow.Pdf.Bluebeam.FireAlarm
             {connectorSizes[5], 0},
         };
 
-        public int GetEmtConnectorCount(string size) 
+        public int GetEmtConnectorCount(string size)
         {
             bool s = EmtConnectors.TryGetValue(size, out var count);
-            if(!s) throw new Exception("Could not retrieve emt connector count size " + size);
+            if (!s) throw new Exception("Could not retrieve emt connector count size " + size);
             return count;
         }
 
-        public int GetPvcConnectorCount(string size) 
+        public int GetPvcConnectorCount(string size)
         {
             bool s = PvcConnectors.TryGetValue(size, out var count);
-            if(!s) throw new Exception("Could not retrieve pvc connector count size " + size);
+            if (!s) throw new Exception("Could not retrieve pvc connector count size " + size);
             return count;
         }
-        
-        public int GetMcCableConnectorCount(string size) 
+
+        public int GetMcCableConnectorCount(string size)
         {
             bool s = McConnectors.TryGetValue(size, out var count);
-            if(!s) throw new Exception("Could not retrieve mc connector count size " + size);
+            if (!s) throw new Exception("Could not retrieve mc connector count size " + size);
             return count;
         }
 
         public BluebeamFireAlarmBox(
-            string box_size, string box_config_char, 
+            string box_size, string box_config_char,
             IEnumerable<PdfAnnotation> connector_annotations)
         {
             BoxConfig = box_config_char;
             BoxSize = box_size;
 
-            foreach(var a in connector_annotations)
+            foreach (var a in connector_annotations)
             {
                 bool s = ProcessSubject(a, out var result);
-                if(!s) continue;
+                if (!s) continue;
                 var size = result[0];
                 var type = result[1];
 
-                if(type.Equals("emt"))
+                if (type.Equals("emt"))
                     EmtConnectors[size] += 1;
-                else if(type.Equals("pvc"))
+                else if (type.Equals("pvc"))
                     PvcConnectors[size] += 1;
-                else if(type.Equals("mc"))
+                else if (type.Equals("mc"))
                     McConnectors[size] += 1;
             }
         }
@@ -109,7 +109,7 @@ namespace JPMorrow.Pdf.Bluebeam.FireAlarm
             result = new string[2] { "", "" };
             var elements = a.Elements;
             bool s = elements.TryGetString("/Subj", out string subject);
-            if(!s || !connectorIdentifierTags.Any(x => subject.ToLower().Contains(x))) return false;
+            if (!s || !connectorIdentifierTags.Any(x => subject.ToLower().Contains(x))) return false;
             result = new string[2] { subject.Split(" - ").First().Trim(), subject.ToLower().Split(" - ")[1].Trim() };
             return true;
         }
@@ -132,14 +132,14 @@ namespace JPMorrow.Pdf.Bluebeam.FireAlarm
         public override string ToString()
         {
             var o = "\n Fire Alarm Box Package\n";
-            foreach(var b in Boxes)
+            foreach (var b in Boxes)
             {
 
             }
             return o;
         }
 
-        private BlubeamFireAlarmBoxPackage() {}
+        private BlubeamFireAlarmBoxPackage() { }
 
         /// <summary>
         /// 
@@ -159,12 +159,11 @@ namespace JPMorrow.Pdf.Bluebeam.FireAlarm
                 if (!is_rect || !has_fabs || !has_group) continue;
 
                 List<PdfAnnotation> connector_annots = new List<PdfAnnotation>();
-                foreach(var g in group_codes)
+                foreach (var g in group_codes)
                 {
                     var found_annots = BluebeamPdfUtil.FindAnnotationsByGroupCode(g, annotations);
                     connector_annots.AddRange(found_annots);
                 }
-
 
                 var box_size = subject.Contains("4 11/16\"") ? "4 11/16\"" : "4\"";
 
@@ -174,7 +173,7 @@ namespace JPMorrow.Pdf.Bluebeam.FireAlarm
                 .StartsWith("#")).ToList();
 
                 var idx = configs.FindIndex(x => x.StartsWith("Box Configuration"));
-                if(idx == -1) continue;
+                if (idx == -1) continue;
                 var box_config = configs[idx].Split(":").Last().Trim().ToUpper();
                 package.AddBox(new BluebeamFireAlarmBox(box_size, box_config, connector_annots));
             }
@@ -197,6 +196,6 @@ namespace JPMorrow.Pdf.Bluebeam.FireAlarm
             bool s = elements.TryGetString("/Subj", out string subject);
             if (s) ret_subject = subject;
             return s && fireAlarmBoxIdentifierTags.Any(x => x.Equals(subject.Trim().ToLower()));
-        }   
+        }
     }
 }

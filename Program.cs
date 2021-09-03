@@ -265,7 +265,9 @@ namespace BluebeamP3InWall
             }
             else
             {
-                Console.WriteLine("All expected custom columns are loaded correctly");
+                Console.WriteLine("All expected custom columns are loaded correctly\n");
+                Console.WriteLine("Custom Columns: ");
+                Console.WriteLine(columns.ToString());
             }
 
             var box_annots = f.GetPage(0).Annotations.Select(x => x as PdfAnnotation);
