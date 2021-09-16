@@ -142,7 +142,8 @@ namespace JPMorrow.Excel
         public void GenerateFireAlarmSheet(
             string labor_import_path, string project_title,
             BluebeamConduitPackage conduit_pkg, BlubeamFireAlarmBoxPackage box_pkg,
-            IEnumerable<BluebeamSingleHanger> hangers, double hanger_spacing)
+            BluebeamFireAlarmConnectorPackage connector_pkg,
+            IEnumerable<BluebeamSingleHanger> hangers, double hanger_spacing, int tbar_cnt)
         {
             if (HasData) throw new Exception("The sheet already has data");
             string title = "M.P.A.C.T. - Fire Alarm";
@@ -171,6 +172,8 @@ namespace JPMorrow.Excel
             var xy_boxes_2 = box_pkg.Boxes.Where(x => x.BoxConfig.Equals("XY") && x.BoxSize.Equals("4 11/16\"")).Count();
             var y_boxes_2 = box_pkg.Boxes.Where(x => x.BoxConfig.Equals("Y") && x.BoxSize.Equals("4 11/16\"")).Count();
 
+            var octagon_boxes = box_pkg.Boxes.Where(x => x.BoxSize.Equals("4\" Octagon")).Count();
+
             var total_box_cnt = box_pkg.Boxes.Count();
 
             void print_boxes(int qty, string labor_str)
@@ -184,19 +187,12 @@ namespace JPMorrow.Excel
 
             InsertSingleDivider(Draw.Color.SlateGray, Draw.Color.White, "Fire Alarm Boxes");
 
-            print_boxes(d_boxes_1, "4\" Square Fire Alarm Box - D Config");
-            print_boxes(i_boxes_1, "4\" Square Fire Alarm Box - I Config");
-            print_boxes(x_boxes_1, "4\" Square Fire Alarm Box - X Config");
-            print_boxes(t_boxes_1, "4\" Square Fire Alarm Box - T Config");
-            print_boxes(xy_boxes_1, "4\" Square Fire Alarm Box - XY Config");
-            print_boxes(y_boxes_1, "4\" Square Fire Alarm Box - Y Config");
+            var box_cnt_1 = d_boxes_1 + i_boxes_1 + x_boxes_1 + t_boxes_1 + xy_boxes_1 + y_boxes_1;
+            print_boxes(box_cnt_1, "4\" Square Fire Alarm Box");
+            var box_cnt_2 = d_boxes_2 + i_boxes_2 + x_boxes_2 + t_boxes_2 + xy_boxes_2 + y_boxes_2;
+            print_boxes(box_cnt_2, "4 11/16\" Square Fire Alarm Box");
 
-            print_boxes(d_boxes_2, "4 11/16\" Square Fire Alarm Box - D Config");
-            print_boxes(i_boxes_2, "4 11/16\" Square Fire Alarm Box - I Config");
-            print_boxes(x_boxes_2, "4 11/16\" Square Fire Alarm Box - X Config");
-            print_boxes(t_boxes_2, "4 11/16\" Square Fire Alarm Box - T Config");
-            print_boxes(xy_boxes_2, "4 11/16\" Square Fire Alarm Box - XY Config");
-            print_boxes(y_boxes_2, "4 11/16\" Square Fire Alarm Box - Y Config");
+            print_boxes(octagon_boxes, "4\" Octagon Fire Alarm Box");
 
             void print_covers(int qty)
             {
@@ -240,20 +236,16 @@ namespace JPMorrow.Excel
             var pvc_total_5 = conduit_pkg.GetTotalPvcLengthRounded("1 1/2\"");
             var pvc_total_6 = conduit_pkg.GetTotalPvcLengthRounded("2\"");
 
-            var mc_total_1 = conduit_pkg.GetTotalMcCableLengthRounded("1/2\"");
-            var mc_total_2 = conduit_pkg.GetTotalMcCableLengthRounded("3/4\"");
-            var mc_total_3 = conduit_pkg.GetTotalMcCableLengthRounded("1\"");
-            var mc_total_4 = conduit_pkg.GetTotalMcCableLengthRounded("1 1/4\"");
-            var mc_total_5 = conduit_pkg.GetTotalMcCableLengthRounded("1 1/2\"");
-            var mc_total_6 = conduit_pkg.GetTotalMcCableLengthRounded("2\"");
+            var mc_total = conduit_pkg.GetTotalMcCableLengthRounded("3/4\"");
 
-            void print_conduit(int qty, string labor_str)
+            void print_conduit(int qty, string labor_str, bool red = false)
             {
                 if (qty == 0) return;
                 var has_item = l.GetItem(out var li, qty, labor_str);
                 if (!has_item) throw new Exception("No Labor item for conduit");
                 var s = li.EntryName.Split(" - ");
-                var red_conduit_fix = s[0] + " - Red " + s[1] + " - " + s[2];
+                var red_str = red ? " - Red " : " - ";
+                var red_conduit_fix = s[0] + red_str + s[1] + " - " + s[2];
                 InsertIntoRow(red_conduit_fix, li.Quantity, li.PerUnitLabor, li.LaborCodeLetter, li.TotalLaborValue);
                 code_one_sub += li.TotalLaborValue; NextRow(1);
             }
@@ -273,6 +265,8 @@ namespace JPMorrow.Excel
             print_conduit(pvc_total_4, "Conduit - PVC - 1 1/4\"");
             print_conduit(pvc_total_5, "Conduit - PVC - 1 1/2\"");
             print_conduit(pvc_total_6, "Conduit - PVC - 2\"");
+
+            print_conduit(mc_total, "Conduit - FMC - 3/4\"", true);
 
             //@TODO:MC Cable
             /* print_conduit(mc_total_1, "1/2\"", 		"Conduit - EMT - 1/2\"");
@@ -348,12 +342,12 @@ namespace JPMorrow.Excel
             var emt_conn_total_5 = 0;
             var emt_conn_total_6 = 0;
 
-            box_pkg.Boxes.ForEach(x => emt_conn_total_1 += x.GetEmtConnectorCount("1/2\""));
-            box_pkg.Boxes.ForEach(x => emt_conn_total_2 += x.GetEmtConnectorCount("3/4\""));
-            box_pkg.Boxes.ForEach(x => emt_conn_total_3 += x.GetEmtConnectorCount("1\""));
-            box_pkg.Boxes.ForEach(x => emt_conn_total_4 += x.GetEmtConnectorCount("1 1/4\""));
-            box_pkg.Boxes.ForEach(x => emt_conn_total_5 += x.GetEmtConnectorCount("1 1/2\""));
-            box_pkg.Boxes.ForEach(x => emt_conn_total_6 += x.GetEmtConnectorCount("2\""));
+            emt_conn_total_1 += connector_pkg.GetEmtConnectorCount("1/2\"");
+            emt_conn_total_2 += connector_pkg.GetEmtConnectorCount("3/4\"");
+            emt_conn_total_3 += connector_pkg.GetEmtConnectorCount("1\"");
+            emt_conn_total_4 += connector_pkg.GetEmtConnectorCount("1 1/4\"");
+            emt_conn_total_5 += connector_pkg.GetEmtConnectorCount("1 1/2\"");
+            emt_conn_total_6 += connector_pkg.GetEmtConnectorCount("2\"");
 
             var pvc_conn_total_1 = 0;
             var pvc_conn_total_2 = 0;
@@ -362,12 +356,15 @@ namespace JPMorrow.Excel
             var pvc_conn_total_5 = 0;
             var pvc_conn_total_6 = 0;
 
-            box_pkg.Boxes.ForEach(x => pvc_conn_total_1 += x.GetPvcConnectorCount("1/2\""));
-            box_pkg.Boxes.ForEach(x => pvc_conn_total_2 += x.GetPvcConnectorCount("3/4\""));
-            box_pkg.Boxes.ForEach(x => pvc_conn_total_3 += x.GetPvcConnectorCount("1\""));
-            box_pkg.Boxes.ForEach(x => pvc_conn_total_4 += x.GetPvcConnectorCount("1 1/4\""));
-            box_pkg.Boxes.ForEach(x => pvc_conn_total_5 += x.GetPvcConnectorCount("1 1/2\""));
-            box_pkg.Boxes.ForEach(x => pvc_conn_total_6 += x.GetPvcConnectorCount("2\""));
+            pvc_conn_total_1 += connector_pkg.GetPvcConnectorCount("1/2\"");
+            pvc_conn_total_2 += connector_pkg.GetPvcConnectorCount("3/4\"");
+            pvc_conn_total_3 += connector_pkg.GetPvcConnectorCount("1\"");
+            pvc_conn_total_4 += connector_pkg.GetPvcConnectorCount("1 1/4\"");
+            pvc_conn_total_5 += connector_pkg.GetPvcConnectorCount("1 1/2\"");
+            pvc_conn_total_6 += connector_pkg.GetPvcConnectorCount("2\"");
+
+            var mc_conn_total = 0;
+            mc_conn_total += connector_pkg.GetMcCableConnectorCount("3/4\"");
 
             void print_connectors(int qty, string labor_str)
             {
@@ -393,6 +390,8 @@ namespace JPMorrow.Excel
             print_connectors(pvc_conn_total_4, "Connector - Female Adapter - PVC - 1 1/4\"");
             print_connectors(pvc_conn_total_5, "Connector - Female Adapter - PVC - 1 1/2\"");
             print_connectors(pvc_conn_total_6, "Connector - Female Adapter - PVC - 2\"");
+
+            print_connectors(mc_conn_total, "Connector - Set Screw Steel - FMC - 3/4\"");
 
             code_one_sub = Math.Ceiling(code_one_sub);
             code_one_gt += code_one_sub;
@@ -423,6 +422,7 @@ namespace JPMorrow.Excel
             // foreach (var h in hex_nuts) print_hanger_hardware(h.Count(), h.Key);
             print_hanger_hardware(total_box_cnt * 2, "Washer - 1/4\"");
             print_hanger_hardware(total_box_cnt * 2, "Hex Nut - 1/4\"");
+            print_hanger_hardware(tbar_cnt, "24\" Span T-Bar Hanger - Caddy 512");
             foreach (var a in anchors) print_hanger_hardware(a.Count(), a.Key);
             foreach (var tr in threaded_rod) print_hanger_hardware((int)(tr.Select(x => x.ThreadedRodLength).Sum() + (total_box_cnt * 10.0)), "Threaded Rod - " + tr.Key);
 

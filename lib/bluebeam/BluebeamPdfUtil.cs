@@ -9,11 +9,11 @@ namespace JPMorrow.Pdf.Bluebeam
 {
     public static class BluebeamPdfUtil
     {
-        public static string[] FireAlarmConduitSubjectTags = new string[] 
+        public static string[] FireAlarmConduitSubjectTags = new string[]
         {
             "emt - conduit run - supported",
             "pvc - conduit run - supported",
-            "mc - conduit run - supported"
+            "fmc - conduit run"
         };
 
         public static string[] FireAlarmConduitSizes = new string[] { "1/2\"", "3/4\"", "1\"", "1 1/4\"", "1 1/2\"", "2\"" };
@@ -22,7 +22,7 @@ namespace JPMorrow.Pdf.Bluebeam
         {
             var elements = a.Elements;
             bool has_sub_type = elements.TryGetString("/Subtype", out string sub_type);
-            if(!has_sub_type || !sub_type.Equals("/PolyLine")) return false;
+            if (!has_sub_type || !sub_type.Equals("/PolyLine")) return false;
             return true;
         }
 
@@ -33,7 +33,8 @@ namespace JPMorrow.Pdf.Bluebeam
         {
             var elements = a.Elements;
             bool s = elements.TryGetString("/Subtype", out string sub_type);
-            return s && sub_type.Equals("/Square");
+            bool ss = sub_type.Equals("/Square") || sub_type.Equals("/Polygon");
+            return s && ss;
         }
 
         public static string GetRcContents(PdfAnnotation a)
@@ -41,7 +42,7 @@ namespace JPMorrow.Pdf.Bluebeam
             var elements = a.Elements;
             bool has_subj_name = elements.TryGetString("/RC", out string rc);
 
-            if(!has_subj_name)
+            if (!has_subj_name)
                 throw new Exception("The provided annotation does not have any /RC data");
 
             return rc;
@@ -51,9 +52,9 @@ namespace JPMorrow.Pdf.Bluebeam
         {
             var elements = a.Elements;
             bool has_subj_name = elements.TryGetString("/Subj", out string subject);
-            
-            if(!has_subj_name)
-                 throw new Exception("The provided annotation has no subject");
+
+            if (!has_subj_name)
+                throw new Exception("The provided annotation has no subject");
 
             return subject;
         }
@@ -64,7 +65,10 @@ namespace JPMorrow.Pdf.Bluebeam
             var elements = a.Elements;
             bool s = elements.TryGetValue("/GroupNesting", out PdfItem item);
 
-            if (!s) return false;
+            if (!s)
+            {
+                return false;
+            }
 
             var groups = item.ToString()
                 .Split(" ").Where(x => x.StartsWith('/'))
@@ -79,12 +83,12 @@ namespace JPMorrow.Pdf.Bluebeam
         {
             List<PdfAnnotation> ret = new List<PdfAnnotation>();
 
-            foreach(var a in search)
+            foreach (var a in search)
             {
                 var elements = a.Elements;
                 bool s = elements.TryGetString("/NM", out string cmp_code);
-                if(!s || string.IsNullOrWhiteSpace(cmp_code)) continue;
-                if(cmp_code.Equals(group_code)) ret.Add(a);
+                if (!s || string.IsNullOrWhiteSpace(cmp_code)) continue;
+                if (cmp_code.Equals(group_code)) ret.Add(a);
             }
 
             return ret;

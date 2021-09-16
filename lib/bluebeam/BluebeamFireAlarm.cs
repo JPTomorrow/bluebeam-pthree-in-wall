@@ -17,17 +17,14 @@ namespace JPMorrow.Pdf.Bluebeam.FireAlarm
     /// 1. Take in a set of grouped annotations
     /// </summary>
 
-    public class BluebeamFireAlarmBox
+    public class BluebeamFireAlarmConnectorPackage
     {
-        public string BoxConfig { get; private set; }
-        public string BoxSize { get; private set; }
-
         private static string[] connectorSizes = new string[] { "1/2\"", "3/4\"", "1\"", "1 1/4\"", "1 1/2\"", "2\"" };
 
         private static string[] connectorIdentifierTags = new string[] {
             "emt - fire alarm connector",
             "pvc - fire alarm connector",
-            "mc - fire alarm connector",
+            "fmc - fire alarm connector",
          };
 
         private Dictionary<string, int> EmtConnectors { get; set; } = new Dictionary<string, int>()
@@ -81,14 +78,16 @@ namespace JPMorrow.Pdf.Bluebeam.FireAlarm
             return count;
         }
 
-        public BluebeamFireAlarmBox(
-            string box_size, string box_config_char,
-            IEnumerable<PdfAnnotation> connector_annotations)
+        private BluebeamFireAlarmConnectorPackage()
         {
-            BoxConfig = box_config_char;
-            BoxSize = box_size;
 
-            foreach (var a in connector_annotations)
+        }
+
+        public static BluebeamFireAlarmConnectorPackage MakePackageFromAnnotations(IEnumerable<PdfAnnotation> annots)
+        {
+            BluebeamFireAlarmConnectorPackage p = new BluebeamFireAlarmConnectorPackage();
+
+            foreach (var a in annots)
             {
                 bool s = ProcessSubject(a, out var result);
                 if (!s) continue;
@@ -96,12 +95,14 @@ namespace JPMorrow.Pdf.Bluebeam.FireAlarm
                 var type = result[1];
 
                 if (type.Equals("emt"))
-                    EmtConnectors[size] += 1;
+                    p.EmtConnectors[size] += 1;
                 else if (type.Equals("pvc"))
-                    PvcConnectors[size] += 1;
-                else if (type.Equals("mc"))
-                    McConnectors[size] += 1;
+                    p.PvcConnectors[size] += 1;
+                else if (type.Equals("fmc"))
+                    p.McConnectors[size] += 1;
             }
+
+            return p;
         }
 
         private static bool ProcessSubject(PdfAnnotation a, out string[] result)
@@ -112,6 +113,17 @@ namespace JPMorrow.Pdf.Bluebeam.FireAlarm
             if (!s || !connectorIdentifierTags.Any(x => subject.ToLower().Contains(x))) return false;
             result = new string[2] { subject.Split(" - ").First().Trim(), subject.ToLower().Split(" - ")[1].Trim() };
             return true;
+        }
+    }
+    public class BluebeamFireAlarmBox
+    {
+        public string BoxConfig { get; private set; }
+        public string BoxSize { get; private set; }
+
+        public BluebeamFireAlarmBox(string box_size, string box_config_char)
+        {
+            BoxConfig = box_config_char;
+            BoxSize = box_size;
         }
     }
 
@@ -127,15 +139,13 @@ namespace JPMorrow.Pdf.Bluebeam.FireAlarm
         private static string[] fireAlarmBoxIdentifierTags = new string[] {
             "4\" - fire alarm box - jm" + fireAlarmBoxMarkupVersion,
             "4 11/16\" - fire alarm box - jm" + fireAlarmBoxMarkupVersion,
+            "4\" octagon - fire alarm box - jm" + fireAlarmBoxMarkupVersion,
         };
 
         public override string ToString()
         {
-            var o = "\n Fire Alarm Box Package\n";
-            foreach (var b in Boxes)
-            {
-
-            }
+            string o = "BOX COUNT: " + Boxes.Count().ToString() + "\n";
+            foreach (var b in Boxes) o += b.BoxSize + "\n";
             return o;
         }
 
@@ -154,18 +164,18 @@ namespace JPMorrow.Pdf.Bluebeam.FireAlarm
             {
                 bool is_rect = BluebeamPdfUtil.IsRectangle(a);
                 bool has_fabs = HasFireAlarmBoxSubject(a, out string subject);
-                bool has_group = BluebeamPdfUtil.HasGroupNesting(a, out var group_codes);
 
-                if (!is_rect || !has_fabs || !has_group) continue;
+                if (!is_rect) continue;
+                else if (!has_fabs) continue;
 
-                List<PdfAnnotation> connector_annots = new List<PdfAnnotation>();
-                foreach (var g in group_codes)
-                {
-                    var found_annots = BluebeamPdfUtil.FindAnnotationsByGroupCode(g, annotations);
-                    connector_annots.AddRange(found_annots);
-                }
+                var possible_box_sizes = new List<string> {
+                    "4 11/16\"", "4\" Octagon", "4\""
+                };
 
-                var box_size = subject.Contains("4 11/16\"") ? "4 11/16\"" : "4\"";
+                string box_size = "";
+                var bs_idx = possible_box_sizes.FindIndex(x => subject.Contains(x));
+                if (bs_idx == -1) continue;
+                else box_size = possible_box_sizes[bs_idx];
 
                 var configs = Regex.Matches(BluebeamPdfUtil.GetRcContents(a), "<p>(.*?)</p>")
                 .Select(x => x.Value.Replace("<p>", "")
@@ -173,9 +183,14 @@ namespace JPMorrow.Pdf.Bluebeam.FireAlarm
                 .StartsWith("#")).ToList();
 
                 var idx = configs.FindIndex(x => x.StartsWith("Box Configuration"));
-                if (idx == -1) continue;
-                var box_config = configs[idx].Split(":").Last().Trim().ToUpper();
-                package.AddBox(new BluebeamFireAlarmBox(box_size, box_config, connector_annots));
+
+                var box_config = "D";
+                if (idx != -1)
+                {
+                    box_config = configs[idx].Split(":").Last().Trim().ToUpper();
+                }
+
+                package.AddBox(new BluebeamFireAlarmBox(box_size, box_config));
             }
 
             return package;

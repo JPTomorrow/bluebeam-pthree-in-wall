@@ -104,7 +104,7 @@ namespace BluebeamP3InWall
                 Console.WriteLine("Using pdf file: " + pdf_input_path);
             }
 
-            PrintAllAnnotationPropertiesToFile(exe_path, pdf_input_path);
+            // PrintAllAnnotationPropertiesToFile(exe_path, pdf_input_path);
 
             double hanger_spacing = -1;
 
@@ -149,9 +149,11 @@ namespace BluebeamP3InWall
             var poly_lines = f.GetAnnotationsBySubType(f.GetPage(0), "PolyLine");
             BluebeamConduitPackage conduit_pkg = BluebeamConduitPackage.PackageFromPolyLines(poly_lines);
             var hangers = BluebeamSingleHanger.SingleHangersFromConduitPackage(conduit_pkg, threaded_rod_size);
+            var tbar_cnt = BluebeamSingleHanger.TBarStrutCount(f.AllAnnotations);
 
             // parse all groups into fire alarm boxes with connectors package
             BlubeamFireAlarmBoxPackage box_package = BlubeamFireAlarmBoxPackage.BoxPackageFromAnnotations(f.AllAnnotations);
+            BluebeamFireAlarmConnectorPackage connector_pkg = BluebeamFireAlarmConnectorPackage.MakePackageFromAnnotations(f.AllAnnotations);
 
             // Output to Excel
             var excel_out_path = exe_path + Path.GetFileNameWithoutExtension(pdf_input_path) + ".xlsx";
@@ -198,7 +200,7 @@ namespace BluebeamP3InWall
                 var labor_path = exe_path + "labor\\";
                 labor_path = labor_path + @"labor_entries.json";
 
-                s1.GenerateFireAlarmSheet(labor_path, "<Project Title Goes Here>", conduit_pkg, box_package, hangers, hanger_spacing);
+                s1.GenerateFireAlarmSheet(labor_path, "<Project Title Goes Here>", conduit_pkg, box_package, connector_pkg, hangers, hanger_spacing, tbar_cnt);
                 Console.WriteLine("\tFilled Sheet");
                 exporter.Close();
                 Console.WriteLine("\tBill of Material Generated!");
@@ -283,9 +285,9 @@ namespace BluebeamP3InWall
                 Thread.Sleep(500);
             }
 
-            if (File.Exists(pdf_output_path)) File.Delete(pdf_output_path);
+            // if (File.Exists(pdf_output_path)) File.Delete(pdf_output_path);
 
-            boxes.SaveMarkupPdf(pdf_input_path, pdf_output_path, f, columns);
+            // boxes.SaveMarkupPdf(pdf_input_path, pdf_output_path, f, columns);
 
             // @TODO: Open Pdf file after save
             //Process.Start(pdf_output_path);

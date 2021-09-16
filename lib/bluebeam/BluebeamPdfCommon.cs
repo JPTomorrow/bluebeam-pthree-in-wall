@@ -56,6 +56,22 @@ namespace JPMorrow.Pdf.Bluebeam
 
             return ret;
         }
+
+        public static int TBarStrutCount(IEnumerable<PdfAnnotation> annots)
+        {
+            int cnt = 0;
+            foreach (var a in annots)
+            {
+                var el = a.Elements;
+                bool s = el.TryGetString("/Subj", out string val);
+                if (!s) continue;
+                string cmp = "24\" span t-bar - caddy 512";
+                if (!val.ToLower().Contains(cmp)) continue;
+                cnt += 1;
+            }
+
+            return cnt;
+        }
     }
 
     public class BluebeamConduit
@@ -85,7 +101,7 @@ namespace JPMorrow.Pdf.Bluebeam
 
         public override string ToString()
         {
-            var o = "\nConduit Package\n";
+            var o = "\nConduit Package: " + Conduit.Count().ToString() + "\n";
             foreach (var s in BluebeamPdfUtil.FireAlarmConduitSizes) o += "emt length - " + s + ": " + GetTotalEmtLengthFeetIn(s) + "\n";
             foreach (var s in BluebeamPdfUtil.FireAlarmConduitSizes) o += "pvc length - " + s + ": " + GetTotalPvcLengthFeetIn(s) + "\n";
             foreach (var s in BluebeamPdfUtil.FireAlarmConduitSizes) o += "mc length - " + s + ": " + GetTotalMcCableLengthFeetIn(s) + "\n";
@@ -180,7 +196,6 @@ namespace JPMorrow.Pdf.Bluebeam
             {
                 if (a == null) throw new Exception("The annotation provided is null");
                 bool has_label = GetAnnotationLabel(a, out string label);
-                if (!has_label) throw new Exception("No valid label");
                 StoreConduitSizeAndLength(BluebeamPdfUtil.GetSubject(a), BluebeamPdfUtil.GetRcContents(a), label);
             }
         }
@@ -234,13 +249,16 @@ namespace JPMorrow.Pdf.Bluebeam
                 throw new Exception("length matching from rc contents failed. rc_content: " + rc_contents);
 
             var length_match = raw_matches.Where(x => !string.IsNullOrWhiteSpace(x)).Last().Replace("-", " ");
-
             var length = Measure.LengthDbl(length_match);
 
             //@TODO: CHECK THAT MEASUREMENTS ARE WORKING BECAUSE THEY ARE NOT
 
             if (length < 0)
-                throw new Exception("Conduit length resolved to a negative value");
+            {
+                var fixed_len = length_match.Split("#xD;").Last();
+                length = Measure.LengthDbl(fixed_len);
+                if (length < 0) throw new Exception("Conduit length resolved to a negative value");
+            }
 
             string s = subject.ToLower();
             var tags = BluebeamPdfUtil.FireAlarmConduitSubjectTags;
@@ -252,9 +270,14 @@ namespace JPMorrow.Pdf.Bluebeam
 
             if (type == null) throw new Exception("There is no conduit type matching the provided subject '" + subject + "'");
 
-            var hanger_label_len = label.Split(" - ").Last().Trim();
-            var hanger_support_len = Measure.LengthDbl(hanger_label_len);
-            if (hanger_support_len < 0) throw new Exception("Hanger support length is invalid: " + label);
+            double hanger_support_len = 0;
+            if (!String.IsNullOrWhiteSpace(label))
+            {
+                var hanger_label_len = label.Split(" - ").Last().Trim();
+                hanger_support_len = Measure.LengthDbl(hanger_label_len);
+                if (hanger_support_len < 0) throw new Exception("Hanger support length is invalid: " + label);
+            }
+
 
             Conduit.Add(new BluebeamConduit(conduit_size, length, type, hanger_support_len));
         }

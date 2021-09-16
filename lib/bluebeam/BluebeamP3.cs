@@ -231,16 +231,13 @@ namespace JPMorrow.Pdf.Bluebeam.P3
             "Top Connectors - MC",
             "Bottom Connectors - MC",
             "Bundle Name",
-            "Box Elevation",
-            "Short Device Code",
-            "Long Device Code"
         };
 
         public BluebeamP3ShorhandDeviceCodeResolver BSHD_Resolver { get; private set; } = new BluebeamP3ShorhandDeviceCodeResolver();
         public List<BluebeamP3Box> Boxes { get; private set; } = new List<BluebeamP3Box>();
         public BluebeamP3BoxCollection()
         {
-
+            
         }
 
         public static BluebeamP3BoxCollection BoxPackageFromAnnotations(
@@ -273,7 +270,7 @@ namespace JPMorrow.Pdf.Bluebeam.P3
                 Console.WriteLine("end");
 
                 config.BundleName = column_data["Bundle Name"];
-                config.BoxElevation = column_data["Box Elevation"];
+                config.BoxElevation = "";
                 config.Subject = subject;
                 config.Annotation = annot;
 

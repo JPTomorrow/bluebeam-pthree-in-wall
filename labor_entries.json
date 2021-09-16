@@ -52,9 +52,9 @@
             "4\"" :     [ "C", 0.1370 ],
             "5\"" :     [ "C", 0.1370 ]
         },
-        "FLEX" : {
+        "FMC" : {
             "1/2\"" :   [ "C", 0.030 ],	
-            "3/4\"" :   [ "C", 0.039 ],
+            "3/4\"" :   [ "C", 0.04 ],
             "1\"" :     [ "C", 0.050 ],
             "1 1/4\"" : [ "C", 0.078 ],
             "1 1/2\"" : [ "C", 0.099 ],
@@ -540,9 +540,9 @@
                 "4\"" :     [ "E", 0.1370 ],
                 "5\"" :     [ "E", 0.1370 ]
             },
-            "FLEX" : {
+            "FMC" : {
                 "1/2\"" :   [ "E", 0.030 ],	
-                "3/4\"" :   [ "E", 0.039 ],
+                "3/4\"" :   [ "E", 0.05 ],
                 "1\"" :     [ "E", 0.050 ],
                 "1 1/4\"" : [ "E", 0.078 ],
                 "1 1/2\"" : [ "E", 0.099 ],
@@ -965,22 +965,10 @@
             "1\" KO" :                             [ "E", 0.023 ]
         }
     },
-    "4\" Square Fire Alarm Box" : {
-        "D Config" :                             [ "E", 0.023 ],
-        "I Config" :                             [ "E", 0.023 ],
-        "X Config" :                             [ "E", 0.023 ],
-        "T Config" :                             [ "E", 0.023 ],
-        "XY Config" :                             [ "E", 0.023 ],
-        "Y Config" :                             [ "E", 0.023 ]
-    },
-    "4 11/16\" Square Fire Alarm Box" : {
-        "D Config" :                             [ "E", 0.023 ],
-        "I Config" :                             [ "E", 0.023 ],
-        "X Config" :                             [ "E", 0.023 ],
-        "T Config" :                             [ "E", 0.023 ],
-        "XY Config" :                             [ "E", 0.023 ],
-        "Y Config" :                             [ "E", 0.023 ]
-    },
+    
+    "4\" Square Fire Alarm Box" : [ "E", 0.023 ],
+    "4 11/16\" Square Fire Alarm Box" : [ "E", 0.023 ],
+    "4\" Octagon Fire Alarm Box" : [ "E", 0.023 ],
 
     "4\" Round Plaster Ring" : {
         "Steel" : {
@@ -1125,6 +1113,7 @@
     "Mounting Bracket" :                     [ "E", 0.078 ],
     "Box Support" :                          [ "E", 0.078 ],
     "Box Stabalizer" :                       [ "E", 0.078 ],
+    "24\" Span T-Bar Hanger - Caddy 512":    [ "E", 0.14 ],
 
     "Metal Clad Conduit Clip Snap Close Flange Hanger Side Mount" : {
         "1/2\"" :                       [ "E", 0.082 ],
