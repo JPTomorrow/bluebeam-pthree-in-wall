@@ -6434,17 +6434,17 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\Jmorrow\\Desktop\\Code\\csharp\\BluebeamP3InWall\\BluebeamP3InWall.csproj",
+      "projectUniqueName": "C:\\Users\\Jmorrow\\Desktop\\code\\work-code\\csharp\\BluebeamP3InWall\\BluebeamP3InWall.csproj",
       "projectName": "BluebeamP3InWall",
-      "projectPath": "C:\\Users\\Jmorrow\\Desktop\\Code\\csharp\\BluebeamP3InWall\\BluebeamP3InWall.csproj",
+      "projectPath": "C:\\Users\\Jmorrow\\Desktop\\code\\work-code\\csharp\\BluebeamP3InWall\\BluebeamP3InWall.csproj",
       "packagesPath": "C:\\Users\\Jmorrow\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\Jmorrow\\Desktop\\Code\\csharp\\BluebeamP3InWall\\obj\\",
+      "outputPath": "C:\\Users\\Jmorrow\\Desktop\\code\\work-code\\csharp\\BluebeamP3InWall\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
       ],
       "configFilePaths": [
-        "C:\\Users\\Jmorrow\\Desktop\\Code\\csharp\\BluebeamP3InWall\\NuGet.Config",
+        "C:\\Users\\Jmorrow\\Desktop\\code\\work-code\\csharp\\BluebeamP3InWall\\NuGet.Config",
         "C:\\Users\\Jmorrow\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],

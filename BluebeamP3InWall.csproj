@@ -19,6 +19,7 @@
 
   <ItemGroup>
     <Reference Include="C:/Program Files (x86)/Microsoft Visual Studio/Shared/Visual Studio Tools for Office/PIA/Office15/Microsoft.Office.Interop.Excel.dll" />
+    <EmbeddedResource Include="./labor_entries.json" />
   </ItemGroup>
   
   <ItemGroup>
@@ -31,16 +32,16 @@
 
   <Target Name="CopyFilesAfterBuild" AfterTargets="Build">
 
-    <ItemGroup>
+    <!-- <ItemGroup>
       <_CopyItems_1 Include=".\labor_entries.json" />
-    </ItemGroup> 
+    </ItemGroup>  -->
 
     <ItemGroup>
       <_CopyItems_2 Include=".\*.pdf" />
     </ItemGroup> 
 
-    <Copy SourceFiles="@(_CopyItems_1)" DestinationFolder="./bin/Debug/net5.0/win-x64/publish/labor" SkipUnchangedFiles="false" OverwriteReadOnlyFiles="true" />
-    <Copy SourceFiles="@(_CopyItems_1)" DestinationFolder="./bin/Release/net5.0/win-x64/publish/labor" SkipUnchangedFiles="false" OverwriteReadOnlyFiles="true" />
+    <!-- <Copy SourceFiles="@(_CopyItems_1)" DestinationFolder="./bin/Debug/net5.0/win-x64/publish/labor" SkipUnchangedFiles="false" OverwriteReadOnlyFiles="true" />
+    <Copy SourceFiles="@(_CopyItems_1)" DestinationFolder="./bin/Release/net5.0/win-x64/publish/labor" SkipUnchangedFiles="false" OverwriteReadOnlyFiles="true" /> -->
     <Copy SourceFiles="@(_CopyItems_2)" DestinationFolder="./bin/Debug/net5.0/win-x64/publish" SkipUnchangedFiles="false" OverwriteReadOnlyFiles="true" />
     <Copy SourceFiles="@(_CopyItems_2)" DestinationFolder="./bin/Release/net5.0/win-x64/publish" SkipUnchangedFiles="false" OverwriteReadOnlyFiles="true" />
   </Target>

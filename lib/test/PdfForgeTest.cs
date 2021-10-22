@@ -2,6 +2,7 @@ namespace JPMorrow.Test.Console
 {
     using JPMorrow.Measurements;
     using JPMorrow.PDF;
+    using JPMorrow.Revit.Labor;
     using System;
     using System.Diagnostics;
     using System.IO;
@@ -110,6 +111,14 @@ namespace JPMorrow.Test.Console
                 a.Assert(assert_str, d1 == d2 && s1.Equals(s2) && s2.Equals(size));
             }
 
+        }
+
+        public static void TestLaborHourEntriesFromResourceFile(string exe_path, TestAssert a)
+        {
+            var entries = LaborExchange.LoadLaborFromInternalRescource();
+            a.Assert("Labor entries are empty or null -> entries: " + entries.Count(), entries.Any());
+            LaborExchange lex = new LaborExchange(entries);
+            a.Assert("Problem with labor exchange", lex == null || !lex.Items.Any());
         }
     }
 }
