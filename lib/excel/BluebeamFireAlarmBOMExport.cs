@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using JPMorrow.Bluebeam.FlexConduit;
 using JPMorrow.Pdf.Bluebeam;
 using JPMorrow.Pdf.Bluebeam.FireAlarm;
 using JPMorrow.Revit.Labor;
@@ -27,6 +28,9 @@ namespace JPMorrow.Excel
             var entries = LaborExchange.LoadLaborFromFile(labor_import_path);
             var l = new LaborExchange(entries);
 
+            var total_box_cnt = box_pkg.Boxes.Count();
+            BluebeamFlexConduitTotal fct = new BluebeamFlexConduitTotal(total_box_cnt);
+
             // boxes
             var d_boxes_1 = box_pkg.Boxes.Where(x => x.BoxConfig.Equals("D") && x.BoxSize.Equals("4\"")).Count();
             var i_boxes_1 = box_pkg.Boxes.Where(x => x.BoxConfig.Equals("I") && x.BoxSize.Equals("4\"")).Count();
@@ -43,7 +47,6 @@ namespace JPMorrow.Excel
             var y_boxes_2 = box_pkg.Boxes.Where(x => x.BoxConfig.Equals("Y") && x.BoxSize.Equals("4 11/16\"")).Count();
 
             var octagon_boxes = box_pkg.Boxes.Where(x => x.BoxSize.Equals("4\" Octagon")).Count();
-            var total_box_cnt = box_pkg.Boxes.Count();
 
             void print_boxes(int qty, string labor_str)
             {
@@ -76,8 +79,8 @@ namespace JPMorrow.Excel
             void print_brackets(int qty)
             {
                 if (qty == 0) return;
-                var has_item = l.GetItem(out var li, qty, "Helicopter Bracket");
-                if (!has_item) throw new Exception("No Labor item for fire alarm box helicopter bracket");
+                var has_item = l.GetItem(out var li, qty, "Caddy 812MB18A Helicopter Bracket");
+                if (!has_item) throw new Exception("No Labor item for fire alarm box Caddy 812MB18A Helicopter Bracket");
                 InsertIntoRow(li.EntryName, li.Quantity, li.PerUnitLabor, li.LaborCodeLetter, li.TotalLaborValue);
                 code_one_sub += li.TotalLaborValue; NextRow(1);
             }
@@ -134,7 +137,18 @@ namespace JPMorrow.Excel
             print_conduit(pvc_total_5, "Conduit - PVC - 1 1/2\"");
             print_conduit(pvc_total_6, "Conduit - PVC - 2\"");
 
-            print_conduit(mc_total, "Conduit - FMC - 3/4\"", true);
+            void print_flex_whips(int qty, string labor_str)
+            {
+                if (qty == 0) return;
+                var has_item = l.GetItem(out var li, qty, labor_str);
+                if (!has_item) throw new Exception("No Labor item for fire alarm flex whips");
+                InsertIntoRow(li.EntryName, li.Quantity, li.PerUnitLabor, li.LaborCodeLetter, li.TotalLaborValue);
+                code_one_sub += li.TotalLaborValue; NextRow(1);
+            }
+
+            print_flex_whips(fct.PipeQty, BluebeamFlexConduitTotal.FlexPipeName);
+
+            // print_conduit(mc_total, "Conduit - FMC - 3/4\"", true);
 
             //@TODO:MC Cable
             /* print_conduit(mc_total_1, "1/2\"", 		"Conduit - EMT - 1/2\"");
@@ -231,8 +245,8 @@ namespace JPMorrow.Excel
             pvc_conn_total_5 += connector_pkg.GetPvcConnectorCount("1 1/2\"");
             pvc_conn_total_6 += connector_pkg.GetPvcConnectorCount("2\"");
 
-            var mc_conn_total = 0;
-            mc_conn_total += connector_pkg.GetMcCableConnectorCount("3/4\"");
+            // var mc_conn_total = 0;
+            // mc_conn_total += connector_pkg.GetMcCableConnectorCount("3/4\"");
 
             void print_connectors(int qty, string labor_str)
             {
@@ -259,7 +273,7 @@ namespace JPMorrow.Excel
             print_connectors(pvc_conn_total_5, "Connector - Female Adapter - PVC - 1 1/2\"");
             print_connectors(pvc_conn_total_6, "Connector - Female Adapter - PVC - 2\"");
 
-            print_connectors(mc_conn_total, "Connector - Set Screw Steel - FMC - 3/4\"");
+            print_connectors(fct.ConnectorQty, BluebeamFlexConduitTotal.FlexConnectorName);
 
             code_one_sub = Math.Ceiling(code_one_sub);
             code_one_gt += code_one_sub;

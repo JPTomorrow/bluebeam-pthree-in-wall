@@ -110,7 +110,6 @@ namespace JPMorrow.Test.Console
                 size + " { " + d1.ToString() + ", " + d2.ToString() + ", " + s1 + ", " + s2 + " }";
                 a.Assert(assert_str, d1 == d2 && s1.Equals(s2) && s2.Equals(size));
             }
-
         }
 
         public static void TestLaborHourEntriesFromResourceFile(string exe_path, TestAssert a)
