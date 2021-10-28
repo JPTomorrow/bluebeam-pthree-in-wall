@@ -25,7 +25,7 @@ namespace JPMorrow.Excel
             var code_one_sub = 0.0;
             static double shave_labor(double labor) => labor * 0.82;
 
-            var entries = LaborExchange.LoadLaborFromFile(labor_import_path);
+            var entries = LaborExchange.LoadLaborFromInternalRescource();
             var l = new LaborExchange(entries);
 
             var total_box_cnt = box_pkg.Boxes.Count();
@@ -302,6 +302,11 @@ namespace JPMorrow.Excel
             foreach (var a in att) print_hanger_hardware(a.Count(), a.Key);
             // foreach (var w in washers) print_hanger_hardware(w.Count(), w.Key);
             // foreach (var h in hex_nuts) print_hanger_hardware(h.Count(), h.Key);
+            print_hanger_hardware(total_box_cnt, "Caddy 4Z34812M Batwing/Clamp");
+
+            int att_cnt = att.Sum(x => x.Count());
+            print_hanger_hardware((int)Math.Round(att_cnt * 0.10), "Unistrut Strap - 3/4\"");
+
             print_hanger_hardware(total_box_cnt * 2, "Washer - 1/4\"");
             print_hanger_hardware(total_box_cnt * 2, "Hex Nut - 1/4\"");
             print_hanger_hardware(tbar_cnt, "24\" Span T-Bar Hanger - Caddy 512");

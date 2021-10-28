@@ -37,7 +37,7 @@
     </ItemGroup>  -->
 
     <ItemGroup>
-      <_CopyItems_2 Include=".\*.pdf" />
+      <_CopyItems_2 Include=".\test-pdfs\*.pdf" />
     </ItemGroup> 
 
     <!-- <Copy SourceFiles="@(_CopyItems_1)" DestinationFolder="./bin/Debug/net5.0/win-x64/publish/labor" SkipUnchangedFiles="false" OverwriteReadOnlyFiles="true" />

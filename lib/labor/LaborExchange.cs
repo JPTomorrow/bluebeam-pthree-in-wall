@@ -167,27 +167,40 @@ namespace JPMorrow.Revit.Labor
     public class LaborExchange
     {
         public static LetterCodeCollection LetterCodes { get; } = new LetterCodeCollection();
-        private List<LaborEntry> CheckEntries { get; set; }
+        private List<LaborEntry> Entries { get; set; }
 
         private List<LaborItem> _items { get; set; } = new List<LaborItem>();
         public IList<LaborItem> Items { get => _items; }
 
+        public override string ToString()
+        {
+            string o = "Labor Hour Entries:\n";
+            foreach (var e in Entries)
+            {
+                o += e.EntryName +
+                    " ->\t[ " + e.LaborData.LaborCodePair.Letter +
+                    ", " + e.LaborData.PerUnitLabor.ToString() + " ]\n";
+            }
+
+            return o;
+        }
+
         public LaborExchange(IEnumerable<LaborEntry> entries = null)
         {
             if (entries == null) entries = new List<LaborEntry>();
-            CheckEntries = entries.ToList();
+            Entries = entries.ToList();
         }
 
         public bool GetEntry(out LaborEntry entry, params string[] part_segment_names)
         {
             entry = null;
             var part_name = string.Join(" - ", part_segment_names);
-            int idx = CheckEntries.FindIndex(x => x.EntryName.Equals(part_name));
+            int idx = Entries.FindIndex(x => x.EntryName.Equals(part_name));
 
             if (idx == -1) return false;
             else
             {
-                LaborEntry found_entry = CheckEntries[idx];
+                LaborEntry found_entry = Entries[idx];
                 entry = found_entry;
             }
 
@@ -320,7 +333,7 @@ namespace JPMorrow.Revit.Labor
                 var pname = string.Join(" - ", p[0], p[1], p[2]);
                 var data = p[3] as LaborData;
                 var entry = new LaborEntry(pname, data);
-                CheckEntries.Add(entry);
+                Entries.Add(entry);
             }
         }
     }

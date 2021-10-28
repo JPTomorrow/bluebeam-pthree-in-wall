@@ -668,8 +668,8 @@
         }
     },
     
-    "Caddy 812MB18A Helicopter Bracket" :                   [ "E", 0.078 ],
-    "Red Blank Box Cover" :                   [ "E", 0.01 ],
+    "Caddy 812MB18A Helicopter Bracket" :    [ "E", 0.078 ],
+    "Red Blank Box Cover" :                  [ "E", 0.01 ],
     "Ground Stinger #12 Copper" :            [ "C", 0.025 ],
     "1/4\"x20 - 1/2\" Long Screw" :          [ "M", 0.078 ],
     "Wafer Head Tek Screw" :                 [ "M", 0.030 ],
@@ -692,6 +692,8 @@
     "4 in. sq. box" :                   [ "E", 1.0 ],
 
     "Caddy 4Z34812M Batwing/Clamp":     [ "E", 0.09 ],
-    "Steel FMC - 6' Whip - 1/2\"":      [ "E", 0.18 ]
+    "Steel FMC - 6 Ft. Whip - 1/2\"":   [ "E", 0.18 ],
+    "Unistrut Strap - 3/4\"":           [ "C", 0.059 ],
+    "Connector - Steel FMC - 1/2\"":    [ "C", 0.059 ]
     
 }

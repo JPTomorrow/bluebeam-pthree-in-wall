@@ -6,8 +6,8 @@ namespace JPMorrow.Bluebeam.FlexConduit
 {
     public class BluebeamFlexConduitTotal
     {
-        public static string FlexPipeName { get => "Steel FMC - 6' Whip - 1/2\""; }
-        public static string FlexConnectorName { get => "Connector - Set Screw Steel - FMC - 1/2\""; }
+        public static string FlexPipeName { get => "Steel FMC - 6 Ft. Whip - 1/2\""; }
+        public static string FlexConnectorName { get => "Connector - Steel FMC - 1/2\""; }
         public int PipeQty { get; private set; } = 0;
         public int ConnectorQty { get; private set; } = 0;
 
