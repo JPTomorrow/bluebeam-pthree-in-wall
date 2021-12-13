@@ -42,9 +42,7 @@ namespace JPMorrow.Pdf.Bluebeam
             var elements = a.Elements;
             bool has_subj_name = elements.TryGetString("/RC", out string rc);
 
-            if (!has_subj_name)
-                throw new Exception("The provided annotation does not have any /RC data");
-
+            if (!has_subj_name) return string.Empty;
             return rc;
         }
 

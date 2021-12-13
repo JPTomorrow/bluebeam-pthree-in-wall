@@ -6429,29 +6429,33 @@
   },
   "packageFolders": {
     "C:\\Users\\Jmorrow\\.nuget\\packages\\": {},
+    "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {},
     "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\Jmorrow\\Desktop\\code\\work-code\\csharp\\BluebeamP3InWall\\BluebeamP3InWall.csproj",
+      "projectUniqueName": "C:\\Users\\Jmorrow\\Desktop\\code\\work-code\\csharp-core\\BluebeamP3InWall\\BluebeamP3InWall.csproj",
       "projectName": "BluebeamP3InWall",
-      "projectPath": "C:\\Users\\Jmorrow\\Desktop\\code\\work-code\\csharp\\BluebeamP3InWall\\BluebeamP3InWall.csproj",
+      "projectPath": "C:\\Users\\Jmorrow\\Desktop\\code\\work-code\\csharp-core\\BluebeamP3InWall\\BluebeamP3InWall.csproj",
       "packagesPath": "C:\\Users\\Jmorrow\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\Jmorrow\\Desktop\\code\\work-code\\csharp\\BluebeamP3InWall\\obj\\",
+      "outputPath": "C:\\Users\\Jmorrow\\Desktop\\code\\work-code\\csharp-core\\BluebeamP3InWall\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
+        "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages",
         "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
       ],
       "configFilePaths": [
-        "C:\\Users\\Jmorrow\\Desktop\\code\\work-code\\csharp\\BluebeamP3InWall\\NuGet.Config",
+        "C:\\Users\\Jmorrow\\Desktop\\code\\work-code\\csharp-core\\BluebeamP3InWall\\NuGet.Config",
         "C:\\Users\\Jmorrow\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
         "net5.0"
       ],
       "sources": {
+        "C:\\Program Files\\dotnet\\library-packs": {},
         "https://api.nuget.org/v3/index.json": {}
       },
       "frameworks": {
@@ -6504,15 +6508,15 @@
         "downloadDependencies": [
           {
             "name": "Microsoft.AspNetCore.App.Runtime.win-x64",
-            "version": "[5.0.2, 5.0.2]"
+            "version": "[5.0.12, 5.0.12]"
           },
           {
             "name": "Microsoft.NETCore.App.Runtime.win-x64",
-            "version": "[5.0.2, 5.0.2]"
+            "version": "[5.0.12, 5.0.12]"
           },
           {
             "name": "Microsoft.WindowsDesktop.App.Runtime.win-x64",
-            "version": "[5.0.2, 5.0.2]"
+            "version": "[5.0.12, 5.0.12]"
           }
         ],
         "frameworkReferences": {
@@ -6520,7 +6524,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.102\\RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.100\\RuntimeIdentifierGraph.json"
       }
     },
     "runtimes": {

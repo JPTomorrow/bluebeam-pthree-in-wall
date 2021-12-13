@@ -91,11 +91,11 @@ namespace BluebeamP3InWall
         /// <param name="exe_path"></param>
         private static void RunFireAlarm(string exe_path)
         {
-            string pdf_input_path = GetPdfInputFileName(exe_path, "");
+            string pdf_input_path = exe_path + GetPdfInputFileName(exe_path, "");
 
             if (string.IsNullOrWhiteSpace(pdf_input_path) || !File.Exists(pdf_input_path))
             {
-                Console.WriteLine("Failed to retrieve pdf file name");
+                Console.WriteLine("Failed to retrieve pdf file name at: " + pdf_input_path);
                 Console.ReadKey();
                 return;
             }

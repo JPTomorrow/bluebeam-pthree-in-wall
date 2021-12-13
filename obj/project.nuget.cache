@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "F8BT+D0APrjd7hOYzh9f/87Ga1Yiy645ZMPuL9rg8RyrZxdnWtchK2kl7rzRgZ+sURLIrzwZM+e8Mb46N/gIdQ==",
+  "dgSpecHash": "Us8EMrc8dAwo2COcLapARHogIQy4V/GDjSKaKUHRb4+a8V6WQseXiMP5ohYZ0BPzb1vCPcNpKhmjKWhIMHbtvg==",
   "success": true,
-  "projectFilePath": "C:\\Users\\Jmorrow\\Desktop\\code\\work-code\\csharp\\BluebeamP3InWall\\BluebeamP3InWall.csproj",
+  "projectFilePath": "C:\\Users\\Jmorrow\\Desktop\\code\\work-code\\csharp-core\\BluebeamP3InWall\\BluebeamP3InWall.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\Jmorrow\\.nuget\\packages\\csvhelper\\27.1.1\\csvhelper.27.1.1.nupkg.sha512",
     "C:\\Users\\Jmorrow\\.nuget\\packages\\epplus\\5.7.1\\epplus.5.7.1.nupkg.sha512",
@@ -108,9 +108,9 @@
     "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder\\system.xml.xmldocument\\4.3.0\\system.xml.xmldocument.4.3.0.nupkg.sha512",
     "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder\\system.xml.xpath\\4.3.0\\system.xml.xpath.4.3.0.nupkg.sha512",
     "C:\\Users\\Jmorrow\\.nuget\\packages\\system.xml.xpath.xmldocument\\4.3.0\\system.xml.xpath.xmldocument.4.3.0.nupkg.sha512",
-    "C:\\Users\\Jmorrow\\.nuget\\packages\\microsoft.netcore.app.runtime.win-x64\\5.0.2\\microsoft.netcore.app.runtime.win-x64.5.0.2.nupkg.sha512",
-    "C:\\Users\\Jmorrow\\.nuget\\packages\\microsoft.windowsdesktop.app.runtime.win-x64\\5.0.2\\microsoft.windowsdesktop.app.runtime.win-x64.5.0.2.nupkg.sha512",
-    "C:\\Users\\Jmorrow\\.nuget\\packages\\microsoft.aspnetcore.app.runtime.win-x64\\5.0.2\\microsoft.aspnetcore.app.runtime.win-x64.5.0.2.nupkg.sha512"
+    "C:\\Users\\Jmorrow\\.nuget\\packages\\microsoft.netcore.app.runtime.win-x64\\5.0.12\\microsoft.netcore.app.runtime.win-x64.5.0.12.nupkg.sha512",
+    "C:\\Users\\Jmorrow\\.nuget\\packages\\microsoft.windowsdesktop.app.runtime.win-x64\\5.0.12\\microsoft.windowsdesktop.app.runtime.win-x64.5.0.12.nupkg.sha512",
+    "C:\\Users\\Jmorrow\\.nuget\\packages\\microsoft.aspnetcore.app.runtime.win-x64\\5.0.12\\microsoft.aspnetcore.app.runtime.win-x64.5.0.12.nupkg.sha512"
   ],
   "logs": [
     {

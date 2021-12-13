@@ -196,7 +196,11 @@ namespace JPMorrow.Pdf.Bluebeam
             {
                 if (a == null) throw new Exception("The annotation provided is null");
                 bool has_label = GetAnnotationLabel(a, out string label);
-                StoreConduitSizeAndLength(BluebeamPdfUtil.GetSubject(a), BluebeamPdfUtil.GetRcContents(a), label);
+
+                var rc_contents_str = BluebeamPdfUtil.GetRcContents(a);
+                if (string.IsNullOrWhiteSpace(rc_contents_str)) continue;
+
+                StoreConduitSizeAndLength(BluebeamPdfUtil.GetSubject(a), rc_contents_str, label);
             }
         }
 

@@ -13,8 +13,6 @@ namespace JPMorrow.Pdf.Bluebeam.FireAlarm
     /// RETURN A TOTAL COUNT OF ALL THE DIFFERENT SIZED FIRE ALARM BOXES
     /// AND THEIR KNOCKOUTS.
     /// 
-    /// Goals:
-    /// 1. Take in a set of grouped annotations
     /// </summary>
 
     public class BluebeamFireAlarmConnectorPackage
@@ -177,7 +175,11 @@ namespace JPMorrow.Pdf.Bluebeam.FireAlarm
                 if (bs_idx == -1) continue;
                 else box_size = possible_box_sizes[bs_idx];
 
-                var configs = Regex.Matches(BluebeamPdfUtil.GetRcContents(a), "<p>(.*?)</p>")
+                var rc_contents_str = BluebeamPdfUtil.GetRcContents(a);
+                if (string.IsNullOrWhiteSpace(rc_contents_str)) continue;
+
+
+                var configs = Regex.Matches(rc_contents_str, "<p>(.*?)</p>")
                 .Select(x => x.Value.Replace("<p>", "")
                 .Replace("</p>", "")).Where(x => !x.ToLower()
                 .StartsWith("#")).ToList();
