@@ -117,11 +117,15 @@ namespace JPMorrow.Pdf.Bluebeam.FireAlarm
     {
         public string BoxConfig { get; private set; }
         public string BoxSize { get; private set; }
+        public bool HasMc { get; private set; } = false;
+        public string McSize { get; private set; } = string.Empty;
 
-        public BluebeamFireAlarmBox(string box_size, string box_config_char)
+        public BluebeamFireAlarmBox(string box_size, string box_config_char, bool has_mc, string mc_size)
         {
             BoxConfig = box_config_char;
             BoxSize = box_size;
+            HasMc = has_mc;
+            McSize = mc_size;
         }
     }
 
@@ -136,7 +140,10 @@ namespace JPMorrow.Pdf.Bluebeam.FireAlarm
 
         private static string[] fireAlarmBoxIdentifierTags = new string[] {
             "4\" - fire alarm box - jm" + fireAlarmBoxMarkupVersion,
-            "4 11/16\" - fire alarm box - jm" + fireAlarmBoxMarkupVersion,
+            "4\" - fire alarm box - 6ft 3/4in mc - jm" + fireAlarmBoxMarkupVersion,
+            "4\" - fire alarm box - 6ft 1/2in mc - jm" + fireAlarmBoxMarkupVersion,
+            "4 11/16\" - fire alarm box - 6ft 1/2in mc - jm" + fireAlarmBoxMarkupVersion,
+            "4 11/16\" - fire alarm box - 6ft 3/4in mc - jm" + fireAlarmBoxMarkupVersion,
             "4\" octagon - fire alarm box - jm" + fireAlarmBoxMarkupVersion,
         };
 
@@ -192,7 +199,18 @@ namespace JPMorrow.Pdf.Bluebeam.FireAlarm
                     box_config = configs[idx].Split(":").Last().Trim().ToUpper();
                 }
 
-                package.AddBox(new BluebeamFireAlarmBox(box_size, box_config));
+                var has_mc = subject.Contains("MC") && subject.Contains("6ft");
+                var mc_size = string.Empty;
+                if (subject.Contains("6ft 1/2"))
+                {
+                    mc_size = "1/2";
+                }
+                else if (subject.Contains("6ft 3/4"))
+                {
+                    mc_size = "3/4";
+                }
+
+                package.AddBox(new BluebeamFireAlarmBox(box_size, box_config, has_mc, mc_size));
             }
 
             return package;
