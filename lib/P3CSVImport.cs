@@ -60,7 +60,7 @@ namespace JPMorrow.P3
             using (var reader = new StreamReader(csv_filepath))
             using (var csv = new CsvReader(reader, CultureInfo.InvariantCulture))
             {
-                
+
                 csv.Read();
                 csv.ReadHeader();
                 while (csv.Read())
@@ -78,13 +78,13 @@ namespace JPMorrow.P3
                     var bcp = int.Parse(csv.GetField<string>("Bottom Connectors - PVC"));
                     var tcm = int.Parse(csv.GetField<string>("Top Connectors - MC"));
                     var bcm = int.Parse(csv.GetField<string>("Bottom Connectors - MC"));
-                    
+
                     var record = new P3CSVRow(subject, bt, bs, gang, pr, cet, cs, tce, bce, tcp, bcp, tcm, bcm);
-                    
+
                     records.Add(record);
                 }
             }
-    
+
             return records;
         }
 
@@ -92,11 +92,12 @@ namespace JPMorrow.P3
         {
             string o = "";
 
-            foreach(var r in rows) {
+            foreach (var r in rows)
+            {
                 o += string.Format(
                     "{0}-{1}-{2}-{3}-{4}-{5}-{6}-{7}-{8}-{9} | {10}\n",
-                    r.Subject, r.BoxType, r.Gang, r.PlasterRing, 
-                    r.TopConnectorsEmt, r.TopConnectorsPvc, r.TopConnectorsMc, 
+                    r.Subject, r.BoxType, r.Gang, r.PlasterRing,
+                    r.TopConnectorsEmt, r.TopConnectorsPvc, r.TopConnectorsMc,
                     r.BottomConnectorsEmt, r.BottomConnectorsPvc, r.BottomConnectorsMc,
                     r.DeviceCode
                 );
@@ -107,27 +108,27 @@ namespace JPMorrow.P3
 
         private void ProcessFields()
         {
-            if(BoxSize.Equals("small"))
+            if (BoxSize.Equals("small"))
                 DeviceCode += "S";
-            else if(BoxSize.Equals("extended"))
+            else if (BoxSize.Equals("extended"))
                 DeviceCode += "X";
-                
-            if(Subject.Contains("Fire Alarm"))
+
+            if (Subject.Contains("Fire Alarm"))
                 DeviceCode += "F";
-            else if(BoxType.Equals("powered"))
+            else if (BoxType.Equals("powered"))
                 DeviceCode += "P";
-            else if(BoxType.Equals("non-powered"))
+            else if (BoxType.Equals("non-powered"))
                 DeviceCode += "N";
 
             // gang
-            if(Gang == "1") DeviceCode += "1";
-            else if(Gang.Equals("2")) DeviceCode += "2";
-            else if(Gang.Equals("3")) DeviceCode += "3";
-            else if(Gang.Equals("4")) DeviceCode += "4";
-            else if(Gang.Equals("round")) DeviceCode += "R";
-            else if(Gang.Equals("E")) DeviceCode += "E";
-            
-            var connector_size_swap = new Dictionary<string, string>() 
+            if (Gang == "1") DeviceCode += "1";
+            else if (Gang.Equals("2")) DeviceCode += "2";
+            else if (Gang.Equals("3")) DeviceCode += "3";
+            else if (Gang.Equals("4")) DeviceCode += "4";
+            else if (Gang.Equals("round")) DeviceCode += "R";
+            else if (Gang.Equals("E")) DeviceCode += "E";
+
+            var connector_size_swap = new Dictionary<string, string>()
             {
                 { "1/2",    "2"},
                 { "3/4",    "3"},
@@ -136,39 +137,39 @@ namespace JPMorrow.P3
                 { "1 1/2",  "6"},
                 { "2",      "8"}
             };
-            
+
             // connector size
-            if(EntryConnectorType.Equals("MC")) DeviceCode += "M";
-            else if(EntryConnectorType.Equals("EMT") || EntryConnectorType.Equals("PVC"))
+            if (EntryConnectorType.Equals("MC")) DeviceCode += "M";
+            else if (EntryConnectorType.Equals("EMT") || EntryConnectorType.Equals("PVC"))
             {
                 var cc = ConnectorSize.Remove(ConnectorSize.Length - 1);
-                
+
                 bool s = connector_size_swap.TryGetValue(cc, out var add_cc);
-                if(!s) throw new System.Exception("Connector Size could not be resolved");
+                if (!s) throw new System.Exception("Connector Size could not be resolved");
                 DeviceCode += add_cc + "C";
             }
-            
+
             // plaster ring
-            if(PlasterRing.Equals("adjustable")) DeviceCode += "-A";
-            else 
+            if (PlasterRing.Equals("adjustable")) DeviceCode += "-A";
+            else
             {
                 var pr = PlasterRing.Remove(PlasterRing.Length - 1);
                 DeviceCode += "-" + pr;
             }
 
-            for (var i = 0; i < TopConnectorsEmt; i++) 
+            for (var i = 0; i < TopConnectorsEmt; i++)
                 DeviceCode += "-CT";
-            for (var i = 0; i < BottomConnectorsEmt; i++) 
+            for (var i = 0; i < BottomConnectorsEmt; i++)
                 DeviceCode += "-CB";
 
-            for (var i = 0; i < TopConnectorsPvc; i++) 
+            for (var i = 0; i < TopConnectorsPvc; i++)
                 DeviceCode += "-PT";
-            for (var i = 0; i < BottomConnectorsPvc; i++) 
+            for (var i = 0; i < BottomConnectorsPvc; i++)
                 DeviceCode += "-PB";
 
-            for (var i = 0; i < TopConnectorsMc; i++) 
+            for (var i = 0; i < TopConnectorsMc; i++)
                 DeviceCode += "-MT";
-            for (var i = 0; i < BottomConnectorsMc; i++) 
+            for (var i = 0; i < BottomConnectorsMc; i++)
                 DeviceCode += "-MB";
         }
     }

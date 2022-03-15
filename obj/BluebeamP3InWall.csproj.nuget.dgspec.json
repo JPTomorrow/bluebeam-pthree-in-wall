@@ -1,24 +1,24 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\Jmorrow\\Desktop\\code\\work-code\\csharp-core\\BluebeamP3InWall\\BluebeamP3InWall.csproj": {}
+    "C:\\Users\\Jmorrow\\Desktop\\code\\work-code\\bluebeam-pthree-in-wall\\BluebeamP3InWall.csproj": {}
   },
   "projects": {
-    "C:\\Users\\Jmorrow\\Desktop\\code\\work-code\\csharp-core\\BluebeamP3InWall\\BluebeamP3InWall.csproj": {
+    "C:\\Users\\Jmorrow\\Desktop\\code\\work-code\\bluebeam-pthree-in-wall\\BluebeamP3InWall.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Jmorrow\\Desktop\\code\\work-code\\csharp-core\\BluebeamP3InWall\\BluebeamP3InWall.csproj",
+        "projectUniqueName": "C:\\Users\\Jmorrow\\Desktop\\code\\work-code\\bluebeam-pthree-in-wall\\BluebeamP3InWall.csproj",
         "projectName": "BluebeamP3InWall",
-        "projectPath": "C:\\Users\\Jmorrow\\Desktop\\code\\work-code\\csharp-core\\BluebeamP3InWall\\BluebeamP3InWall.csproj",
+        "projectPath": "C:\\Users\\Jmorrow\\Desktop\\code\\work-code\\bluebeam-pthree-in-wall\\BluebeamP3InWall.csproj",
         "packagesPath": "C:\\Users\\Jmorrow\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Jmorrow\\Desktop\\code\\work-code\\csharp-core\\BluebeamP3InWall\\obj\\",
+        "outputPath": "C:\\Users\\Jmorrow\\Desktop\\code\\work-code\\bluebeam-pthree-in-wall\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages",
           "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
         ],
         "configFilePaths": [
-          "C:\\Users\\Jmorrow\\Desktop\\code\\work-code\\csharp-core\\BluebeamP3InWall\\NuGet.Config",
+          "C:\\Users\\Jmorrow\\Desktop\\code\\work-code\\bluebeam-pthree-in-wall\\NuGet.Config",
           "C:\\Users\\Jmorrow\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"

@@ -32,20 +32,8 @@ namespace JPMorrow.Excel
             BluebeamFlexConduitTotal fct = new BluebeamFlexConduitTotal(total_box_cnt);
 
             // boxes
-            var d_boxes_1 = box_pkg.Boxes.Where(x => x.BoxConfig.Equals("D") && x.BoxSize.Equals("4\"")).Count();
-            var i_boxes_1 = box_pkg.Boxes.Where(x => x.BoxConfig.Equals("I") && x.BoxSize.Equals("4\"")).Count();
-            var x_boxes_1 = box_pkg.Boxes.Where(x => x.BoxConfig.Equals("X") && x.BoxSize.Equals("4\"")).Count();
-            var t_boxes_1 = box_pkg.Boxes.Where(x => x.BoxConfig.Equals("T") && x.BoxSize.Equals("4\"")).Count();
-            var xy_boxes_1 = box_pkg.Boxes.Where(x => x.BoxConfig.Equals("XY") && x.BoxSize.Equals("4\"")).Count();
-            var y_boxes_1 = box_pkg.Boxes.Where(x => x.BoxConfig.Equals("Y") && x.BoxSize.Equals("4\"")).Count();
-
-            var d_boxes_2 = box_pkg.Boxes.Where(x => x.BoxConfig.Equals("D") && x.BoxSize.Equals("4 11/16\"")).Count();
-            var i_boxes_2 = box_pkg.Boxes.Where(x => x.BoxConfig.Equals("I") && x.BoxSize.Equals("4 11/16\"")).Count();
-            var x_boxes_2 = box_pkg.Boxes.Where(x => x.BoxConfig.Equals("X") && x.BoxSize.Equals("4 11/16\"")).Count();
-            var t_boxes_2 = box_pkg.Boxes.Where(x => x.BoxConfig.Equals("T") && x.BoxSize.Equals("4 11/16\"")).Count();
-            var xy_boxes_2 = box_pkg.Boxes.Where(x => x.BoxConfig.Equals("XY") && x.BoxSize.Equals("4 11/16\"")).Count();
-            var y_boxes_2 = box_pkg.Boxes.Where(x => x.BoxConfig.Equals("Y") && x.BoxSize.Equals("4 11/16\"")).Count();
-
+            var boxes_1 = box_pkg.Boxes.Where(x => x.BoxSize.Equals("4\"")).Count();
+            var boxes_2 = box_pkg.Boxes.Where(x => x.BoxSize.Equals("4 11/16\"")).Count();
             var octagon_boxes = box_pkg.Boxes.Where(x => x.BoxSize.Equals("4\" Octagon")).Count();
 
             void print_boxes(int qty, string labor_str)
@@ -59,9 +47,9 @@ namespace JPMorrow.Excel
 
             InsertSingleDivider(Draw.Color.SlateGray, Draw.Color.White, "Fire Alarm Boxes");
 
-            var box_cnt_1 = d_boxes_1 + i_boxes_1 + x_boxes_1 + t_boxes_1 + xy_boxes_1 + y_boxes_1;
+            var box_cnt_1 = boxes_1;
             print_boxes(box_cnt_1, "4\" Square Fire Alarm Box");
-            var box_cnt_2 = d_boxes_2 + i_boxes_2 + x_boxes_2 + t_boxes_2 + xy_boxes_2 + y_boxes_2;
+            var box_cnt_2 = boxes_2;
             print_boxes(box_cnt_2, "4 11/16\" Square Fire Alarm Box");
             print_boxes(octagon_boxes, "4\" Octagon Fire Alarm Box");
 
@@ -146,7 +134,13 @@ namespace JPMorrow.Excel
                 code_one_sub += li.TotalLaborValue; NextRow(1);
             }
 
-            print_flex_whips(fct.PipeQty, BluebeamFlexConduitTotal.FlexPipeName);
+            //get flex count
+            var flex_boxes = box_pkg.Boxes.Where(x => x.HasMc);
+            var oh_flex_boxes = flex_boxes.Where(x => x.McSize.Equals("1/2")).Count();
+            var oq_flex_boxes = flex_boxes.Where(x => x.McSize.Equals("3/4")).Count();
+
+            print_flex_whips(oh_flex_boxes, BluebeamFlexConduitTotal.OneHalfFlexPipeName);
+            print_flex_whips(oq_flex_boxes, BluebeamFlexConduitTotal.ThreeQuarterFlexPipeName);
 
             // print_conduit(mc_total, "Conduit - FMC - 3/4\"", true);
 
@@ -273,7 +267,11 @@ namespace JPMorrow.Excel
             print_connectors(pvc_conn_total_5, "Connector - Female Adapter - PVC - 1 1/2\"");
             print_connectors(pvc_conn_total_6, "Connector - Female Adapter - PVC - 2\"");
 
-            print_connectors(fct.ConnectorQty, BluebeamFlexConduitTotal.FlexConnectorName);
+            print_connectors(oh_flex_boxes, BluebeamFlexConduitTotal.OneHalfFlexConnectorName);
+            print_connectors(oq_flex_boxes, BluebeamFlexConduitTotal.ThreeQuarterFlexConnectorName);
+
+
+            // print_connectors(fct.ConnectorQty, BluebeamFlexConduitTotal.OneHalfFlexPipeName);
 
             code_one_sub = Math.Ceiling(code_one_sub);
             code_one_gt += code_one_sub;

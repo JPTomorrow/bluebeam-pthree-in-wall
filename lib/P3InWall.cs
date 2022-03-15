@@ -314,26 +314,6 @@ namespace JPMorrow.P3
             }
         }
 
-        /*  /// <summary>
-         /// Extract device codes and quantities from a text file 
-         /// describing those boxes
-         /// </summary>
-         public static IEnumerable<DeviceCodeQtyPair> GetDevicesFromFile(string file_name)
-         {
-             var all_txt = File.ReadAllText(file_name);
-             var lines = all_txt.Split('\n');
-
-             List<DeviceCodeQtyPair> pairs = new List<DeviceCodeQtyPair>();
-             foreach(var l in lines)
-             {
-                 var entry = l.Split('|');
-                 if(entry.Length != 2) continue;
-                 pairs.Add(new DeviceCodeQtyPair(entry[0].Trim(), int.Parse(entry[1].Trim())));
-             }
-
-             return pairs;
-         } */
-
         /// <summary>
         /// Get Legacy device codes from file and return a collection 
         /// of parts to make up the box
@@ -379,31 +359,6 @@ namespace JPMorrow.P3
             var devices = ParseLegacyDeviceCodes(codes);
             return devices;
         }
-        /* 
-                /// <summary>
-                /// get legacy device codes from fixtures in the revit model 
-                /// and return a collection of parts to make up the box
-                /// </summary>
-                public static IEnumerable<P3PartCollection> GetLegacyDevices(
-                    ModelInfo info, IEnumerable<ElementId> fixture_ids)
-                {
-                    if(!fixture_ids.Any())
-                    {
-                        Console.WriteLine("No boxes to process");
-                        return new List<P3PartCollection>();
-                    }
-
-                    // collect the device codes
-                    var device_codes = new List<P3Code>();
-
-                    foreach (var id in fixture_ids)
-                    {
-                        var code = P3Code.GetDeviceCodeFromFixture(info.DOC, id);
-                        if (code.IsValidCode) device_codes.Add(code);
-                    }
-
-                    return ParseLegacyDeviceCodes(info, device_codes);
-                } */
 
         private static IEnumerable<P3PartCollection> ParseLegacyDeviceCodes(IEnumerable<P3Code> codes)
         {
@@ -579,7 +534,6 @@ namespace JPMorrow.P3
 
         public class P3Code
         {
-            //public ElementId FixtureId { get; private set; }
             public string RawDeviceCode { get; private set; }
             public string ConnectorSizeCode { get; private set; } = string.Empty;
             public string BoxSizeCode { get; private set; } = string.Empty;
@@ -590,15 +544,6 @@ namespace JPMorrow.P3
             public IList<string> ExtraConnectors { get => _extra_connectors; }
 
             public bool IsValidCode { get; private set; } = false;
-            // private static string CodeParameterName = "Box Assembly Code";
-
-            /* private P3Code(Document doc, Element fixture) 
-            {
-                FixtureId = fixture.Id;
-                IsValidCode = false;
-                RawDeviceCode = GetDeviceCodeFromComments(doc, fixture);
-                ProcessCode();
-            } */
 
             private P3Code(string code)
             {
@@ -614,12 +559,6 @@ namespace JPMorrow.P3
                 BundleName = bundle_name;
                 ProcessCode();
             }
-
-            /* public static P3Code GetDeviceCodeFromFixture(Document doc, ElementId fixture_id) 
-            {
-                var fixture = doc.GetElement(fixture_id);
-                return new P3Code(doc, fixture);
-            } */
 
             public static P3Code GetCodeFromDeviceCode(string device_code)
             {
@@ -686,25 +625,6 @@ namespace JPMorrow.P3
 
                 return ret;
             }
-
-            /* /// <summary>
-            /// get the device code from the comments 
-            /// section and create an P3BoxInfo
-            /// </summary>
-            private string GetDeviceCodeFromComments(Document doc, Element fixture) 
-            {
-                var raw_code_str = fixture.LookupParameter(CodeParameterName).AsString();
-                bool unfit_code_format(string s) =>
-                    s.Any(c => !char.IsDigit(c) && !DeviceCheckChars.Any(y => y.Equals(c)));
-
-                if (raw_code_str == null || String.IsNullOrWhiteSpace(raw_code_str)) return string.Empty;
-
-                var split_comments = raw_code_str.Split('-');
-                if (!split_comments.Any()) return string.Empty;
-                var first_part = split_comments.First();
-                if (unfit_code_format(first_part)) return string.Empty;
-                return raw_code_str;
-            } */
 
             /// <summary>
             /// Process device code into its parts

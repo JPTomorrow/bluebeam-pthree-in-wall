@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "Us8EMrc8dAwo2COcLapARHogIQy4V/GDjSKaKUHRb4+a8V6WQseXiMP5ohYZ0BPzb1vCPcNpKhmjKWhIMHbtvg==",
+  "dgSpecHash": "LMHHtD1sBahppSyvI6tPOVvhcz1IQIzwbJaMEsiYTdaJdaqpPs8hmtxcElN2nGK28uvUccsRo3/o943y1cpTTA==",
   "success": true,
-  "projectFilePath": "C:\\Users\\Jmorrow\\Desktop\\code\\work-code\\csharp-core\\BluebeamP3InWall\\BluebeamP3InWall.csproj",
+  "projectFilePath": "C:\\Users\\Jmorrow\\Desktop\\code\\work-code\\bluebeam-pthree-in-wall\\BluebeamP3InWall.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\Jmorrow\\.nuget\\packages\\csvhelper\\27.1.1\\csvhelper.27.1.1.nupkg.sha512",
     "C:\\Users\\Jmorrow\\.nuget\\packages\\epplus\\5.7.1\\epplus.5.7.1.nupkg.sha512",
